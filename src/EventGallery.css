@@ -1,0 +1,332 @@
+/* EventGallery.css */
+
+.event-gallery-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  padding-top: 70px; /* Adjust for fixed header */
+  background-color: #282c34;
+  color: white;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.back-arrow {
+  font-size: 1.8em;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.title-section h3 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.title-section p {
+  margin: 5px 0 0;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.event-summary-card {
+  background: linear-gradient(135deg, #6200ea, #aa00ff);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.music-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.event-summary-image {
+  width: 100%;
+  height: 180px; /* Fixed height for consistency */
+  object-fit: cover; /* Cover the area, crop if necessary */
+  border-radius: 10px; /* Slightly less rounded than card */
+  margin-bottom: 15px;
+}
+
+.event-summary-card .event-date {
+  font-size: 0.9em;
+  color: #e0e0e0;
+  margin-bottom: 5px;
+}
+
+.event-summary-card .event-name {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+.event-summary-card .event-price {
+  font-size: 1em;
+  color: #e0e0e0;
+}
+
+.counts-section {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 30px;
+}
+
+.count-item {
+  text-align: center;
+  background-color: #3a3f47;
+  padding: 15px;
+  border-radius: 10px;
+  flex: 1;
+  margin: 0 5px;
+}
+
+.count-number {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.count-label {
+  font-size: 0.8em;
+  color: #ccc;
+  margin: 5px 0 0;
+}
+
+.gallery-section {
+  width: 100%;
+  max-width: 500px;
+}
+
+.gallery-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.gallery-header .camera-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.gallery-header h4 {
+  margin: 0;
+  font-size: 1.3em;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.image-card {
+  background-color: #3a3f47;
+  border-radius: 10px;
+  height: 150px; /* Adjust as needed */
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.image-card h5 {
+  margin: 0;
+  font-size: 0.9em;
+  color: #e0e0e0;
+}
+
+.video-time {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
+
+.delete-media-button {
+  position: absolute;
+  top: 5px;   /* Adjust as needed */
+  right: 5px; /* Adjust as needed */
+  background-color: rgba(255, 0, 0, 0.8); /* Red with some transparency */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Ensure it's above the image */
+  transition: background-color 0.3s ease;
+}
+
+.delete-media-button:hover {
+  background-color: rgba(255, 0, 0, 1); /* Solid red on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .event-gallery-container {
+    padding: 10px;
+    padding-top: 60px; /* Adjust for fixed header on smaller screens */
+  }
+
+  .header {
+    margin-bottom: 15px;
+  }
+
+  .back-arrow {
+    font-size: 1.5em;
+    margin-right: 15px;
+  }
+
+  .title-section h3 {
+    font-size: 1.3em;
+  }
+
+  .title-section p {
+    font-size: 0.8em;
+  }
+
+  .event-summary-card {
+    padding: 15px;
+  }
+
+  .music-icon {
+    font-size: 40px;
+  }
+
+  .event-summary-card .event-name {
+    font-size: 1.2em;
+  }
+
+  .counts-section {
+    margin-bottom: 20px;
+  }
+
+  .count-item {
+    padding: 10px;
+  }
+
+  .count-number {
+    font-size: 1.5em;
+  }
+
+  .count-label {
+    font-size: 0.7em;
+  }
+
+  .gallery-header {
+    margin-bottom: 15px;
+  }
+
+  .image-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .image-card {
+    height: 120px;
+    padding: 8px;
+  }
+
+  .image-card h5 {
+    font-size: 0.8em;
+  }
+}
+
+.gallery-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: #3a3f47;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2em;
+  color: white;
+  cursor: pointer;
+  z-index: 2001;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  margin: 0;
+  color: white;
+  font-size: 1.1em;
+}
+
+.download-button {
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #aa00ff;
+}

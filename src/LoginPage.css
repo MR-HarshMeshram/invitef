@@ -1,0 +1,132 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #2e2e2e; /* Dark background */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.event-text {
+  font-size: min(6vw, 24px);
+  text-align: center;
+  margin: 20px 0;
+  color: #f0f0f0; /* Lighter text color for dark background */
+  padding: 0 20px;
+}
+
+.auth-button {
+  width: calc(100% - 40px);
+  max-width: 300px;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none; /* No border for these buttons */
+  background-color: #3a3a3a; /* Darker button background */
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.auth-button img {
+  margin-right: 10px;
+}
+
+.or-text {
+  margin: 20px 0;
+  color: #bbbbbb; /* Lighter color for OR text */
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.or-text::before, .or-text::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background-color: #bbbbbb; /* Lighter color for lines */
+  margin: 0 10px;
+}
+
+.mobile-input-container {
+  width: calc(100% - 40px);
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  border: none; /* No border */
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #3a3a3a; /* Darker background */
+  box-sizing: border-box;
+  margin: 10px 0;
+}
+
+.mobile-input-container img {
+  margin-right: 10px;
+}
+
+.mobile-input-prefix {
+  margin-right: 5px;
+  color: #f0f0f0; /* Lighter color for prefix */
+}
+
+.mobile-input {
+  flex-grow: 1;
+  outline: none;
+  font-size: 16px;
+  padding: 8px 10px;
+  height: 40px;
+  background-color: #3a3a3a; /* Match container background */
+  border-radius: 4px;
+  color: white; /* White text for input */
+  border: none; /* No border for input */
+}
+
+.mobile-input::placeholder {
+  color: #888; /* Adjusted placeholder color */
+}
+
+.mobile-input:focus {
+  border-color: transparent; /* No border highlight on focus */
+  box-shadow: none; /* No shadow on focus */
+}
+
+.continue-button {
+  width: calc(100% - 40px);
+  max-width: 300px;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none; /* No border */
+  background-color: #3a3a3a; /* Darker button background */
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .event-text {
+    font-size: 18px;
+  }
+
+  .auth-button,
+  .mobile-input-container,
+  .continue-button {
+    width: calc(100% - 20px);
+    padding: 12px;
+  }
+}
