@@ -41,12 +41,12 @@ function InvitationForm() {
       setFetchError('User not logged in or token missing. Please log in again to view your invitations.');
       setIsFetchingInvitations(false);
       // Ensure the form is hidden if user is not logged in
-      setShowCreateForm(false); 
+      setShowCreateForm(false);
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/invitations/user/${userEmail}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/invitations/user/${userEmail}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         },
@@ -147,7 +147,7 @@ function InvitationForm() {
 
       const result = await response.json();
       // After successful creation, refetch the list of invitations
-      await fetchUserInvitations(); 
+      await fetchUserInvitations();
       // After successful creation, reset form fields and hide the form
       setEventName('');
       setLocation('');

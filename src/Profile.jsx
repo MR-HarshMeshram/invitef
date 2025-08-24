@@ -1,5 +1,6 @@
 import React from 'react';
 import './Profile.css';
+import LogoutButton from './component/LogoutButton';
 
 function Profile() {
   return (
@@ -10,6 +11,8 @@ function Profile() {
         <p>@johndoe</p>
       </div>
 
+
+      <LogoutButton />
       <div className="stats-grid">
         <div className="stat-card">
           <h4>24</h4>
@@ -64,7 +67,7 @@ function Profile() {
 
       <div className="profile-buttons">
         <button className="profile-button primary">EDIT PROFILE</button>
-      
+
         <button className="profile-button danger">SIGN OUT</button>
       </div>
     </div>

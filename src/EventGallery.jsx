@@ -22,7 +22,7 @@ function EventGallery() {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/invitations/${invitationId}`);
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${invitationId}`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Failed to fetch invitation media.');

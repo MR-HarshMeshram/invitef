@@ -62,7 +62,7 @@ function InvitationDisplay() {
           return;
         }
 
-        const response = await fetch(`https://nvite-bac.onrender.com/invitations/${invitation._id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/invitations/${invitation._id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${accessToken}`,

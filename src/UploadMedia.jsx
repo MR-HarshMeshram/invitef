@@ -35,7 +35,7 @@ function UploadMedia() {
     const prevUrls = imagePreviews;
     const currentUrls = newImagePreviews;
     prevUrls.filter(url => !currentUrls.includes(url)).forEach(url => URL.revokeObjectURL(url));
-    
+
     setImagePreviews(newImagePreviews);
   };
 
@@ -59,7 +59,7 @@ function UploadMedia() {
       }
 
       // Replace with your actual upload API endpoint
-      const response = await fetch(`http://localhost:5000/invitations/media/upload`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/invitations/media/upload`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
