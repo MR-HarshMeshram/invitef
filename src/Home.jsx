@@ -29,11 +29,10 @@ function Home() {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch('https://invite-backend-vk36.onrender.com/invitations/all');
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/all`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Failed to fetch all invitations.');
-          console.log(response.data)
         }
         const result = await response.json();
         setAllInvitations(result.invitations);

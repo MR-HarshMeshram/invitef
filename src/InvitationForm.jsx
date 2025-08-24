@@ -46,7 +46,7 @@ function InvitationForm() {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/invitations/user/${userEmail}`, {
+      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/user/${userEmail}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         },
