@@ -32,7 +32,7 @@ function InvitationDisplay() {
       try {
         await navigator.share({
           title: invitation.eventName,
-          text: `Check out this invitation for ${invitation.eventName} hosted by ${invitation.invitedBy}!`, 
+          text: `Check out this invitation for ${invitation.eventName} hosted by ${invitation.invitedBy}!`,
           url: invitationUrl,
         });
         alert('Invitation shared successfully!');
@@ -62,7 +62,7 @@ function InvitationDisplay() {
           return;
         }
 
-        const response = await fetch(`http://localhost:5000/invitations/${invitation._id}`, {
+        const response = await fetch(`https://nvite-bac.onrender.com/invitations/${invitation._id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
