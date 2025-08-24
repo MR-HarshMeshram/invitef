@@ -16,7 +16,7 @@ function LoginPage() {
         <br />
         JOIN THE EVENT
       </p>
-      <button className="auth-button" onClick={() => window.location.href = 'https://invite-backend-vk36.onrender.com/auth/google'}>
+      <button className="auth-button" onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/google`}>
         <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google logo" />
         <span>Continue with Google</span>
       </button>
