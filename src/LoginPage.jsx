@@ -16,7 +16,7 @@ function LoginPage() {
         <br />
         JOIN THE EVENT
       </p>
-      <button className="auth-button" onClick={() => window.location.href = 'http://localhost:5000/auth/google'}>
+      <button className="auth-button" onClick={() => window.location.href = 'https://nvite-bac.onrender.com/auth/google'}>
         <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google logo" />
         <span>Continue with Google</span>
       </button>
