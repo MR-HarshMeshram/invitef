@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './InvitationDisplay.css'; // Reuse the existing CSS for styling
 
-function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handleUploadClick, handleShareClick, handleDeleteClick, handleAcceptClick, handleDeclineClick }) {
+function HomeDisplay({ invitation, loggedInUserEmail, isAccepted, handleGalleryClick, handleUploadClick, handleShareClick, handleDeleteClick, handleAcceptClick, handleDeclineClick }) {
   const navigate = useNavigate();
 
   if (!invitation) {
@@ -36,7 +36,9 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
           )}
         </p>
         <div className="card-actions">
-          <button className="action-button gallery-button" onClick={handleGalleryClick}>Gallery</button>
+          {isAccepted && (
+            <button className="action-button gallery-button" onClick={handleGalleryClick}>Gallery</button>
+          )}
           {loggedInUserEmail === invitation.createdByEmail && (
             <button className="action-button upload-button" onClick={handleUploadClick}>Upload</button>
           )}

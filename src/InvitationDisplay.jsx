@@ -13,6 +13,7 @@ function InvitationDisplay() {
   const [error, setError] = useState(null); // Add error state
   const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
   const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
+  const [isAccepted, setIsAccepted] = useState(false); // New state to track if the invitation is accepted
 
   useEffect(() => {
     console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
@@ -38,6 +39,12 @@ function InvitationDisplay() {
           const data = await response.json();
           console.log("Invitation fetched successfully:", data);
           setInvitation(data);
+          // Check if the logged-in user has accepted this invitation
+          if (data.acceptedBy && loggedInUserEmail && data.acceptedBy.includes(loggedInUserEmail)) {
+            setIsAccepted(true);
+          } else {
+            setIsAccepted(false);
+          }
         } catch (error) {
           console.error('Error fetching invitation:', error);
           setError(error.message); // Set error state
@@ -57,6 +64,12 @@ function InvitationDisplay() {
       fetchInvitation();
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
+      // If invitation is already in state, check acceptance status
+      if (invitation.acceptedBy && loggedInUserEmail && invitation.acceptedBy.includes(loggedInUserEmail)) {
+        setIsAccepted(true);
+      } else {
+        setIsAccepted(false);
+      }
     }
   }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Add loggedInUserEmail to dependencies
 
@@ -155,7 +168,8 @@ function InvitationDisplay() {
         }
 
         alert('Invitation accepted!');
-        navigate('/home'); // Or to an 'invited' tab/page
+        setIsAccepted(true); // Set isAccepted to true on successful acceptance
+        navigate('/invited'); // Navigate to the 'invited' tab
       } catch (error) {
         console.error('Error accepting invitation:', error);
         alert(`Error: ${error.message}`);
@@ -209,6 +223,7 @@ function InvitationDisplay() {
             handleDeleteClick={handleDeleteClick}
             handleAcceptClick={handleAcceptClick}
             handleDeclineClick={handleDeclineClick}
+            isAccepted={isAccepted} // Pass isAccepted to HomeDisplay
           />
         </div>
       )}
