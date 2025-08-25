@@ -24,7 +24,7 @@ function Profile() {
       }
 
       try {
-        const response = await fetch(`https://invite-backend-vk36.onrender.com/users/${userEmail}`, {
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/auth/me`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
@@ -35,13 +35,15 @@ function Profile() {
         }
 
         const data = await response.json();
+        const fetchedUser = data.user; // Assuming the backend returns { user: {...} }
+
         setUserData({
-          fullName: data.name || 'N/A',
-          email: data.email || 'N/A',
-          phone: data.phone || 'N/A', // Assuming a 'phone' field from backend
-          location: data.location || 'N/A', // Assuming a 'location' field from backend
-          memberSince: data.createdAt ? new Date(data.createdAt).toLocaleDateString() : 'N/A',
-          profilePicture: data.picture || '', // Assuming a 'picture' field from backend
+          fullName: fetchedUser.name || 'N/A',
+          email: fetchedUser.email || 'N/A',
+          phone: fetchedUser.phone || 'N/A', // Assuming a 'phone' field from backend
+          location: fetchedUser.location || 'N/A', // Assuming a 'location' field from backend
+          memberSince: fetchedUser.createdAt ? new Date(fetchedUser.createdAt).toLocaleDateString() : 'N/A',
+          profilePicture: fetchedUser.picture || '', // Assuming a 'picture' field from backend
         });
       } catch (error) {
         console.error('Error fetching user data:', error);
