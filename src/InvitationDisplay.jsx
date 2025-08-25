@@ -13,6 +13,7 @@ function InvitationDisplay() {
   const [error, setError] = useState(null); // Add error state
   const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
   const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
+  const [hasAccepted, setHasAccepted] = useState(false); // New state to track if invitation has been accepted
 
   // Memoized function to fetch invitation details
   const fetchInvitation = React.useCallback(async () => {
@@ -161,7 +162,9 @@ function InvitationDisplay() {
         }
 
         alert('Invitation accepted!');
-        navigate('/home'); // Or to an 'invited' tab/page
+        setHasAccepted(true); // Set hasAccepted to true upon successful acceptance
+        // Navigate to the 'invited' page/tab and pass the accepted invitation
+        navigate('/invited', { state: { acceptedInvitation: invitation } });
       } catch (error) {
         console.error('Error accepting invitation:', error);
         alert(`Error: ${error.message}`);
@@ -215,6 +218,7 @@ function InvitationDisplay() {
             handleDeleteClick={handleDeleteClick}
             handleAcceptClick={handleAcceptClick}
             handleDeclineClick={handleDeclineClick}
+            hasAccepted={hasAccepted} // Pass the new state here
           />
         </div>
       )}
