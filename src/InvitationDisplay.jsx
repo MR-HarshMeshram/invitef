@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
-import LoginModal from './LoginModal'; // Import the LoginModal component
 
 function InvitationDisplay() {
   const location = useLocation();
@@ -10,7 +9,6 @@ function InvitationDisplay() {
   const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
-  const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
   const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
 
   useEffect(() => {
@@ -23,9 +21,8 @@ function InvitationDisplay() {
         try {
           const accessToken = localStorage.getItem('accessToken');
           if (!accessToken) {
-            console.log("Access token missing. Showing login pop-up.");
-            setShowLoginPopup(true); // Show login pop-up if not authenticated
-            setLoading(false); // Stop loading as we're waiting for login
+            console.log("Access token missing. Redirecting to login.");
+            navigate('/login');
             return;
           }
 
@@ -213,19 +210,11 @@ function InvitationDisplay() {
     }
   };
 
-  const handleLoginSuccess = () => {
-    // After successful login, hide the pop-up and try fetching the invitation again
-    setShowLoginPopup(false);
-    // Re-trigger the useEffect to fetch invitation data after login
-    setInvitation(null); // Clear invitation to force refetch
-    setLoading(true); // Start loading again
-  };
-
   return (
     <div className="invitation-display-container">
       {/* The header-card is now hidden by CSS */}
 
-      <div className="invitation-card" style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
+      <div className="invitation-card">
         {invitation.invitationImage && (
           <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image" />
         )}
@@ -257,19 +246,19 @@ function InvitationDisplay() {
             {loggedInUserEmail === invitation.createdByEmail && (
               <button className="action-button delete-button" onClick={handleDeleteClick}>Delete</button>
             )}
-            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
+            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && ( // Only show accept/decline for invited users of private invitations
               <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>
             )}
-            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
+            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && ( // Only show accept/decline for invited users of private invitations
               <button className="action-button decline-button" onClick={handleDeclineClick}>Decline</button>
             )}
           </div>
         </div>
       </div>
 
-      {showLoginPopup && (
-        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
-      )}
+      {/* Optionally keep these buttons or integrate them differently */}
+      {/* <button onClick={() => navigate('/home')}>Go to Home</button>
+      <button onClick={() => navigate('/invitation')}>Create Another Invitation</button> */}
     </div>
   );
 }
