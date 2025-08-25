@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
 import LoginModal from './LoginModal'; // Import the LoginModal component
 import HomeDisplay from './HomeDisplay'; // Import the new HomeDisplay component
-import { Helmet } from 'react-helmet-async'; // Import Helmet
+// Import Helmet
 // hi
 function InvitationDisplay() {
   const location = useLocation();
