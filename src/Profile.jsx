@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import LogoutButton from './component/LogoutButton';
-
+// profile
 function Profile() {
   const [isDarkMode, setIsDarkMode] = useState(false); // New state for dark mode
   const [userData, setUserData] = useState({
