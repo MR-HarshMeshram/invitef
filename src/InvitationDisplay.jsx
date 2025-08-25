@@ -53,7 +53,7 @@ function InvitationDisplay() {
   }
 
   const handleGalleryClick = () => {
-    navigate('/event-gallery', { state: { invitationId: invitation._id } }); // Navigate to event gallery
+    navigate(`/event-gallery/${invitation._id}`); // Navigate to event gallery with ID in URL
   };
 
   const handleUploadClick = () => {

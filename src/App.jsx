@@ -35,6 +35,7 @@ function MainContent() {
         <Route path="/invited" element={<Invited />} />
         <Route path="/upload-media" element={<UploadMedia />} />
         <Route path="/event-gallery" element={<EventGallery />} />
+        <Route path="/event-gallery/:invitationId" element={<EventGallery />} /> {/* Dynamic route for EventGallery */}
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </>

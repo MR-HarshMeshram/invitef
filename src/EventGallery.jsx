@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './EventGallery.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 function EventGallery() {
   const [selectedImage, setSelectedImage] = useState(null);
   const location = useLocation();
-  const { invitationId } = location.state || {};
+  const { invitationId: urlInvitationId } = useParams(); // Get invitationId from URL parameters
   const [invitation, setInvitation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,20 +15,20 @@ function EventGallery() {
 
   useEffect(() => {
     const fetchInvitationMedia = async () => {
-      if (!invitationId) {
-        setError('No Invitation ID provided.');
+      if (!urlInvitationId) {
+        setError('No Invitation ID provided in URL.');
         setLoading(false);
         return;
       }
 
       try {
-        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${invitationId}`);
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Failed to fetch invitation media.');
         }
         const data = await response.json();
-        setInvitation(data.invitation);
+        setInvitation(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -37,7 +37,7 @@ function EventGallery() {
     };
 
     fetchInvitationMedia();
-  }, [invitationId]);
+  }, [urlInvitationId]);
 
   // Filter images and videos from eventMedia
   const eventImages = invitation?.eventMedia?.filter(media => media.url.match(/\.(jpeg|jpg|png|gif)$/i)) || [];
@@ -45,8 +45,23 @@ function EventGallery() {
 
   const images = [
     // Using actual uploaded media instead of placeholders
-    ...eventImages.map((media, index) => ({ id: `img-${index}`, title: `Image ${index + 1}`, src: media.url, public_id: media.public_id, createdByEmail: invitation.createdByEmail })),
-    ...eventVideos.map((media, index) => ({ id: `vid-${index}`, title: `Video ${index + 1}`, src: media.url, time: 'N/A', public_id: media.public_id, createdByEmail: invitation.createdByEmail })),
+    ...(eventImages || []).map(media => ({
+      id: media.public_id,
+      public_id: media.public_id,
+      src: media.url,
+      title: 'Event Image',
+      createdByEmail: invitation?.createdByEmail,
+    })),
+    // Add videos as well, if you want them in the general gallery view, with a play icon overlay
+    ...(eventVideos || []).map(media => ({
+      id: media.public_id,
+      public_id: media.public_id,
+      src: media.url,
+      title: 'Event Video',
+      time: '0:00', // Placeholder for video duration
+      type: 'video',
+      createdByEmail: invitation?.createdByEmail,
+    })),
   ];
 
   const handleImageClick = (image) => {
@@ -69,7 +84,7 @@ function EventGallery() {
   };
 
   const handleDeleteMedia = async (e, publicId) => {
-    e.stopPropagation(); // Prevent image card click from opening modal
+    e.stopPropagation(); // Prevent image modal from opening
     if (window.confirm('Are you sure you want to delete this media?')) {
       try {
         const accessToken = localStorage.getItem('accessToken');
@@ -79,7 +94,7 @@ function EventGallery() {
         }
 
         // Replace with your actual delete media API endpoint
-        const deleteUrl = `http://localhost:5000/invitations/media/${invitationId}/${publicId}`;
+        const deleteUrl = `https://invite-backend-vk36.onrender.com/invitations/media/${urlInvitationId}/${publicId}`;
         console.log('Frontend: Deleting media with URL:', deleteUrl);
         const response = await fetch(deleteUrl, {
           method: 'DELETE',
@@ -94,16 +109,18 @@ function EventGallery() {
         }
 
         alert('Media deleted successfully!');
-        // Refresh the invitation data to update the gallery
-        // A simple way is to refetch all data:
+        // Refresh invitation data after deletion
         setLoading(true);
         setError(null);
-        fetch(`http://localhost:5000/invitations/${invitationId}`)
+        fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`)
           .then(res => res.json())
-          .then(data => setInvitation(data.invitation))
+          .then(data => setInvitation(data))
           .catch(err => setError(err.message))
           .finally(() => setLoading(false));
 
+        if (selectedImage && selectedImage.public_id === publicId) {
+          setSelectedImage(null); // Close modal if the deleted image was open
+        }
       } catch (error) {
         console.error('Error deleting media:', error);
         alert(`Error: ${error.message}`);
