@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
-import LoginModal from './LoginModal'; // Import the LoginModal component
 
 function InvitationDisplay() {
   const location = useLocation();
@@ -10,8 +9,7 @@ function InvitationDisplay() {
   const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
-  const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
-  const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
+  const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
 
   useEffect(() => {
     console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
@@ -24,8 +22,7 @@ function InvitationDisplay() {
           const accessToken = localStorage.getItem('accessToken');
           if (!accessToken) {
             console.log("Access token missing. Redirecting to login.");
-            setShowLoginPopup(true); // Show login pop-up if not authenticated
-            setLoading(false); // Stop loading as we're waiting for login
+            navigate('/login');
             return;
           }
 
@@ -57,7 +54,7 @@ function InvitationDisplay() {
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
     }
-  }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Add loggedInUserEmail to dependencies
+  }, [invitation, urlInvitationId, navigate]);
 
   if (loading) {
     return (
@@ -213,12 +210,6 @@ function InvitationDisplay() {
     }
   };
 
-  const handleLoginSuccess = () => {
-    setLoggedInUserEmail(localStorage.getItem('userEmail')); // Update email after login
-    setShowLoginPopup(false); // Hide pop-up
-    // The useEffect will re-run because loggedInUserEmail changed, triggering invitation fetch
-  };
-
   return (
     <div className="invitation-display-container">
       {/* The header-card is now hidden by CSS */}
@@ -268,12 +259,8 @@ function InvitationDisplay() {
       {/* Optionally keep these buttons or integrate them differently */}
       {/* <button onClick={() => navigate('/home')}>Go to Home</button>
       <button onClick={() => navigate('/invitation')}>Create Another Invitation</button> */}
-        
-        {showLoginPopup && (
-          <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
-        )}
-      </div>
-    );
-  }
+    </div>
+  );
+}
 
 export default InvitationDisplay;
