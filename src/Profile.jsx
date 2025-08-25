@@ -3,7 +3,6 @@ import './Profile.css';
 import LogoutButton from './component/LogoutButton';
 // profile
 function Profile() {
-  const [isDarkMode, setIsDarkMode] = useState(false); // New state for dark mode
   const [userData, setUserData] = useState({
     fullName: 'Loading...',
     email: 'Loading...',
@@ -12,10 +11,6 @@ function Profile() {
     memberSince: 'Loading...',
     profilePicture: '',
   });
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,16 +55,12 @@ function Profile() {
   }, []); // Empty dependency array means this effect runs once on mount
 
   return (
-    <div className={`profile-container ${isDarkMode ? 'dark-mode' : ''}`}>
+    <div className="profile-container dark-mode">
       <div className="profile-header-card">
         <div className="profile-avatar">{userData.fullName.charAt(0)}</div>
         <h3>{userData.fullName}</h3>
         <p>@{userData.email.split('@')[0]}</p>
       </div>
-
-      <button onClick={toggleDarkMode} className="dark-mode-toggle-button">
-        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-      </button>
 
       <LogoutButton />
       <div className="stats-grid">

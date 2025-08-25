@@ -66,22 +66,6 @@
   color: #bbb;
 }
 
-.dark-mode-toggle-button {
-  background-color: #6200ea;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 15px;
-  font-size: 0.9em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 20px; /* Add some space below the button */
-}
-
-.dark-mode-toggle-button:hover {
-  background-color: #7b1fa2;
-}
-
 
 .profile-header-card {
   background: linear-gradient(135deg, #6200ea, #aa00ff);
