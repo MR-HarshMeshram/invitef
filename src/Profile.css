@@ -12,6 +12,77 @@
   box-sizing: border-box;
 }
 
+.profile-container.dark-mode {
+  background-color: #1a1a1a; /* Dark background */
+  color: #f0f0f0; /* Light text */
+}
+
+.profile-container.dark-mode .profile-header-card {
+  background: linear-gradient(135deg, #333, #555); /* Darker gradient */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.profile-container.dark-mode .profile-avatar {
+  background-color: #333;
+  color: #aa00ff;
+}
+
+.profile-container.dark-mode .profile-header-card p {
+  color: #bbb;
+}
+
+.profile-container.dark-mode .stat-card {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.profile-container.dark-mode .stat-card h4 {
+  color: #aa00ff;
+}
+
+.profile-container.dark-mode .stat-card p {
+  color: #ccc;
+}
+
+.profile-container.dark-mode .info-card {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.profile-container.dark-mode .info-card h3 {
+  color: #f0f0f0;
+  border-bottom-color: #3a3a3a;
+}
+
+.profile-container.dark-mode .info-item {
+  border-bottom-color: #3a3a3a;
+}
+
+.profile-container.dark-mode .info-item span:first-child {
+  color: #ccc;
+}
+
+.profile-container.dark-mode .info-item span:last-child {
+  color: #bbb;
+}
+
+.dark-mode-toggle-button {
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px; /* Add some space below the button */
+}
+
+.dark-mode-toggle-button:hover {
+  background-color: #7b1fa2;
+}
+
+
 .profile-header-card {
   background: linear-gradient(135deg, #6200ea, #aa00ff);
   border-radius: 15px;
@@ -184,65 +255,4 @@
   .profile-buttons {
     grid-template-columns: 1fr;
   }
-}
-
-/* Dark Mode Styles */
-.dark-mode {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
-}
-
-.dark-mode .profile-header-card {
-  background: linear-gradient(135deg, #333, #555);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-.dark-mode .profile-avatar {
-  background-color: #333;
-  color: #aa00ff;
-}
-
-.dark-mode .profile-header-card p {
-  color: #ccc;
-}
-
-.dark-mode .stat-card,
-.dark-mode .info-card {
-  background-color: #2a2a2a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .stat-card h4 {
-  color: #aa00ff;
-}
-
-.dark-mode .stat-card p,
-.dark-mode .info-item span:last-child {
-  color: #ccc;
-}
-
-.dark-mode .info-card h3 {
-  color: #f0f0f0;
-  border-bottom-color: #444;
-}
-
-.dark-mode .info-item {
-  border-bottom-color: #3a3a3a;
-}
-
-.dark-mode .info-item span:first-child {
-  color: #f0f0f0;
-}
-
-.dark-mode .profile-button.primary {
-  background-color: #aa00ff;
-}
-
-.dark-mode .profile-button.secondary {
-  background-color: #444;
-  color: #f0f0f0;
-}
-
-.dark-mode .profile-button.danger {
-  background-color: #c0392b;
 }
