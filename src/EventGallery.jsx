@@ -74,12 +74,16 @@ function EventGallery() {
 
   const handleDownload = () => {
     if (selectedImage && selectedImage.src) {
+      console.log('Attempting to download image:', selectedImage.src);
       const link = document.createElement('a');
       link.href = selectedImage.src;
       link.download = selectedImage.title || 'media'; // Suggest a filename
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      console.log('Download link clicked and removed from DOM.');
+    } else {
+      console.log('No selected image or image source found for download.');
     }
   };
 
