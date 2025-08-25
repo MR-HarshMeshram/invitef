@@ -212,10 +212,10 @@ function InvitationDisplay() {
             {loggedInUserEmail === invitation.createdByEmail && (
               <button className="action-button delete-button" onClick={handleDeleteClick}>Delete</button>
             )}
-            {loggedInUserEmail !== invitation.createdByEmail && ( // Only show accept/decline for invited users
+            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && ( // Only show accept/decline for invited users of private invitations
               <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>
             )}
-            {loggedInUserEmail !== invitation.createdByEmail && ( // Only show accept/decline for invited users
+            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && ( // Only show accept/decline for invited users of private invitations
               <button className="action-button decline-button" onClick={handleDeclineClick}>Decline</button>
             )}
           </div>
