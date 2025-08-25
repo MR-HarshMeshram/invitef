@@ -17,7 +17,6 @@ const LoginModal = ({ onLoginSuccess, onClose }) => {
           <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google icon" />
           Continue with Google
         </button>
-        <button onClick={onClose} className="close-button">Close</button>
       </div>
     </div>
   );

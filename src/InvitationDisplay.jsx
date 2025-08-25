@@ -199,16 +199,18 @@ function InvitationDisplay() {
       {loading && <h2>Loading invitation...</h2>}
       {error && <h2>Error: {error}</h2>}
       {!loading && !error && !showLoginPopup && invitation && (
-        <HomeDisplay
-          invitation={invitation}
-          loggedInUserEmail={loggedInUserEmail}
-          handleGalleryClick={handleGalleryClick}
-          handleUploadClick={handleUploadClick}
-          handleShareClick={handleShareClick}
-          handleDeleteClick={handleDeleteClick}
-          handleAcceptClick={handleAcceptClick}
-          handleDeclineClick={handleDeclineClick}
-        />
+        <div style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
+          <HomeDisplay
+            invitation={invitation}
+            loggedInUserEmail={loggedInUserEmail}
+            handleGalleryClick={handleGalleryClick}
+            handleUploadClick={handleUploadClick}
+            handleShareClick={handleShareClick}
+            handleDeleteClick={handleDeleteClick}
+            handleAcceptClick={handleAcceptClick}
+            handleDeclineClick={handleDeclineClick}
+          />
+        </div>
       )}
 
       {showLoginPopup && (
