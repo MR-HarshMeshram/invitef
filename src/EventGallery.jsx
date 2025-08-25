@@ -72,16 +72,26 @@ function EventGallery() {
     setSelectedImage(null);
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (selectedImage && selectedImage.src) {
       console.log('Attempting to download image:', selectedImage.src);
-      const link = document.createElement('a');
-      link.href = selectedImage.src;
-      link.download = selectedImage.title || 'media'; // Suggest a filename
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      console.log('Download link clicked and removed from DOM.');
+      try {
+        const response = await fetch(selectedImage.src);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = selectedImage.title || 'media'; // Suggest a filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url); // Clean up the object URL
+        console.log('Download initiated using Blob URL.');
+      } catch (error) {
+        console.error('Error downloading image:', error);
+        alert('Failed to download image. Please try again.');
+      }
     } else {
       console.log('No selected image or image source found for download.');
     }
