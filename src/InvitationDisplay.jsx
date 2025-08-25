@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
-import LoginModal from './LoginModal'; // Import the LoginModal component
 
 function InvitationDisplay() {
   const location = useLocation();
@@ -10,7 +9,6 @@ function InvitationDisplay() {
   const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
-  const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
   const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
 
   useEffect(() => {
@@ -23,9 +21,8 @@ function InvitationDisplay() {
         try {
           const accessToken = localStorage.getItem('accessToken');
           if (!accessToken) {
-            console.log("Access token missing. Showing login pop-up.");
-            setShowLoginPopup(true); // Show login pop-up if not authenticated
-            setLoading(false); // Stop loading as we're waiting for login
+            console.log("Access token missing. Redirecting to login.");
+            navigate('/login');
             return;
           }
 
@@ -50,7 +47,7 @@ function InvitationDisplay() {
           alert(`Failed to load invitation: ${error.message}`);
           navigate('/invitation'); // Redirect if fetch fails
         } finally {
-          // setLoading(false); // Only set to false here if not showing popup
+          setLoading(false); // End loading
         }
       };
       fetchInvitation();
@@ -58,13 +55,6 @@ function InvitationDisplay() {
       setLoading(false); // If invitation is already in state, stop loading
     }
   }, [invitation, urlInvitationId, navigate]);
-
-  const handleLoginSuccess = () => {
-    console.log("Login successful. Re-fetching invitation.");
-    setShowLoginPopup(false); // Hide pop-up
-    setLoading(true); // Start loading again to re-fetch invitation
-    setInvitation(null); // Clear invitation to force re-fetch in useEffect
-  };
 
   if (loading) {
     return (
@@ -83,7 +73,7 @@ function InvitationDisplay() {
     );
   }
 
-  if (!invitation && !showLoginPopup) {
+  if (!invitation) {
     return (
       <div className="invitation-display-container">
         <h2>No invitation data found.</h2>
@@ -92,18 +82,6 @@ function InvitationDisplay() {
     );
   }
 
-  // If no invitation and login popup is shown, return the popup in foreground
-  if (!invitation && showLoginPopup) {
-    return (
-      <div className="invitation-display-container" style={{ filter: 'blur(5px)' }}>
-        {/* You can optionally render a blurred version of the empty invitation container here */}
-        <h2>Please log in to view this invitation.</h2>
-        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
-      </div>
-    );
-  }
-
-  // Rest of the component (when invitation is available)
   const handleGalleryClick = () => {
     navigate(`/event-gallery/${invitation._id}`); // Navigate to event gallery with ID in URL
   };
