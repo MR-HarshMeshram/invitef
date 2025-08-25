@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
+import LoginModal from './LoginModal'; // Import the LoginModal component
 
 function InvitationDisplay() {
   const location = useLocation();
   const navigate = useNavigate();
   const { invitationId: urlInvitationId } = useParams(); // Get invitation ID from URL
-  const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState(null); // Add error state
-  const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
+  const [invitation, setInvitation] = useState(location.state?.invitation);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
 
   useEffect(() => {
-    console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
-    // If no invitation in state and we have an ID from the URL, try to fetch it
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      setShowLoginPopup(true); // Show login pop-up if not authenticated
+      setLoading(false); // Stop loading as we're waiting for login
+      return;
+    }
+
+    // If accessToken exists but no invitation in state and we have an ID from the URL, try to fetch it
     if (!invitation && urlInvitationId) {
       const fetchInvitation = async () => {
-        setLoading(true); // Start loading
-        setError(null); // Clear previous errors
+        setLoading(true);
+        setError(null);
         try {
-          const accessToken = localStorage.getItem('accessToken');
-          if (!accessToken) {
-            console.log("Access token missing. Redirecting to login.");
-            navigate('/login');
-            return;
-          }
-
-          console.log(`Fetching invitation with ID: ${urlInvitationId}`);
           const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`,
@@ -39,22 +40,27 @@ function InvitationDisplay() {
           }
 
           const data = await response.json();
-          console.log("Invitation fetched successfully:", data);
           setInvitation(data);
         } catch (error) {
           console.error('Error fetching invitation:', error);
-          setError(error.message); // Set error state
+          setError(error.message);
           alert(`Failed to load invitation: ${error.message}`);
-          navigate('/invitation'); // Redirect if fetch fails
+          // Do not navigate, just show error on the page with card still in background
         } finally {
-          setLoading(false); // End loading
+          setLoading(false);
         }
       };
       fetchInvitation();
     } else if (invitation) {
-      setLoading(false); // If invitation is already in state, stop loading
+      setLoading(false);
     }
-  }, [invitation, urlInvitationId, navigate]);
+  }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Add loggedInUserEmail to dependencies
+
+  const handleLoginSuccess = () => {
+    setLoggedInUserEmail(localStorage.getItem('userEmail')); // Update email after login
+    setShowLoginPopup(false); // Hide pop-up
+    // The useEffect will re-run because loggedInUserEmail changed, triggering invitation fetch
+  };
 
   if (loading) {
     return (
@@ -259,6 +265,10 @@ function InvitationDisplay() {
       {/* Optionally keep these buttons or integrate them differently */}
       {/* <button onClick={() => navigate('/home')}>Go to Home</button>
       <button onClick={() => navigate('/invitation')}>Create Another Invitation</button> */}
+
+      {showLoginPopup && (
+        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
+      )}
     </div>
   );
 }
