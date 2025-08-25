@@ -14,56 +14,62 @@ function InvitationDisplay() {
   const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
   const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
 
+  // Memoized function to fetch invitation details
+  const fetchInvitation = React.useCallback(async () => {
+    setLoading(true); // Start loading
+    setError(null); // Clear previous errors
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+
+      // Only include Authorization header if an access token is available
+      const headers = accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {};
+
+      console.log(`Fetching invitation with ID: ${urlInvitationId}`);
+      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, { headers });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch invitation.');
+      }
+
+      const data = await response.json();
+      console.log("Invitation fetched successfully:", data);
+      setInvitation(data);
+    } catch (error) {
+      console.error('Error fetching invitation:', error);
+      setError(error.message); // Set error state
+      alert(`Failed to load invitation: ${error.message}`);
+      navigate('/invitation'); // Redirect if fetch fails
+    } finally {
+      setLoading(false); // End loading
+    }
+  }, [urlInvitationId, navigate]); // Dependencies for useCallback
+
   useEffect(() => {
     console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
     // If no invitation in state and we have an ID from the URL, try to fetch it
     if (!invitation && urlInvitationId) {
-      const fetchInvitation = async () => {
-        setLoading(true); // Start loading
-        setError(null); // Clear previous errors
-        try {
-          const accessToken = localStorage.getItem('accessToken');
-
-          // Only include Authorization header if an access token is available
-          const headers = accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {};
-
-          console.log(`Fetching invitation with ID: ${urlInvitationId}`);
-          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, { headers });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to fetch invitation.');
-          }
-
-          const data = await response.json();
-          console.log("Invitation fetched successfully:", data);
-          setInvitation(data);
-        } catch (error) {
-          console.error('Error fetching invitation:', error);
-          setError(error.message); // Set error state
-          alert(`Failed to load invitation: ${error.message}`);
-          navigate('/invitation'); // Redirect if fetch fails
-        } finally {
-          setLoading(false); // End loading
-        }
-      };
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
         console.log("Access token missing. Showing login pop-up.");
         setShowLoginPopup(true); // Show login pop-up if not authenticated
         setLoading(false); // Stop loading as we're waiting for login
+        localStorage.setItem('pendingInvitationId', urlInvitationId); // Save ID for post-login redirect
         return;
       }
       fetchInvitation();
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
     }
-  }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Add loggedInUserEmail to dependencies
+  }, [invitation, urlInvitationId, fetchInvitation]); // Add fetchInvitation to dependencies
 
   const handleLoginSuccess = () => {
     setLoggedInUserEmail(localStorage.getItem('userEmail')); // Update email after login
     setShowLoginPopup(false); // Hide pop-up
-    // The useEffect will re-run because loggedInUserEmail changed, triggering invitation fetch
+    // After successful login, attempt to refetch the invitation
+    if (urlInvitationId) {
+      fetchInvitation();
+    }
   };
 
   const handleGalleryClick = () => {

@@ -22,7 +22,13 @@ function Home() {
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userPicture', picture);
       // Optionally, remove query parameters from the URL
-      navigate('/home', { replace: true });
+      const pendingInvitationId = localStorage.getItem('pendingInvitationId');
+      if (pendingInvitationId) {
+        localStorage.removeItem('pendingInvitationId'); // Clear it after use
+        navigate(`/invitation/${pendingInvitationId}`, { replace: true });
+      } else {
+        navigate('/home', { replace: true });
+      }
     }
 
     const fetchAllInvitations = async () => {
