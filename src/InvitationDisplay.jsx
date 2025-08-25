@@ -16,24 +16,19 @@ function InvitationDisplay() {
 
   useEffect(() => {
     console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
-
-    if (!localStorage.getItem('accessToken')) {
-      console.log("Access token missing. Showing login pop-up.");
-      setShowLoginPopup(true); // Show login pop-up if not authenticated
-      setLoading(false); // Stop loading as we're waiting for login
-      return;
-    }
-
-    // If we have an invitation ID from the URL and a logged-in user, try to fetch it
-    if (urlInvitationId) {
+    // If no invitation in state and we have an ID from the URL, try to fetch it
+    if (!invitation && urlInvitationId) {
       const fetchInvitation = async () => {
         setLoading(true); // Start loading
         setError(null); // Clear previous errors
         try {
+          const accessToken = localStorage.getItem('accessToken');
+
+          // Only include Authorization header if an access token is available
+          const headers = accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {};
+
           console.log(`Fetching invitation with ID: ${urlInvitationId}`);
-          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` },
-          });
+          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, { headers });
 
           if (!response.ok) {
             const errorData = await response.json();
@@ -52,42 +47,23 @@ function InvitationDisplay() {
           setLoading(false); // End loading
         }
       };
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.log("Access token missing. Showing login pop-up.");
+        setShowLoginPopup(true); // Show login pop-up if not authenticated
+        setLoading(false); // Stop loading as we're waiting for login
+        return;
+      }
       fetchInvitation();
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
     }
-  }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Removed accessToken from dependencies as it's read internally
+  }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Add loggedInUserEmail to dependencies
 
   const handleLoginSuccess = () => {
     setLoggedInUserEmail(localStorage.getItem('userEmail')); // Update email after login
     setShowLoginPopup(false); // Hide pop-up
-    // After successful login, attempt to refetch the invitation
-    if (urlInvitationId) {
-      setLoading(true);
-      setError(null);
-      const fetchInvitationAfterLogin = async () => {
-        try {
-          const accessToken = localStorage.getItem('accessToken');
-          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, {
-            headers: { 'Authorization': `Bearer ${accessToken}` },
-          });
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to fetch invitation after login.');
-          }
-          const data = await response.json();
-          setInvitation(data);
-        } catch (error) {
-          console.error('Error fetching invitation after login:', error);
-          setError(error.message);
-          alert(`Failed to load invitation: ${error.message}`);
-          navigate('/invitation');
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchInvitationAfterLogin();
-    }
+    // The useEffect will re-run because loggedInUserEmail changed, triggering invitation fetch
   };
 
   const handleGalleryClick = () => {
@@ -236,7 +212,7 @@ function InvitationDisplay() {
           />
         </div>
       )}
-         
+
       {showLoginPopup && (
         <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
       )}
