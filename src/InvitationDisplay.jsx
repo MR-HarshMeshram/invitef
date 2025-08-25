@@ -3,9 +3,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
 import LoginModal from './LoginModal'; // Import the LoginModal component
 import HomeDisplay from './HomeDisplay'; // Import the new HomeDisplay component
-
-
-// Import Helmet
 // hi
 function InvitationDisplay() {
   const location = useLocation();
@@ -210,32 +207,20 @@ function InvitationDisplay() {
     <div className="invitation-display-container">
       {loading && <h2>Loading invitation...</h2>}
       {error && <h2>Error: {error}</h2>}
-      {!loading && !error && invitation && (
-        <>
-          <Helmet>
-            <title>{invitation.eventName} - Invitation</title>
-            <meta property="og:title" content={invitation.eventName} />
-            <meta property="og:description" content={`You're invited to ${invitation.eventName} hosted by ${invitation.invitedBy} at ${invitation.location}!`} />
-            {invitation.invitationImage && (
-              <meta property="og:image" content={invitation.invitationImage.url} />
-            )}
-            <meta property="og:url" content={`${window.location.origin}/invitation/${invitation._id}`} />
-            <meta name="twitter:card" content="summary_large_image" />
-          </Helmet>
-          <div style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
-            <HomeDisplay
-              invitation={invitation}
-              loggedInUserEmail={loggedInUserEmail}
-              handleGalleryClick={handleGalleryClick}
-              handleUploadClick={handleUploadClick}
-              handleShareClick={handleShareClick}
-              handleDeleteClick={handleDeleteClick}
-              handleAcceptClick={handleAcceptClick}
-              handleDeclineClick={handleDeclineClick}
-              hasAccepted={hasAccepted} // Pass the new state here
-            />
-          </div>
-        </>
+      {!loading && !error && (
+        <div style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
+          <HomeDisplay
+            invitation={invitation}
+            loggedInUserEmail={loggedInUserEmail}
+            handleGalleryClick={handleGalleryClick}
+            handleUploadClick={handleUploadClick}
+            handleShareClick={handleShareClick}
+            handleDeleteClick={handleDeleteClick}
+            handleAcceptClick={handleAcceptClick}
+            handleDeclineClick={handleDeclineClick}
+            hasAccepted={hasAccepted} // Pass the new state here
+          />
+        </div>
       )}
 
       {showLoginPopup && (
