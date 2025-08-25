@@ -1,12 +1,47 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
 
 function InvitationDisplay() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { invitation } = location.state || {};
+  const { invitationId: urlInvitationId } = useParams(); // Get invitation ID from URL
+  const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
   const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
+
+  useEffect(() => {
+    // If no invitation in state, try to fetch it using the ID from the URL
+    if (!invitation && urlInvitationId) {
+      const fetchInvitation = async () => {
+        try {
+          const accessToken = localStorage.getItem('accessToken');
+          if (!accessToken) {
+            // Redirect to login if not authenticated
+            navigate('/login');
+            return;
+          }
+
+          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch invitation.');
+          }
+
+          const data = await response.json();
+          setInvitation(data);
+        } catch (error) {
+          console.error('Error fetching invitation:', error);
+          alert('Failed to load invitation.');
+          navigate('/invitation'); // Redirect if fetch fails
+        }
+      };
+      fetchInvitation();
+    }
+  }, [invitation, urlInvitationId, navigate]);
 
   if (!invitation) {
     return (
@@ -27,7 +62,7 @@ function InvitationDisplay() {
   };
 
   const handleShareClick = async () => {
-    const invitationUrl = window.location.href; // Current URL of the invitation display page
+    const invitationUrl = `${window.location.origin}/invitation/${invitation._id}`; // Construct shareable URL
     if (navigator.share) {
       try {
         await navigator.share({
@@ -83,6 +118,68 @@ function InvitationDisplay() {
     }
   };
 
+  const handleAcceptClick = async () => {
+    if (window.confirm('Do you want to accept this invitation?')) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          alert('Authentication token missing. Please log in again.');
+          return;
+        }
+
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${invitation._id}/accept`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to accept invitation.');
+        }
+
+        alert('Invitation accepted!');
+        navigate('/home'); // Or to an 'invited' tab/page
+      } catch (error) {
+        console.error('Error accepting invitation:', error);
+        alert(`Error: ${error.message}`);
+      }
+    }
+  };
+
+  const handleDeclineClick = async () => {
+    if (window.confirm('Do you want to decline this invitation?')) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          alert('Authentication token missing. Please log in again.');
+          return;
+        }
+
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${invitation._id}/decline`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to decline invitation.');
+        }
+
+        alert('Invitation declined and removed.');
+        navigate('/home'); // Or remove the card from view
+      } catch (error) {
+        console.error('Error declining invitation:', error);
+        alert(`Error: ${error.message}`);
+      }
+    }
+  };
+
   return (
     <div className="invitation-display-container">
       {/* The header-card is now hidden by CSS */}
@@ -93,7 +190,7 @@ function InvitationDisplay() {
         )}
         <div className="invitation-content">
           {/* Add the date as seen in the image, you might need to format it if your backend sends a full timestamp */}
-          <p className="event-date">Sun, 05 Oct, 7 PM</p> {/* Placeholder for date/time */}
+          <p className="event-date">{new Date(invitation.eventDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p> {/* Placeholder for date/time */}
           <h3>{invitation.eventName}</h3>
           <p className="location-display">📍 {invitation.location}</p>
           <p className="host-display">Hosted by: {invitation.invitedBy}</p>
@@ -114,6 +211,12 @@ function InvitationDisplay() {
             )}
             {loggedInUserEmail === invitation.createdByEmail && (
               <button className="action-button delete-button" onClick={handleDeleteClick}>Delete</button>
+            )}
+            {loggedInUserEmail !== invitation.createdByEmail && ( // Only show accept/decline for invited users
+              <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>
+            )}
+            {loggedInUserEmail !== invitation.createdByEmail && ( // Only show accept/decline for invited users
+              <button className="action-button decline-button" onClick={handleDeclineClick}>Decline</button>
             )}
           </div>
         </div>
