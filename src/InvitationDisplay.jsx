@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
+import LoginModal from './LoginModal'; // Import the LoginModal component
 
 function InvitationDisplay() {
   const location = useLocation();
@@ -9,7 +10,8 @@ function InvitationDisplay() {
   const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
-  const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
 
   useEffect(() => {
     console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
@@ -21,8 +23,9 @@ function InvitationDisplay() {
         try {
           const accessToken = localStorage.getItem('accessToken');
           if (!accessToken) {
-            console.log("Access token missing. Redirecting to login.");
-            navigate('/login');
+            console.log("Access token missing. Showing login pop-up.");
+            setShowLoginPopup(true); // Show login pop-up if not authenticated
+            setLoading(false); // Stop loading as we're waiting for login
             return;
           }
 
@@ -54,7 +57,13 @@ function InvitationDisplay() {
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
     }
-  }, [invitation, urlInvitationId, navigate]);
+  }, [invitation, urlInvitationId, navigate, loggedInUserEmail]); // Add loggedInUserEmail to dependencies
+
+  const handleLoginSuccess = () => {
+    setLoggedInUserEmail(localStorage.getItem('userEmail')); // Update email after login
+    setShowLoginPopup(false); // Hide pop-up
+    // The useEffect will re-run because loggedInUserEmail changed, triggering invitation fetch
+  };
 
   if (loading) {
     return (
@@ -73,7 +82,7 @@ function InvitationDisplay() {
     );
   }
 
-  if (!invitation) {
+  if (!invitation && !showLoginPopup) {
     return (
       <div className="invitation-display-container">
         <h2>No invitation data found.</h2>
@@ -211,7 +220,7 @@ function InvitationDisplay() {
   };
 
   return (
-    <div className="invitation-display-container">
+    <div className="invitation-display-container" style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
       {/* The header-card is now hidden by CSS */}
 
       <div className="invitation-card">
@@ -246,10 +255,10 @@ function InvitationDisplay() {
             {loggedInUserEmail === invitation.createdByEmail && (
               <button className="action-button delete-button" onClick={handleDeleteClick}>Delete</button>
             )}
-            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && ( // Only show accept/decline for invited users of private invitations
+            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
               <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>
             )}
-            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && ( // Only show accept/decline for invited users of private invitations
+            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
               <button className="action-button decline-button" onClick={handleDeclineClick}>Decline</button>
             )}
           </div>
@@ -259,6 +268,10 @@ function InvitationDisplay() {
       {/* Optionally keep these buttons or integrate them differently */}
       {/* <button onClick={() => navigate('/home')}>Go to Home</button>
       <button onClick={() => navigate('/invitation')}>Create Another Invitation</button> */}
+         
+      {showLoginPopup && (
+        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
+      )}
     </div>
   );
 }

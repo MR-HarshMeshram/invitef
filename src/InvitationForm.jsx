@@ -134,7 +134,7 @@ function InvitationForm() {
         headers['Authorization'] = `Bearer ${accessToken}`;
       }
 
-      const response = await fetch('http://localhost:5000/invitations/create', {
+      const response = await fetch('https://invite-backend-vk36.onrender.com/invitations/create', {
         method: 'POST',
         body: formData,
         headers: headers, // Add headers to the request
