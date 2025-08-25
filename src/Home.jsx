@@ -51,7 +51,7 @@ function Home() {
   };
 
   const handleInvitationCardClick = (invitation) => {
-    navigate('/invitation-display', { state: { invitation } });
+    navigate(`/invitation/${invitation._id}`); // Pass invitation ID as a URL parameter
   };
 
   return (

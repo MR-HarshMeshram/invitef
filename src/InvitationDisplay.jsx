@@ -198,7 +198,7 @@ function InvitationDisplay() {
     <div className="invitation-display-container">
       {loading && <h2>Loading invitation...</h2>}
       {error && <h2>Error: {error}</h2>}
-      {!loading && !error && invitation && (
+      {!loading && !error && (
         <div style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
           <HomeDisplay
             invitation={invitation}
