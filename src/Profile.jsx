@@ -1,14 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import LogoutButton from './component/LogoutButton';
 
 function Profile() {
+  const [userData, setUserData] = useState({
+    fullName: 'Loading...',
+    email: 'Loading...',
+    phone: 'Loading...',
+    location: 'Loading...',
+    memberSince: 'Loading...',
+    profilePicture: '',
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userEmail = localStorage.getItem('userEmail');
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (!userEmail || !accessToken) {
+        console.log('User not logged in or token missing.');
+        // Optionally redirect to login or show a message
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/users/${userEmail}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data.');
+        }
+
+        const data = await response.json();
+        setUserData({
+          fullName: data.name || 'N/A',
+          email: data.email || 'N/A',
+          phone: data.phone || 'N/A', // Assuming a 'phone' field from backend
+          location: data.location || 'N/A', // Assuming a 'location' field from backend
+          memberSince: data.createdAt ? new Date(data.createdAt).toLocaleDateString() : 'N/A',
+          profilePicture: data.picture || '', // Assuming a 'picture' field from backend
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Handle error, e.g., display error message
+      }
+    };
+
+    fetchUserData();
+  }, []); // Empty dependency array means this effect runs once on mount
+
   return (
     <div className="profile-container">
       <div className="profile-header-card">
-        <div className="profile-avatar">JD</div>
-        <h3>John Doe</h3>
-        <p>@johndoe</p>
+        <div className="profile-avatar">{userData.fullName.charAt(0)}</div>
+        <h3>{userData.fullName}</h3>
+        <p>@{userData.email.split('@')[0]}</p>
       </div>
 
 
@@ -29,23 +78,23 @@ function Profile() {
         <h3>Personal Information</h3>
         <div className="info-item">
           <span>Full Name</span>
-          <span>John Doe</span>
+          <span>{userData.fullName}</span>
         </div>
         <div className="info-item">
           <span>Email</span>
-          <span>john.doe@email.com</span>
+          <span>{userData.email}</span>
         </div>
         <div className="info-item">
           <span>Phone</span>
-          <span>+1 (555) 123-4567</span>
+          <span>{userData.phone}</span>
         </div>
         <div className="info-item">
           <span>Location</span>
-          <span>New York, NY</span>
+          <span>{userData.location}</span>
         </div>
         <div className="info-item">
           <span>Member Since</span>
-          <span>January 2024</span>
+          <span>{userData.memberSince}</span>
         </div>
       </div>
 
