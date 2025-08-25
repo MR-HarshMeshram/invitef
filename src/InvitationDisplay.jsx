@@ -7,20 +7,26 @@ function InvitationDisplay() {
   const navigate = useNavigate();
   const { invitationId: urlInvitationId } = useParams(); // Get invitation ID from URL
   const [invitation, setInvitation] = useState(location.state?.invitation); // Initialize with state or null
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null); // Add error state
   const loggedInUserEmail = localStorage.getItem('userEmail'); // Get logged in user's email
 
   useEffect(() => {
-    // If no invitation in state, try to fetch it using the ID from the URL
+    console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
+    // If no invitation in state and we have an ID from the URL, try to fetch it
     if (!invitation && urlInvitationId) {
       const fetchInvitation = async () => {
+        setLoading(true); // Start loading
+        setError(null); // Clear previous errors
         try {
           const accessToken = localStorage.getItem('accessToken');
           if (!accessToken) {
-            // Redirect to login if not authenticated
+            console.log("Access token missing. Redirecting to login.");
             navigate('/login');
             return;
           }
 
+          console.log(`Fetching invitation with ID: ${urlInvitationId}`);
           const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`,
@@ -28,20 +34,44 @@ function InvitationDisplay() {
           });
 
           if (!response.ok) {
-            throw new Error('Failed to fetch invitation.');
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch invitation.');
           }
 
           const data = await response.json();
+          console.log("Invitation fetched successfully:", data);
           setInvitation(data);
         } catch (error) {
           console.error('Error fetching invitation:', error);
-          alert('Failed to load invitation.');
+          setError(error.message); // Set error state
+          alert(`Failed to load invitation: ${error.message}`);
           navigate('/invitation'); // Redirect if fetch fails
+        } finally {
+          setLoading(false); // End loading
         }
       };
       fetchInvitation();
+    } else if (invitation) {
+      setLoading(false); // If invitation is already in state, stop loading
     }
   }, [invitation, urlInvitationId, navigate]);
+
+  if (loading) {
+    return (
+      <div className="invitation-display-container">
+        <h2>Loading invitation...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="invitation-display-container">
+        <h2>Error: {error}</h2>
+        <button onClick={() => navigate('/home')}>Go to Home</button>
+      </div>
+    );
+  }
 
   if (!invitation) {
     return (
@@ -190,7 +220,11 @@ function InvitationDisplay() {
         )}
         <div className="invitation-content">
           {/* Add the date as seen in the image, you might need to format it if your backend sends a full timestamp */}
-          <p className="event-date">{new Date(invitation.eventDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</p> {/* Placeholder for date/time */}
+          <p className="event-date">
+            {invitation.eventDate 
+              ? new Date(invitation.eventDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+              : 'Date Not Available'}
+          </p> {/* Placeholder for date/time */}
           <h3>{invitation.eventName}</h3>
           <p className="location-display">📍 {invitation.location}</p>
           <p className="host-display">Hosted by: {invitation.invitedBy}</p>
