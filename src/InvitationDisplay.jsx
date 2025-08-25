@@ -32,12 +32,6 @@ function InvitationDisplay() {
 
           if (!response.ok) {
             const errorData = await response.json();
-            // If the error is due to authentication, show login popup
-            if (response.status === 401 || response.status === 403) {
-              console.log("Authentication required. Showing login pop-up.");
-              setShowLoginPopup(true);
-              return; // Stop further processing of this failed fetch
-            }
             throw new Error(errorData.message || 'Failed to fetch invitation.');
           }
 
@@ -53,6 +47,13 @@ function InvitationDisplay() {
           setLoading(false); // End loading
         }
       };
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.log("Access token missing. Showing login pop-up.");
+        setShowLoginPopup(true); // Show login pop-up if not authenticated
+        setLoading(false); // Stop loading as we're waiting for login
+        return;
+      }
       fetchInvitation();
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
@@ -197,12 +198,11 @@ function InvitationDisplay() {
     <div className="invitation-display-container">
       {loading && <h2>Loading invitation...</h2>}
       {error && <h2>Error: {error}</h2>}
-      {!loading && !error && (invitation || showLoginPopup) && (
+      {!loading && !error && invitation && (
         <div style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
           <HomeDisplay
             invitation={invitation}
             loggedInUserEmail={loggedInUserEmail}
-            showLoginPopup={showLoginPopup}
             handleGalleryClick={handleGalleryClick}
             handleUploadClick={handleUploadClick}
             handleShareClick={handleShareClick}
