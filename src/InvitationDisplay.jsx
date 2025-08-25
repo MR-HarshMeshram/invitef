@@ -23,19 +23,12 @@ function InvitationDisplay() {
         setError(null); // Clear previous errors
         try {
           const accessToken = localStorage.getItem('accessToken');
-          if (!accessToken) {
-            console.log("Access token missing. Showing login pop-up.");
-            setShowLoginPopup(true); // Show login pop-up if not authenticated
-            setLoading(false); // Stop loading as we're waiting for login
-            return;
-          }
+
+          // Only include Authorization header if an access token is available
+          const headers = accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {};
 
           console.log(`Fetching invitation with ID: ${urlInvitationId}`);
-          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`,
-            },
-          });
+          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`, { headers });
 
           if (!response.ok) {
             const errorData = await response.json();
@@ -54,6 +47,13 @@ function InvitationDisplay() {
           setLoading(false); // End loading
         }
       };
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.log("Access token missing. Showing login pop-up.");
+        setShowLoginPopup(true); // Show login pop-up if not authenticated
+        setLoading(false); // Stop loading as we're waiting for login
+        return;
+      }
       fetchInvitation();
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
@@ -137,7 +137,7 @@ function InvitationDisplay() {
       try {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
-          alert('Authentication token missing. Please log in again.');
+          setShowLoginPopup(true); // Show login pop-up if not authenticated
           return;
         }
 
@@ -168,7 +168,7 @@ function InvitationDisplay() {
       try {
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) {
-          alert('Authentication token missing. Please log in again.');
+          setShowLoginPopup(true); // Show login pop-up if not authenticated
           return;
         }
 
