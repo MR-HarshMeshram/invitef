@@ -102,7 +102,7 @@
 .card-actions {
   display: flex;
   justify-content: flex-start; /* Align buttons to the left */
-  gap: 15px; /* Increase space between buttons for better visibility */
+  gap: 10px; /* Adjust space between buttons for better visibility */
   margin-top: 0px; /* Adjust as padding from invitation-content should handle spacing */
   width: 100%; /* Take full width of content area */
   padding: 0px 30px 20px 30px; /* Add padding to align with content and provide bottom space */
@@ -113,13 +113,11 @@
   color: white;
   border: none;
   border-radius: 6px;       /* less rounded */
-  padding: 5px 10px;        /* smaller padding */
-  font-size: 0.75em;        /* smaller font size */
+  padding: 8px 15px;        /* increased padding */
+  font-size: 0.9em;        /* increased font size */
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* lighter shadow */
-  min-width: 70px;          /* optional: keeps consistent width */
-  min-height: 28px;         /* optional: keeps consistent height */
   text-align: center;       /* Center text horizontally */
   display: flex;            /* Use flexbox for vertical centering */
   align-items: center;      /* Center text vertically */
@@ -183,28 +181,5 @@
 }
 
 .book-tickets-button:active {
-  transform: translateY(0);
-}
-
-/* Remove or adjust these if they interfere with the new design */
-.invitation-display-container button:not(.book-tickets-button) {
-  background-color: #7b1fa2; /* Existing button style */
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 25px;
-  margin: 10px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.invitation-display-container button:not(.book-tickets-button):hover {
-  background-color: #9c27b0;
-  transform: translateY(-2px);
-}
-
-.invitation-display-container button:not(.book-tickets-button):active {
   transform: translateY(0);
 }
