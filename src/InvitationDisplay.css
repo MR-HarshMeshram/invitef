@@ -17,7 +17,7 @@
   border-radius: 20px;
   padding: 0;
   margin-bottom: 30px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Reduced shadow for a flatter look */
   text-align: left; /* Align text to left */
   width: 100%;
   max-width: 500px; /* Adjust as needed */
