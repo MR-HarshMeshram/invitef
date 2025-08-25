@@ -12,6 +12,8 @@ function Profile() {
     profilePicture: '',
   });
 
+  const [isDarkMode, setIsDarkMode] = useState(false); // State for dark mode
+
   useEffect(() => {
     const fetchUserData = async () => {
       const userEmail = localStorage.getItem('userEmail');
@@ -54,15 +56,21 @@ function Profile() {
     fetchUserData();
   }, []); // Empty dependency array means this effect runs once on mount
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <div className="profile-container">
+    <div className={`profile-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <div className="profile-header-card">
         <div className="profile-avatar">{userData.fullName.charAt(0)}</div>
         <h3>{userData.fullName}</h3>
         <p>@{userData.email.split('@')[0]}</p>
       </div>
 
-
+      <button onClick={toggleDarkMode} className="profile-button secondary">
+        {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+      </button>
       <LogoutButton />
       <div className="stats-grid">
         <div className="stat-card">
