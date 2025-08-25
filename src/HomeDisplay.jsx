@@ -15,7 +15,7 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
   }
 
   return (
-    <div className="invitation-card">
+    <div className="invitation-card" onClick={(invitation.eventPrivacy === 'public' || hasAccepted) ? handleGalleryClick : undefined} style={{ cursor: (invitation.eventPrivacy === 'public' || hasAccepted) ? 'pointer' : 'default' }}>
       {invitation.invitationImage && (
         <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image" />
       )}
@@ -36,9 +36,6 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
           )}
         </p>
         <div className="card-actions">
-          {hasAccepted && (
-            <button className="action-button gallery-button" onClick={handleGalleryClick}>Gallery</button>
-          )}
           {loggedInUserEmail === invitation.createdByEmail && (
             <button className="action-button upload-button" onClick={handleUploadClick}>Upload</button>
           )}
