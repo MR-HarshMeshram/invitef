@@ -68,7 +68,6 @@ function Profile() {
       <div className="profile-buttons">
         <button className="profile-button primary">EDIT PROFILE</button>
 
-        <button className="profile-button danger">SIGN OUT</button>
       </div>
     </div>
   );
