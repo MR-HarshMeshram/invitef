@@ -27,7 +27,7 @@
 
 .modal-content h2 {
   margin-top: 0;
-  font-size: 1.8em;
+  font-size: 1.5em; /* Reduced font size to prevent truncation */
   margin-bottom: 15px;
 }
 
