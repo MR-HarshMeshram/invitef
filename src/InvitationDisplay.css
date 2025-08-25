@@ -89,9 +89,21 @@
   width: 24px; /* Default size */
   height: 24px; /* Default size */
   border-radius: 50%; /* Make it circular */
+  /* background-color: #4CAF50; */ /* Green background for public */
+  padding: 4px; /* Add padding to make it visible */
+  box-sizing: content-box; /* Ensure padding adds to size */
+}
+
+.privacy-display .globe-icon {
+  display: inline-block;
+  width: 24px; /* Default size */
+  height: 24px; /* Default size */
+  border-radius: 50%; /* Make it circular */
   background-color: #4CAF50; /* Green background for public */
   padding: 4px; /* Add padding to make it visible */
   box-sizing: content-box; /* Ensure padding adds to size */
+  background-image: url('https://img.icons8.com/ios-filled/24/000000/globe--v1.png'); /* Globe icon */
+  background-size: cover;
 }
 
 /* Override for private icon to be yellow */
