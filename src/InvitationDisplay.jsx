@@ -195,7 +195,7 @@ function InvitationDisplay() {
   };
 
   return (
-    <div className="invitation-display-container" style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
+    <div className="invitation-display-container">
       {loading && <h2>Loading invitation...</h2>}
       {error && <h2>Error: {error}</h2>}
       {!loading && !error && !showLoginPopup && invitation && (
