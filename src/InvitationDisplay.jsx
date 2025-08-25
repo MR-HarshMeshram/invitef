@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationDisplay.css'; // You'll need to create this CSS file
 import LoginModal from './LoginModal'; // Import the LoginModal component
+import HomeDisplay from './HomeDisplay'; // Import the new HomeDisplay component
 
 function InvitationDisplay() {
   const location = useLocation();
@@ -64,32 +65,6 @@ function InvitationDisplay() {
     setShowLoginPopup(false); // Hide pop-up
     // The useEffect will re-run because loggedInUserEmail changed, triggering invitation fetch
   };
-
-  if (loading) {
-    return (
-      <div className="invitation-display-container">
-        <h2>Loading invitation...</h2>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="invitation-display-container">
-        <h2>Error: {error}</h2>
-        <button onClick={() => navigate('/home')}>Go to Home</button>
-      </div>
-    );
-  }
-
-  if (!invitation && !showLoginPopup) {
-    return (
-      <div className="invitation-display-container">
-        <h2>No invitation data found.</h2>
-        <button onClick={() => navigate('/invitation')}>Create New Invitation</button>
-      </div>
-    );
-  }
 
   const handleGalleryClick = () => {
     navigate(`/event-gallery/${invitation._id}`); // Navigate to event gallery with ID in URL
@@ -221,54 +196,21 @@ function InvitationDisplay() {
 
   return (
     <div className="invitation-display-container" style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
-      {/* The header-card is now hidden by CSS */}
+      {loading && <h2>Loading invitation...</h2>}
+      {error && <h2>Error: {error}</h2>}
+      {!loading && !error && !showLoginPopup && invitation && (
+        <HomeDisplay
+          invitation={invitation}
+          loggedInUserEmail={loggedInUserEmail}
+          handleGalleryClick={handleGalleryClick}
+          handleUploadClick={handleUploadClick}
+          handleShareClick={handleShareClick}
+          handleDeleteClick={handleDeleteClick}
+          handleAcceptClick={handleAcceptClick}
+          handleDeclineClick={handleDeclineClick}
+        />
+      )}
 
-      <div className="invitation-card">
-        {invitation.invitationImage && (
-          <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image" />
-        )}
-        <div className="invitation-content">
-          {/* Add the date as seen in the image, you might need to format it if your backend sends a full timestamp */}
-          <p className="event-date">
-            {invitation.eventDate 
-              ? new Date(invitation.eventDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })
-              : 'Date Not Available'}
-          </p> {/* Placeholder for date/time */}
-          <h3>{invitation.eventName}</h3>
-          <p className="location-display">📍 {invitation.location}</p>
-          <p className="host-display">Hosted by: {invitation.invitedBy}</p>
-          <p className="privacy-display">
-            {invitation.eventPrivacy === 'private' ? (
-              <><img src="https://img.icons8.com/ios-filled/24/000000/lock.png" alt="Lock icon" className="lock-icon" /> Private</>
-            ) : (
-              <><img src="https://img.icons8.com/ios-filled/24/000000/globe--v1.png" alt="Public icon" className="globe-icon" /> Public</>
-            )}
-          </p>
-          <div className="card-actions">
-            <button className="action-button gallery-button" onClick={handleGalleryClick}>Gallery</button>
-            {loggedInUserEmail === invitation.createdByEmail && (
-              <button className="action-button upload-button" onClick={handleUploadClick}>Upload</button>
-            )}
-            {loggedInUserEmail === invitation.createdByEmail && (
-              <button className="action-button share-button" onClick={handleShareClick}>Share</button>
-            )}
-            {loggedInUserEmail === invitation.createdByEmail && (
-              <button className="action-button delete-button" onClick={handleDeleteClick}>Delete</button>
-            )}
-            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
-              <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>
-            )}
-            {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
-              <button className="action-button decline-button" onClick={handleDeclineClick}>Decline</button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Optionally keep these buttons or integrate them differently */}
-      {/* <button onClick={() => navigate('/home')}>Go to Home</button>
-      <button onClick={() => navigate('/invitation')}>Create Another Invitation</button> */}
-         
       {showLoginPopup && (
         <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
       )}

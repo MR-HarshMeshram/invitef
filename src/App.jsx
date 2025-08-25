@@ -31,6 +31,7 @@ function MainContent() {
         <Route path="/" element={<LoginPage />} /> {/* Use LoginPage component for the root route */}
         <Route path="/home" element={<Home />} />
         <Route path="/invitation" element={<InvitationForm />} />
+        <Route path="/invitation/:invitationId" element={<InvitationDisplay />} /> {/* New dynamic route for displaying invitation by ID */}
         <Route path="/invitation-display" element={<InvitationDisplay />} /> {/* New route for displaying invitation */}
         <Route path="/invited" element={<Invited />} />
         <Route path="/upload-media" element={<UploadMedia />} />
