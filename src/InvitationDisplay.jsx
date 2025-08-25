@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async'; // Import Helmet
 import './InvitationDisplay.css'; // You'll need to create this CSS file
 import LoginModal from './LoginModal'; // Import the LoginModal component
 import HomeDisplay from './HomeDisplay'; // Import the new HomeDisplay component
@@ -205,6 +206,18 @@ function InvitationDisplay() {
 
   return (
     <div className="invitation-display-container">
+      {invitation && (
+        <Helmet>
+          <title>{invitation.eventName} - Invitation</title>
+          <meta property="og:title" content={invitation.eventName} />
+          <meta property="og:description" content={`You're invited to ${invitation.eventName} hosted by ${invitation.invitedBy}!`} />
+          {invitation.invitationImage && (
+            <meta property="og:image" content={invitation.invitationImage.url} />
+          )}
+          <meta property="og:url" content={`${window.location.origin}/invitation/${invitation._id}`} />
+          <meta property="og:type" content="website" />
+        </Helmet>
+      )}
       {loading && <h2>Loading invitation...</h2>}
       {error && <h2>Error: {error}</h2>}
       {!loading && !error && (
