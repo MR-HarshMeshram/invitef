@@ -27,6 +27,36 @@ function Invited() {
     }
   }, [location.state]);
 
+  useEffect(() => {
+    const validateAndSetInvitations = async () => {
+      const storedInvitations = JSON.parse(localStorage.getItem('acceptedInvitations')) || [];
+      const validInvitations = [];
+
+      for (const inv of storedInvitations) {
+        try {
+          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${inv._id}`);
+          if (response.ok) {
+            validInvitations.push(inv); // Invitation still exists, keep it
+          } else if (response.status === 404) {
+            console.log(`Invitation with ID ${inv._id} no longer exists and will be removed.`);
+          } else {
+            // Handle other potential errors, maybe keep for now or log
+            console.error(`Error validating invitation ${inv._id}: ${response.status}`);
+            validInvitations.push(inv); // Keep if other error, can be re-evaluated
+          }
+        } catch (error) {
+          console.error(`Network error validating invitation ${inv._id}:`, error);
+          validInvitations.push(inv); // Keep on network error to retry later
+        }
+      }
+
+      setAcceptedInvitations(validInvitations);
+      localStorage.setItem('acceptedInvitations', JSON.stringify(validInvitations));
+    };
+
+    validateAndSetInvitations();
+  }, []); // Run once on mount
+
   const handleCardClick = (invitationId) => {
     navigate(`/event-gallery/${invitationId}`);
   };
