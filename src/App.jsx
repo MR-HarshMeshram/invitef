@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import LoginPage from './LoginPage'; // Import the new LoginPage component
 import Home from './Home';
 import InvitationForm from './InvitationForm';
@@ -23,7 +23,33 @@ function AppWrapper() {
 
 function MainContent() {
   const location = useLocation();
+  const navigate = useNavigate(); // Get the navigate hook
   const isLoginPage = location.pathname === '/';
+
+  // Effect to handle redirection after Google login
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    const name = params.get('name');
+    const email = params.get('email');
+    const picture = params.get('picture');
+
+    if (token && email) { // Ensure both token and email are present
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('userName', name);
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userPicture', picture);
+
+      // Check for a pending invitation ID that triggered the login
+      const pendingInvitationId = localStorage.getItem('pendingInvitationId');
+      if (pendingInvitationId) {
+        localStorage.removeItem('pendingInvitationId'); // Clear it after use
+        navigate(`/invitation/${pendingInvitationId}`, { replace: true });
+      } else {
+        navigate('/home', { replace: true });
+      }
+    }
+  }, [location.search, navigate]); // Rerun when query params change
 
   return (
     <>

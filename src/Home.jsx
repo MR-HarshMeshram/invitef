@@ -10,26 +10,26 @@ function Home() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-    const name = params.get('name');
-    const email = params.get('email');
-    const picture = params.get('picture');
+    // Removed login handling as it's now managed by App.jsx
+    // const params = new URLSearchParams(location.search);
+    // const token = params.get('token');
+    // const name = params.get('name');
+    // const email = params.get('email');
+    // const picture = params.get('picture');
 
-    if (token) {
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem('userName', name);
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userPicture', picture);
-      // Optionally, remove query parameters from the URL
-      const pendingInvitationId = localStorage.getItem('pendingInvitationId');
-      if (pendingInvitationId) {
-        localStorage.removeItem('pendingInvitationId'); // Clear it after use
-        navigate(`/invitation/${pendingInvitationId}`, { replace: true });
-      } else {
-        navigate('/home', { replace: true });
-      }
-    }
+    // if (token) {
+    //   localStorage.setItem('accessToken', token);
+    //   localStorage.setItem('userName', name);
+    //   localStorage.setItem('userEmail', email);
+    //   localStorage.setItem('userPicture', picture);
+    //   const pendingInvitationId = localStorage.getItem('pendingInvitationId');
+    //   if (pendingInvitationId) {
+    //     localStorage.removeItem('pendingInvitationId');
+    //     navigate(`/invitation/${pendingInvitationId}`, { replace: true });
+    //   } else {
+    //     navigate('/home', { replace: true });
+    //   }
+    // }
 
     const fetchAllInvitations = async () => {
       setIsLoading(true);
