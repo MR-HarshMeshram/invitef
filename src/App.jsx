@@ -44,12 +44,12 @@ function MainContent() {
       const pendingInvitationPath = localStorage.getItem('pendingInvitationPath');
       if (pendingInvitationPath) {
         localStorage.removeItem('pendingInvitationPath'); // Clear it after use
-        navigate(pendingInvitationPath, { replace: true });
+        window.location.href = pendingInvitationPath; // Force a full page reload
       } else {
-        navigate('/home', { replace: true });
+        window.location.href = '/home'; // Force a full page reload
       }
     }
-  }, [location.search, navigate]); // Rerun when query params change
+  }, [location.search]); // Removed navigate from dependencies as it's no longer used for these redirects
 
   return (
     <>
