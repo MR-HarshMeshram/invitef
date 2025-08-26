@@ -9,7 +9,6 @@ import EventGallery from './EventGallery';
 import InvitationDisplay from './InvitationDisplay'; // Import InvitationDisplay
 import Profile from './Profile';
 import Header from './Header';
-import ProtectedRoute from './ProtectedRoute'; // Import ProtectedRoute
 import { useEffect } from 'react'; // Import useEffect
 import './App.css';
 
@@ -30,15 +29,15 @@ function MainContent() {
       {!isLoginPage && <Header />} 
       <Routes>
         <Route path="/" element={<LoginPage />} /> {/* Use LoginPage component for the root route */}
-        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/invitation" element={<ProtectedRoute><InvitationForm /></ProtectedRoute>} />
-        <Route path="/invitation/:invitationId" element={<ProtectedRoute><InvitationDisplay /></ProtectedRoute>} /> {/* New dynamic route for displaying invitation by ID */}
-        <Route path="/invitation-display" element={<ProtectedRoute><InvitationDisplay /></ProtectedRoute>} /> {/* New route for displaying invitation */}
-        <Route path="/invited" element={<ProtectedRoute><Invited /></ProtectedRoute>} />
-        <Route path="/upload-media" element={<ProtectedRoute><UploadMedia /></ProtectedRoute>} />
-        <Route path="/event-gallery" element={<ProtectedRoute><EventGallery /></ProtectedRoute>} />
-        <Route path="/event-gallery/:invitationId" element={<ProtectedRoute><EventGallery /></ProtectedRoute>} /> {/* Dynamic route for EventGallery */}
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/invitation" element={<InvitationForm />} />
+        <Route path="/invitation/:invitationId" element={<InvitationDisplay />} /> {/* New dynamic route for displaying invitation by ID */}
+        <Route path="/invitation-display" element={<InvitationDisplay />} /> {/* New route for displaying invitation */}
+        <Route path="/invited" element={<Invited />} />
+        <Route path="/upload-media" element={<UploadMedia />} />
+        <Route path="/event-gallery" element={<EventGallery />} />
+        <Route path="/event-gallery/:invitationId" element={<EventGallery />} /> {/* Dynamic route for EventGallery */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );
