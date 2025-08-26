@@ -60,6 +60,7 @@ function InvitationForm() {
       }
 
       const result = await response.json();
+      console.log("Fetched invitations data:", result.invitations); // Add this line to log fetched data
       setUserInvitations(result.invitations);
 
       // No longer automatically show form if no invitations, user clicks button now
