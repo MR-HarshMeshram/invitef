@@ -64,14 +64,7 @@ function Profile() {
 
       <LogoutButton />
       <div className="stats-grid">
-        <div className="stat-card">
-          <h4>24</h4>
-          <p>EVENTS CREATED</p>
-        </div>
-        <div className="stat-card">
-          <h4>156</h4>
-          <p>INVITATIONS SENT</p>
-        </div>
+        
 
       </div>
 
@@ -116,7 +109,7 @@ function Profile() {
       </div>
 
       <div className="profile-buttons">
-        <button className="profile-button primary">EDIT PROFILE</button>
+        
 
       </div>
     </div>
