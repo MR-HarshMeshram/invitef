@@ -20,13 +20,11 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
         <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image" />
       )}
       <div className="invitation-content">
-        <p className="event-date">
-          {invitation.eventDate
-            ? new Date(invitation.eventDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })
-            : 'Date Not Available'}
-        </p>
+        {/* Removed eventDate as dateTime is now used for event date and time */}
+        {invitation.dateTime && <p className="event-date">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
         <h3>{invitation.eventName}</h3>
         <p className="location-display">📍 {invitation.location}</p>
+        {invitation.description && <p className="description-display">{invitation.description}</p>}
         <p className="host-display">Hosted by: {invitation.invitedBy}</p>
         <p className="privacy-display">
           {invitation.eventPrivacy === 'private' ? (

@@ -84,22 +84,25 @@ function Home() {
                 <img src={invitation.invitationImage.url} alt="Invitation Card" className="event-card-image" />
               )}
               <div className="event-details">
-                {/* Add event date placeholder or actual date if available in invitation object */}
-                
-                <p className="event-name">{invitation.eventName}</p>
-                <p className="event-description">{invitation.description}</p>
-                <p className="event-date-time">🗓️ {invitation.dateTime ? new Date(invitation.dateTime).toLocaleString() : 'Date Not Available'}</p>
-                <p className="event-location">
-                  <img src="https://img.icons8.com/ios-filled/20/000000/marker.png" alt="Location icon" /> {invitation.location}
-                </p>
-                <p className="event-host">Hosted by: {invitation.invitedBy}</p>
-                <p className="event-privacy">
-                  {invitation.eventPrivacy === 'private' ? (
-                    <><img src="https://img.icons8.com/ios-filled/24/000000/lock.png" alt="Lock icon" className="lock-icon" /> Private</>
-                  ) : (
-                    <><img src="https://img.icons8.com/ios-filled/24/000000/globe--v1.png" alt="Public icon" className="globe-icon" /> Public</>
-                  )}
-                </p>
+                {/* Conditionally render event details */}
+                {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
+                {invitation.eventName && <p className="event-name">{invitation.eventName}</p>}
+                {invitation.location && (
+                  <p className="event-location">
+                    <img src="https://img.icons8.com/ios-filled/20/000000/marker.png" alt="Location icon" /> {invitation.location}
+                  </p>
+                )}
+                {invitation.description && <p className="event-description">{invitation.description}</p>}
+                {invitation.invitedBy && <p className="event-host">Hosted by: {invitation.invitedBy}</p>}
+                {invitation.eventPrivacy && (
+                  <p className="event-privacy">
+                    {invitation.eventPrivacy === 'private' ? (
+                      <><img src="https://img.icons8.com/ios-filled/24/000000/lock.png" alt="Lock icon" className="lock-icon" /> Private</>
+                    ) : (
+                      <><img src="https://img.icons8.com/ios-filled/24/000000/globe--v1.png" alt="Public icon" className="globe-icon" /> Public</>
+                    )}
+                  </p>
+                )}
               </div>
             </div>
           ))
