@@ -1,11 +1,13 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
   const accessToken = localStorage.getItem('accessToken');
+  const location = useLocation();
 
   if (!accessToken) {
-    // User not logged in, redirect to the login page
+    // User not logged in, save the current path and redirect to the login page
+    localStorage.setItem('pendingInvitationPath', location.pathname);
     return <Navigate to="/" replace />;
   }
 

@@ -40,11 +40,11 @@ function MainContent() {
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userPicture', picture);
 
-      // Check for a pending invitation ID that triggered the login
-      const pendingInvitationId = localStorage.getItem('pendingInvitationId');
-      if (pendingInvitationId) {
-        localStorage.removeItem('pendingInvitationId'); // Clear it after use
-        navigate(`/invitation/${pendingInvitationId}`, { replace: true });
+      // Check for a pending invitation path that triggered the login
+      const pendingInvitationPath = localStorage.getItem('pendingInvitationPath');
+      if (pendingInvitationPath) {
+        localStorage.removeItem('pendingInvitationPath'); // Clear it after use
+        navigate(pendingInvitationPath, { replace: true });
       } else {
         navigate('/home', { replace: true });
       }
