@@ -60,7 +60,6 @@ function InvitationForm() {
       }
 
       const result = await response.json();
-      console.log("Fetched invitations data:", result.invitations); // Add this line to log fetched data
       setUserInvitations(result.invitations);
 
       // No longer automatically show form if no invitations, user clicks button now
@@ -328,8 +327,8 @@ function InvitationForm() {
                   <div className="event-details">
                     <p className="event-date">{invitation.eventName}</p>
                     <p className="event-name">{invitation.location}</p>
-                    <p className="event-description">{invitation.description}</p>
-                    <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>
+                    {invitation.description && <p className="event-description">{invitation.description}</p>}
+                    {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
                     <p className="event-price">Hosted by: {invitation.invitedBy}</p>
                     <p className="event-privacy">{invitation.eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}</p>
                   </div>
