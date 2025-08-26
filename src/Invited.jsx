@@ -54,6 +54,8 @@ function Invited() {
                 </p>
                 <p className="event-name">{invitation.eventName}</p>
                 <p className="event-price">Hosted by: {invitation.invitedBy}</p> {/* Assuming invitedBy is the host */}
+                <p className="event-description">{invitation.description}</p>
+                <p className="event-date-time">🗓️ {invitation.dateTime ? new Date(invitation.dateTime).toLocaleString() : 'Date Not Available'}</p>
               </div>
             </div>
           ))

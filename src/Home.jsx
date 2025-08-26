@@ -85,8 +85,10 @@ function Home() {
               )}
               <div className="event-details">
                 {/* Add event date placeholder or actual date if available in invitation object */}
-                <p className="event-date">Sun, 05 Oct, 7 PM</p>
+                
                 <p className="event-name">{invitation.eventName}</p>
+                <p className="event-description">{invitation.description}</p>
+                <p className="event-date-time">🗓️ {invitation.dateTime ? new Date(invitation.dateTime).toLocaleString() : 'Date Not Available'}</p>
                 <p className="event-location">
                   <img src="https://img.icons8.com/ios-filled/20/000000/marker.png" alt="Location icon" /> {invitation.location}
                 </p>
