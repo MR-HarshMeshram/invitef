@@ -55,6 +55,7 @@ function InvitationDisplay() {
         console.log("Access token missing. Showing login pop-up.");
         setShowLoginPopup(true); // Show login pop-up if not authenticated
         setLoading(false); // Stop loading as we're waiting for login
+        localStorage.setItem('pendingInvitationId', urlInvitationId); // Save ID for post-login redirect
         return;
       }
       fetchInvitation();
