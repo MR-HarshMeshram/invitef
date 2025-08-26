@@ -316,7 +316,7 @@ function InvitationForm() {
           {isFetchingInvitations ? (
             <p>Loading your invitations...</p>
           ) : fetchError ? (
-            <p style={{ color: 'red' }}>Error: {fetchError}</p>
+            <p style={{ color: 'red' }}>No invitation created yet.</p>
           ) : userInvitations.length > 0 ? (
             <div className="card-container">
               {userInvitations.map((invitation) => (
