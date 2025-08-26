@@ -47,15 +47,14 @@ function Invited() {
                 <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image" />
               )}
               <div className="event-details">
-                <p className="event-date">
-                  {invitation.eventDate
-                    ? new Date(invitation.eventDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })
-                    : 'Date Not Available'}
-                </p>
-                <p className="event-name">{invitation.eventName}</p>
-                <p className="event-price">Hosted by: {invitation.invitedBy}</p> {/* Assuming invitedBy is the host */}
-                <p className="event-description">{invitation.description}</p>
-                <p className="event-date-time">🗓️ {invitation.dateTime ? new Date(invitation.dateTime).toLocaleString() : 'Date Not Available'}</p>
+                {/* Removed eventDate as dateTime is now used for event date and time */}
+                {invitation.eventName && <p className="event-name">{invitation.eventName}</p>}
+                {invitation.location && <p className="event-location">📍 {invitation.location}</p>}
+                {invitation.description && <p className="event-description">{invitation.description}</p>}
+                {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
+                <p className="event-host">Hosted by: {invitation.invitedBy}</p>
+                <p className="event-privacy">{invitation.eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}</p>
+
               </div>
             </div>
           ))
