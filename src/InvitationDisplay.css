@@ -9,9 +9,6 @@
   margin-top: 50px; /* Add margin to push content below the global header */
 }
 
-.invitation-display-container .header-card {
-}
-
 .invitation-card {
   background: linear-gradient(135deg, #6a1b9a, #4a148c); /* Purple gradient */
   border-radius: 20px;
@@ -143,34 +140,6 @@
   transform: translateY(0);
 }
 
-.gallery-button {
-  /* Inherits from action-button */
-}
-
-.upload-button {
-  background-color: #aa00ff; /* A different purple shade for Upload and Delete buttons */
-}
-
-.upload-button:hover {
-  background-color: #c042ff;
-}
-
-.share-button {
-  background-color: #6200ea; /* Same as gallery button */
-}
-
-.share-button:hover {
-  background-color: #7a1fdc;
-}
-
-.delete-button {
-  background-color: #aa00ff; /* Same as upload button */
-}
-
-.delete-button:hover {
-  background-color: #c042ff;
-}
-
 .book-tickets-button {
   background-color: #616161; /* Dark grey button */
   color: white;
@@ -218,8 +187,8 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 50px; /* Adjust as needed */
-  height: 50px; /* Adjust as needed */
+  width: 50px; /* Reduced size */
+  height: 50px; /* Reduced size */
 }
 
 .action-icon-box:hover {
@@ -228,27 +197,7 @@
 }
 
 .action-text {
-  font-size: 0.7em;
+  font-size: 0.6em; /* Reduced font size */
   color: #333;
-  margin-top: 5px;
-}
-
-.upload-icon {
-  /* Specific styles for upload icon if needed */
-}
-
-.share-icon {
-  /* Specific styles for share icon if needed */
-}
-
-.delete-icon {
-  /* Specific styles for delete icon if needed */
-}
-
-.accept-icon {
-  /* Specific styles for accept icon if needed */
-}
-
-.decline-icon {
-  /* Specific styles for decline icon if needed */
+  margin-top: 3px; /* Reduced margin */
 }
