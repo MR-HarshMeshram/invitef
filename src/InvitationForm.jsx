@@ -128,11 +128,14 @@ function InvitationForm() {
     setIsLoading(true);
     setError(null);
 
-    if (!eventName || !location || !invitedBy || !selectedFile) {
+    if (!isEditing && (!eventName || !location || !invitedBy || !selectedFile)) {
       setError('Please fill in all required fields and upload an image.');
       setIsLoading(false);
       return;
     }
+
+    // When editing, if no new file is selected, ensure the existing image URL is maintained.
+    // This is handled by not appending 'invitationImage' to formData if selectedFile is null.
 
     const userEmail = localStorage.getItem('userEmail'); // Get user email from localStorage
     if (!userEmail) {
