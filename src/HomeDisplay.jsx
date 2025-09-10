@@ -35,19 +35,34 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
         </p>
         <div className="card-actions">
           {loggedInUserEmail === invitation.createdByEmail && (
-            <img src="https://img.icons8.com/ios/24/000000/upload.png" alt="Upload" className="action-icon upload-icon" onClick={handleUploadClick} />
+            <div className="action-icon-box" onClick={handleUploadClick}>
+              <img src="https://img.icons8.com/ios/24/000000/upload.png" alt="Upload" className="action-icon" />
+              <p className="action-text">Upload</p>
+            </div>
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
-            <img src="https://img.icons8.com/ios/24/000000/share.png" alt="Share" className="action-icon share-icon" onClick={handleShareClick} />
+            <div className="action-icon-box" onClick={handleShareClick}>
+              <img src="https://img.icons8.com/ios/24/000000/share.png" alt="Share" className="action-icon" />
+              <p className="action-text">Share</p>
+            </div>
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
-            <img src="https://img.icons8.com/ios/24/000000/trash.png" alt="Delete" className="action-icon delete-icon" onClick={handleDeleteClick} />
+            <div className="action-icon-box" onClick={handleDeleteClick}>
+              <img src="https://img.icons8.com/ios/24/000000/trash.png" alt="Delete" className="action-icon" />
+              <p className="action-text">Delete</p>
+            </div>
           )}
           {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
-            <img src="https://img.icons8.com/ios/24/000000/checked--v1.png" alt="Accept" className="action-icon accept-icon" onClick={handleAcceptClick} />
+            <div className="action-icon-box" onClick={handleAcceptClick}>
+              <img src="https://img.icons8.com/ios/24/000000/checked--v1.png" alt="Accept" className="action-icon" />
+              <p className="action-text">Accept</p>
+            </div>
           )}
           {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
-            <img src="https://img.icons8.com/ios/24/000000/multiply.png" alt="Decline" className="action-icon decline-icon" onClick={handleDeclineClick} />
+            <div className="action-icon-box" onClick={handleDeclineClick}>
+              <img src="https://img.icons8.com/ios/24/000000/multiply.png" alt="Decline" className="action-icon" />
+              <p className="action-text">Decline</p>
+            </div>
           )}
         </div>
       </div>

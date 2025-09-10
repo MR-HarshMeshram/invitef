@@ -113,11 +113,9 @@
 
 .card-actions {
   display: flex;
-  justify-content: flex-start; /* Align buttons to the left */
-  gap: 10px; /* Adjust space between buttons for better visibility */
-  margin-top: 0px; /* Adjust as padding from invitation-content should handle spacing */
-  width: 100%; /* Take full width of content area */
-  padding: 0px 30px 20px 30px; /* Add padding to align with content and provide bottom space */
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .action-button {
@@ -206,6 +204,33 @@
 
 .action-icon:hover {
   transform: scale(1.1);
+}
+
+.action-icon-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 70px; /* Adjust as needed */
+  height: 70px; /* Adjust as needed */
+}
+
+.action-icon-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-text {
+  font-size: 0.7em;
+  color: #333;
+  margin-top: 5px;
 }
 
 .upload-icon {
