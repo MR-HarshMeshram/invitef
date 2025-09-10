@@ -35,13 +35,13 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
         </p>
         <div className="card-actions">
           {loggedInUserEmail === invitation.createdByEmail && (
-            <button className="action-button upload-button" onClick={handleUploadClick}>Upload</button>
+            <img src="https://img.icons8.com/ios-filled/24/000000/upload.png" alt="Upload" className="action-icon upload-icon" onClick={handleUploadClick} />
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
-            <button className="action-button share-button" onClick={handleShareClick}>Share</button>
+            <img src="https://img.icons8.com/ios-filled/24/000000/share--v1.png" alt="Share" className="action-icon share-icon" onClick={handleShareClick} />
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
-            <button className="action-button delete-button" onClick={handleDeleteClick}>Delete</button>
+            <img src="https://img.icons8.com/ios-filled/24/000000/filled-trash.png" alt="Delete" className="action-icon delete-icon" onClick={handleDeleteClick} />
           )}
           {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
             <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>

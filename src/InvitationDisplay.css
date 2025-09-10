@@ -195,3 +195,27 @@
 .book-tickets-button:active {
   transform: translateY(0);
 }
+
+.action-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.action-icon:hover {
+  transform: scale(1.1);
+}
+
+.upload-icon {
+  /* Specific styles for upload icon if needed */
+}
+
+.share-icon {
+  /* Specific styles for share icon if needed */
+}
+
+.delete-icon {
+  /* Specific styles for delete icon if needed */
+}
