@@ -14,8 +14,10 @@ function Dashboard() {
       setError(null);
       try {
         const token = localStorage.getItem('accessToken');
+        console.log('Access Token:', token ? 'Present' : 'Not Present');
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
 
+        console.log('Fetching dashboard data...');
         const [totalUsersRes, totalInvitationsRes, privateInvitationsRes, publicInvitationsRes, photoUploadsRes] = await Promise.all([
           fetch('https://invite-backend-vk36.onrender.com/users/dashboard/totalUsers', { headers }),
           fetch('https://invite-backend-vk36.onrender.com/invitations/dashboard/total', { headers }),
@@ -24,11 +26,28 @@ function Dashboard() {
           fetch('https://invite-backend-vk36.onrender.com/invitations/dashboard/photos', { headers }),
         ]);
 
+        console.log('All fetch responses received.');
+
+        // Check response status before parsing JSON
+        if (!totalUsersRes.ok) console.error('Total Users API Error:', totalUsersRes.status, totalUsersRes.statusText);
+        if (!totalInvitationsRes.ok) console.error('Total Invitations API Error:', totalInvitationsRes.status, totalInvitationsRes.statusText);
+        if (!privateInvitationsRes.ok) console.error('Private Invitations API Error:', privateInvitationsRes.status, privateInvitationsRes.statusText);
+        if (!publicInvitationsRes.ok) console.error('Public Invitations API Error:', publicInvitationsRes.status, publicInvitationsRes.statusText);
+        if (!photoUploadsRes.ok) console.error('Photo Uploads API Error:', photoUploadsRes.status, photoUploadsRes.statusText);
+
         const totalUsersData = await totalUsersRes.json();
         const totalInvitationsData = await totalInvitationsRes.json();
         const privateInvitationsData = await privateInvitationsRes.json();
         const publicInvitationsData = await publicInvitationsRes.json();
         const photoUploadsData = await photoUploadsRes.json();
+
+        console.log('Parsed Data:', {
+          totalUsersData,
+          totalInvitationsData,
+          privateInvitationsData,
+          publicInvitationsData,
+          photoUploadsData,
+        });
 
         if (!totalUsersRes.ok) throw new Error(totalUsersData.message || 'Failed to fetch total users');
         if (!totalInvitationsRes.ok) throw new Error(totalInvitationsData.message || 'Failed to fetch total invitations');
