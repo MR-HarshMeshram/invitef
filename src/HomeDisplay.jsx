@@ -35,19 +35,19 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
         </p>
         <div className="card-actions">
           {loggedInUserEmail === invitation.createdByEmail && (
-            <img src="https://img.icons8.com/ios-filled/24/000000/upload.png" alt="Upload" className="action-icon upload-icon" onClick={handleUploadClick} />
+            <img src="https://img.icons8.com/ios/24/000000/upload.png" alt="Upload" className="action-icon upload-icon" onClick={handleUploadClick} />
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
-            <img src="https://img.icons8.com/ios-filled/24/000000/share--v1.png" alt="Share" className="action-icon share-icon" onClick={handleShareClick} />
+            <img src="https://img.icons8.com/ios/24/000000/share.png" alt="Share" className="action-icon share-icon" onClick={handleShareClick} />
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
-            <img src="https://img.icons8.com/ios-filled/24/000000/filled-trash.png" alt="Delete" className="action-icon delete-icon" onClick={handleDeleteClick} />
+            <img src="https://img.icons8.com/ios/24/000000/trash.png" alt="Delete" className="action-icon delete-icon" onClick={handleDeleteClick} />
           )}
           {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
-            <button className="action-button accept-button" onClick={handleAcceptClick}>Accept</button>
+            <img src="https://img.icons8.com/ios/24/000000/checked--v1.png" alt="Accept" className="action-icon accept-icon" onClick={handleAcceptClick} />
           )}
           {loggedInUserEmail !== invitation.createdByEmail && invitation.eventPrivacy === 'private' && (
-            <button className="action-button decline-button" onClick={handleDeclineClick}>Decline</button>
+            <img src="https://img.icons8.com/ios/24/000000/multiply.png" alt="Decline" className="action-icon decline-icon" onClick={handleDeclineClick} />
           )}
         </div>
       </div>
