@@ -82,6 +82,10 @@ function InvitationDisplay() {
     navigate('/upload-media', { state: { invitationId: invitation._id } });
   };
 
+  const handleEditClick = () => {
+    navigate('/invitation', { state: { invitation, isEditing: true } });
+  };
+
   const handleShareClick = async () => {
     const invitationUrl = `${window.location.origin}/invitation/${invitation._id}`; // Construct shareable URL
     if (navigator.share) {
@@ -219,6 +223,7 @@ function InvitationDisplay() {
             handleAcceptClick={handleAcceptClick}
             handleDeclineClick={handleDeclineClick}
             hasAccepted={hasAccepted} // Pass the new state here
+            handleEditClick={handleEditClick} // Pass the new handler here
           />
         </div>
       )}

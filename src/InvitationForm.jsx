@@ -18,16 +18,36 @@ function InvitationForm() {
   const [isFetchingInvitations, setIsFetchingInvitations] = useState(true); // New state for fetching invitations
   const [fetchError, setFetchError] = useState(null); // New state for fetching errors
   const [showCreateForm, setShowCreateForm] = useState(false); // Controls visibility of the creation form, initially hidden
+  const [isEditing, setIsEditing] = useState(false); // New state to track if we are editing an existing invitation
+  const [currentInvitationId, setCurrentInvitationId] = useState(null); // New state to store the ID of the invitation being edited
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const locationHook = useLocation(); // Use useLocation hook
 
   // Check for navigation state on initial load
   useEffect(() => {
-    if (locationHook.state && locationHook.state.showForm) {
-      setShowCreateForm(true);
-      // Clear the state so it doesn't persist if the user navigates away and back
-      navigate(locationHook.pathname, { replace: true, state: {} });
+    if (locationHook.state) {
+      if (locationHook.state.showForm) {
+        setShowCreateForm(true);
+        setIsEditing(false); // Not editing when creating a new form
+        setCurrentInvitationId(null);
+        // Clear the state so it doesn't persist if the user navigates away and back
+        navigate(locationHook.pathname, { replace: true, state: {} });
+      } else if (locationHook.state.invitation && locationHook.state.isEditing) {
+        const { invitation } = locationHook.state;
+        setEventName(invitation.eventName);
+        setLocation(invitation.location);
+        setDescription(invitation.description || '');
+        setDateTime(invitation.dateTime ? new Date(invitation.dateTime).toISOString().slice(0, 16) : '');
+        setInvitedBy(invitation.invitedBy);
+        setEventPrivacy(invitation.eventPrivacy);
+        setPreviewUrl(invitation.invitationImage.url); // Pre-fill image preview
+        setSelectedFile(null); // No file selected initially for edit, only URL
+        setShowCreateForm(true); // Show the form for editing
+        setIsEditing(true); // Set editing mode to true
+        setCurrentInvitationId(invitation._id); // Set the ID of the invitation being edited
+        navigate(locationHook.pathname, { replace: true, state: {} }); // Clear state
+      }
     }
     fetchUserInvitations();
   }, [locationHook.state, navigate]); // Add locationHook.state and navigate to dependencies
@@ -128,7 +148,10 @@ function InvitationForm() {
     formData.append('description', description); // Append description
     formData.append('dateTime', dateTime); // Append dateTime
     formData.append('eventPrivacy', eventPrivacy);
-    formData.append('invitationImage', selectedFile);
+    // Only append new image if selected
+    if (selectedFile) {
+      formData.append('invitationImage', selectedFile);
+    }
     formData.append('createdByEmail', userEmail); // Append user email
 
     try {
@@ -138,21 +161,39 @@ function InvitationForm() {
         headers['Authorization'] = `Bearer ${accessToken}`;
       }
 
-      const response = await fetch('https://invite-backend-vk36.onrender.com/invitations/create', {
-        method: 'POST',
-        body: formData,
-        headers: headers, // Add headers to the request
-      });
+      let response;
+      let url;
+      let method;
+
+      if (isEditing) {
+        url = `https://invite-backend-vk36.onrender.com/invitations/${currentInvitationId}`;
+        method = 'PUT';
+        // For PUT requests with FormData, don't set Content-Type header manually
+        // The browser will set it automatically with the correct boundary
+        response = await fetch(url, {
+          method: method,
+          body: formData,
+          headers: headers,
+        });
+      } else {
+        url = 'https://invite-backend-vk36.onrender.com/invitations/create';
+        method = 'POST';
+        response = await fetch(url, {
+          method: method,
+          body: formData,
+          headers: headers,
+        });
+      }
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create invitation.');
+        throw new Error(errorData.message || `Failed to ${isEditing ? 'update' : 'create'} invitation.`);
       }
 
       const result = await response.json();
-      // After successful creation, refetch the list of invitations
+      // After successful creation/update, refetch the list of invitations
       await fetchUserInvitations();
-      // After successful creation, reset form fields and hide the form
+      // After successful creation/update, reset form fields and hide the form
       setEventName('');
       setLocation('');
       setInvitedBy('');
@@ -161,6 +202,8 @@ function InvitationForm() {
       setSelectedFile(null);
       setPreviewUrl('');
       setShowCreateForm(false); // Hide the form after successful submission
+      setIsEditing(false); // Reset editing state
+      setCurrentInvitationId(null); // Clear current invitation ID
       navigate('/invitation-display', { state: { invitation: result.invitation } }); // Navigate to display page
     } catch (err) {
       setError(err.message);
@@ -306,7 +349,7 @@ function InvitationForm() {
             {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
 
             <button type="submit" className="send-invitations-button" disabled={isLoading}>
-              {isLoading ? 'Sending...' : 'Send Invitations'} <img src="https://img.icons8.com/emoji/24/000000/rocket-emoji.png" alt="Rocket emoji" />
+              {isLoading ? (isEditing ? 'Saving...' : 'Sending...') : (isEditing ? 'Save Changes' : 'Send Invitations')} <img src="https://img.icons8.com/emoji/24/000000/rocket-emoji.png" alt="Rocket emoji" />
             </button>
           </form>
         </div>

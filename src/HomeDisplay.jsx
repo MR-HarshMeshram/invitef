@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './InvitationDisplay.css'; // Reuse the existing CSS for styling
 
-function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handleUploadClick, handleShareClick, handleDeleteClick, handleAcceptClick, handleDeclineClick, hasAccepted }) {
+function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handleUploadClick, handleShareClick, handleDeleteClick, handleAcceptClick, handleDeclineClick, hasAccepted, handleEditClick }) {
   const navigate = useNavigate();
 
   if (!invitation) {
@@ -38,6 +38,12 @@ function HomeDisplay({ invitation, loggedInUserEmail, handleGalleryClick, handle
             <div className="action-icon-box" onClick={handleUploadClick}>
               <img src="https://img.icons8.com/ios/24/000000/upload.png" alt="Upload" className="action-icon" />
               <p className="action-text">Upload</p>
+            </div>
+          )}
+          {loggedInUserEmail === invitation.createdByEmail && (
+            <div className="action-icon-box" onClick={handleEditClick}>
+              <img src="https://img.icons8.com/ios/24/000000/edit.png" alt="Edit" className="action-icon" />
+              <p className="action-text">Edit</p>
             </div>
           )}
           {loggedInUserEmail === invitation.createdByEmail && (
