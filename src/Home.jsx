@@ -41,7 +41,12 @@ function Home() {
           throw new Error(errorData.message || 'Failed to fetch all invitations.');
         }
         const result = await response.json();
-        setAllInvitations(result.invitations);
+        const sortedInvitations = result.invitations.sort((a, b) => {
+          const dateA = new Date(a.dateTime);
+          const dateB = new Date(b.dateTime);
+          return dateB - dateA; // Sort in descending order (latest first)
+        });
+        setAllInvitations(sortedInvitations);
       } catch (err) {
         setError(err.message);
       } finally {
