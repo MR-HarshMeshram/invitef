@@ -1,0 +1,209 @@
+.dashboard-container {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f2f5;
+  padding: 30px;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-container h1 {
+  font-size: 2.5em;
+  color: #1a202c;
+  margin-bottom: 10px;
+}
+
+.dashboard-subtitle {
+  font-size: 1.1em;
+  color: #616161;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 40px;
+}
+
+.kpi-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.kpi-card:hover {
+  transform: translateY(-5px);
+}
+
+.kpi-title {
+  font-size: 0.9em;
+  color: #757575;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.kpi-value {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.kpi-trend {
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+}
+
+.kpi-trend .arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-right: 5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+.kpi-trend .arrow.up {
+  border-bottom: 5px solid #4CAF50; /* Green for positive trend */
+}
+
+.kpi-trend .arrow.down {
+  border-top: 5px solid #F44336; /* Red for negative trend */
+}
+
+.kpi-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+}
+
+.kpi-icon img {
+  width: 30px;
+  height: 30px;
+  filter: invert(100%); /* Make icons white */
+}
+
+.quick-stats-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 40px;
+}
+
+.quick-stats-container h2 {
+  font-size: 1.8em;
+  color: #1a202c;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.quick-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.stat-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stat-card p {
+  font-size: 0.9em;
+  color: #757575;
+}
+
+.recent-activity-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 40px;
+}
+
+.recent-activity-container h2 {
+  font-size: 1.8em;
+  color: #1a202c;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.activity-icon {
+  background-image: url('https://img.icons8.com/ios-filled/24/000000/activity-history.png');
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+}
+
+.activity-list {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.activity-item:last-child {
+  margin-bottom: 0;
+}
+
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.activity-item p {
+  font-size: 1em;
+  color: #424242;
+  flex-grow: 1;
+}
+
+.activity-time {
+  color: #9e9e9e;
+  font-size: 0.85em;
+  margin-left: 10px;
+}
+
+.dashboard-last-updated {
+  font-size: 0.9em;
+  color: #757575;
+  margin-top: 40px;
+  text-align: center;
+  width: 100%;
+}

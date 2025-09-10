@@ -171,6 +171,8 @@ function InvitationForm() {
       if (isEditing) {
         url = `https://invite-backend-vk36.onrender.com/invitations/${currentInvitationId}`;
         method = 'PUT';
+        console.log('Sending PUT request to:', url);
+        console.log('Headers:', headers);
         // For PUT requests with FormData, don't set Content-Type header manually
         // The browser will set it automatically with the correct boundary
         response = await fetch(url, {
@@ -181,6 +183,8 @@ function InvitationForm() {
       } else {
         url = 'https://invite-backend-vk36.onrender.com/invitations/create';
         method = 'POST';
+        console.log('Sending POST request to:', url);
+        console.log('Headers:', headers);
         response = await fetch(url, {
           method: method,
           body: formData,

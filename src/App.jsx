@@ -8,6 +8,7 @@ import UploadMedia from './UploadMedia';
 import EventGallery from './EventGallery';
 import InvitationDisplay from './InvitationDisplay'; // Import InvitationDisplay
 import Profile from './Profile';
+import Dashboard from './Dashboard'; // Import the new Dashboard component
 import Header from './Header';
 import { useEffect } from 'react'; // Import useEffect
 import './App.css';
@@ -38,6 +39,7 @@ function MainContent() {
         <Route path="/event-gallery" element={<EventGallery />} />
         <Route path="/event-gallery/:invitationId" element={<EventGallery />} /> {/* Dynamic route for EventGallery */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard/:date" element={<Dashboard />} /> {/* New route for Dashboard */}
       </Routes>
     </>
   );
