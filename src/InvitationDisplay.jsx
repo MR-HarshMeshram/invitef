@@ -270,36 +270,38 @@ function InvitationDisplay() {
                 </div>
               </div>
             </div>
-            <div className="private-invitations-section">
-              <h3 className="private-invitations-title">My Private Invitations</h3>
-              <div className="private-invitations-grid">
-                {/* Static Private Invitations - to be replaced with dynamic data if needed */}
-                <div className="private-invitation-item">
-                  <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMy08Zl6_WdE1R5x7pQUtNEk66GB5QCdqX4F_013e17exRCJD9cKh-3RKCAED7wWr049R3_cTUXYJqPs4BiKtoGFrtEnJf7GIdkWmExeDBVd_FoJxy5tKrdr4-k9LlMvOqTskXpZVSrqRkO06k39PppyErSFkrJnphIyqYfWdGNpiK1Qz4qWtM_W1C6zzDtBHEdptcZEGYsuuDah2zFjtfjM8ZXTeJ4rBYiyAqWBfxE-K3E-6JSA0t5BklCz_YY63TFVhfor2-Ilk" alt="Birthday Bash Invitation Card" />
-                  <div className="private-invitation-overlay">
-                    <p className="private-invitation-name">Birthday Bash</p>
+            {invitation.invitationImage && (
+              <div className="private-invitations-section">
+                <h3 className="private-invitations-title">My Private Invitations</h3>
+                <div className="private-invitations-grid">
+                  {/* Static Private Invitations - to be replaced with dynamic data if needed */}
+                  <div className="private-invitation-item">
+                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMy08Zl6_WdE1R5x7pQUtNEk66GB5QCdqX4F_013e17exRCJD9cKh-3RKCAED7wWr049R3_cTUXYJqPs4BiKtoGFrtEnJf7GIdkWmExeDBVd_FoJxy5tKrdr4-k9LlMvOqTskXpZVSrqRkO06k39PppyErSFkrJnphIyqYfWdGNpiK1Qz4qWtM_W1C6zzDtBHEdptcZEGYsuuDah2zFjtfjM8ZXTeJ4rBYiyAqWBfxE-K3E-6JSA0t5BklCz_YY63TFVhfor2-Ilk" alt="Birthday Bash Invitation Card" />
+                    <div className="private-invitation-overlay">
+                      <p className="private-invitation-name">Birthday Bash</p>
+                    </div>
                   </div>
-                </div>
-                <div className="private-invitation-item">
-                  <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEPqjYhGdN3N_BfVGrBO4SF__Xs_0WXpOqJ6idWkwnekQDoQsPPdnmmbVyleUk_j5XAYBiKD0kmn0DukJlfhmtqQZhMqSUjoPx9rJU2VAQZo3BJw6rnWM-iq9xEE6BEr66G9g-dmo2Ipqyd51ArvUoGHl2rcl5x19_kfwIBk3iCVlk41X5a3SyUrQqy20DKjkUAI4OY6d5SmqQoi9isxIL-GBUkTMaNR7CR_hUFciyB318NWBW-zkM9doy4fmwRaib1AB-CoT0ols" alt="Wedding Celebration Invitation Card" />
-                  <div className="private-invitation-overlay">
-                    <p className="private-invitation-name">Wedding Celebration</p>
+                  <div className="private-invitation-item">
+                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEPqjYhGdN3N_BfVGrBO4SF__Xs_0WXpOqJ6idWkwnekQDoQsPPdnmmbVyleUk_j5XAYBiKD0kmn0DukJlfhmtqQZhMqSUjoPx9rJU2VAQZo3BJw6rnWM-iq9xEE6BEr66G9g-dmo2Ipqyd51ArvUoGHl2rcl5x19_kfwIBk3iCVlk41X5a3SyUrQqy20DKjkUAI4OY6d5SmqQoi9isxIL-GBUkTMaNR7CR_hUFciyB318NWBW-zkM9doy4fmwRaib1AB-CoT0ols" alt="Wedding Celebration Invitation Card" />
+                    <div className="private-invitation-overlay">
+                      <p className="private-invitation-name">Wedding Celebration</p>
+                    </div>
                   </div>
-                </div>
-                <div className="private-invitation-item">
-                  <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEz4lzxfDLF5ulYNKVhBjKo7k9y3GMo7DTXDDsBAUDaXiz5HoIqcafI_uI1oX6FW1Q7TOwmkdiB_cOdP5zdE3CKw6YF0a8y6oVsL2MRqSjnw8YdhnvqEZXMPWbYp1Ishe4QzQGBiZNTYB0S_BBET6_jMPdh3RH-eJFeZURo_h1nJxTDVIkpGviNUr49OWDuLr1YcAvKDSHCM3t70TK7F-DJ7jzIiXvT3GdC3Fp8_3OyEjrybxqlxyH-MeHhLMP3SDQTMhUJMWPinU" alt="Anniversary Dinner Invitation Card" />
-                  <div className="private-invitation-overlay">
-                    <p className="private-invitation-name">Anniversary Dinner</p>
+                  <div className="private-invitation-item">
+                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEz4lzxfDLF5ulYNKVhBjKo7k9y3GMo7DTXDDsBAUDaXiz5HoIqcafI_uI1oX6FW1Q7TOwmkdiB_cOdP5zdE3CKw6YF0a8y6oVsL2MRqSjnw8YdhnvqEZXMPWbYp1Ishe4QzQGBiZNTYB0S_BBET6_jMPdh3RH-eJFeZURo_h1nJxTDVIkpGviNUr49OWDuLr1YcAvKDSHCM3t70TK7F-DJ7jzIiXvT3GdC3Fp8_3OyEjrybxqlxyH-MeHhLMP3SDQTMhUJMWPinU" alt="Anniversary Dinner Invitation Card" />
+                    <div className="private-invitation-overlay">
+                      <p className="private-invitation-name">Anniversary Dinner</p>
+                    </div>
                   </div>
-                </div>
-                <div className="private-invitation-item">
-                  <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7CY0j-uJrWGmnZa-B_7Tx1XPKlzfQP_NGNooyFunvZzesSyuOjFs62BOxM5RqFPLMJA8Vi9Q2tVGziAvfhIer7Xiz2Mxe2vGQRwMsb-NS4nMeO7Iv_2LB5wX4uKP0r6O7mBSydqjOPvXWDY6UOrZGk7jVCFp66PcsbaKhRfd-erq7lfSYGDa53NQm6cvS5LvHaegNuplZVcJvxAUpNK_WgmOH_ECb4j4DCNBDswNijgGVCN38-JWgKn1oZ7U2h50kdd5XXpbARss" alt="Graduation Party Invitation Card" />
-                  <div className="private-invitation-overlay">
-                    <p className="private-invitation-name">Graduation Party</p>
+                  <div className="private-invitation-item">
+                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7CY0j-uJrWGmnZa-B_7Tx1XPKlzfQP_NGNooyFunvZzesSyuOjFs62BOxM5RqFPLMJA8Vi9Q2tVGziAvfhIer7Xiz2Mxe2vGQRwMsb-NS4nMeO7Iv_2LB5wX4uKP0r6O7mBSydqjOPvXWDY6UOrZGk7jVCFp66PcsbaKhRfd-erq7lfSYGDa53NQm6cvS5LvHaegNuplZVcJvxAUpNK_WgmOH_ECb4j4DCNBDswNijgGVCN38-JWgKn1oZ7U2h50kdd5XXpbARss" alt="Graduation Party Invitation Card" />
+                    <div className="private-invitation-overlay">
+                      <p className="private-invitation-name">Graduation Party</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         ) : (
           <p className="no-invitation-message">No invitation data found.</p>
