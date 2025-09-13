@@ -98,12 +98,11 @@
 
 .detail-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 
 .detail-icon {
-  margin-top: 4px;
   color: #718096; /* text-zinc-500 */
 }
 
