@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import './InvitationDisplay.css';
+import './InvitationDisplay.css'; // You'll need to create this CSS file
 import LoginModal from './LoginModal'; // Import the LoginModal component
-import './material-symbols-outlined.css'; // Import for Material Symbols Outlined
+import HomeDisplay from './HomeDisplay'; // Import the new HomeDisplay component
 // hi
 function InvitationDisplay() {
   const location = useLocation();
@@ -14,8 +14,6 @@ function InvitationDisplay() {
   const [showLoginPopup, setShowLoginPopup] = useState(false); // New state for login pop-up
   const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail')); // Get logged in user's email
   const [hasAccepted, setHasAccepted] = useState(false); // New state to track if invitation has been accepted
-  const [privateInvitations, setPrivateInvitations] = useState([]);
-  const [allInvitations, setAllInvitations] = useState([]);
 
   // Memoized function to fetch invitation details
   const fetchInvitation = React.useCallback(async () => {
@@ -48,28 +46,6 @@ function InvitationDisplay() {
     }
   }, [urlInvitationId, navigate]); // Dependencies for useCallback
 
-  // Memoized function to fetch private invitations for the logged-in user
-  const fetchPrivateInvitations = React.useCallback(async () => {
-    const userEmail = localStorage.getItem('userEmail');
-    if (!userEmail) {
-      console.log("User email not found. Cannot fetch private invitations.");
-      return;
-    }
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      const headers = accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {};
-      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/private/${userEmail}`, { headers });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch private invitations.');
-      }
-      const data = await response.json();
-      setPrivateInvitations(data.invitations);
-    } catch (error) {
-      console.error('Error fetching private invitations:', error);
-    }
-  }, []); // No dependencies for useCallback, as it only uses localStorage and does not depend on component state or props
-
   useEffect(() => {
     console.log("useEffect triggered. Invitation in state:", invitation, "URL ID:", urlInvitationId);
     // If no invitation in state and we have an ID from the URL, try to fetch it
@@ -86,8 +62,7 @@ function InvitationDisplay() {
     } else if (invitation) {
       setLoading(false); // If invitation is already in state, stop loading
     }
-    fetchPrivateInvitations(); // Fetch private invitations when component mounts or invitation changes
-  }, [invitation, urlInvitationId, fetchInvitation, fetchPrivateInvitations]); // Add fetchPrivateInvitations to dependencies
+  }, [invitation, urlInvitationId, fetchInvitation]); // Add fetchInvitation to dependencies
 
   const handleLoginSuccess = () => {
     setLoggedInUserEmail(localStorage.getItem('userEmail')); // Update email after login
@@ -232,124 +207,30 @@ function InvitationDisplay() {
     }
   };
 
-  const handleInvitationCardClick = (privateInv) => {
-    setInvitation(privateInv); // Set the selected private invitation as the main invitation
-    setLoading(false); // Stop loading as we have the invitation
-    setShowLoginPopup(false); // Hide login pop-up if it was shown
-  };
-
   return (
-    <div className="invitation-page-container">
-      <header className="header-bar">
-        <button className="header-back-button" onClick={() => navigate(-1)}>
-          <span className="material-symbols-outlined">arrow_back</span>
-        </button>
-        <h2 className="header-title">Private Invitation Gallery</h2>
-      </header>
-      {loading && <p>Loading invitation...</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      {!loading && !error && invitation && (
-        <div className="content-padding" style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
-          <div className="invitation-details-card">
-            {invitation.invitationImage && (
-              <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image-display" />
+    <div className="invitation-display-container">
+      {loading && <h2>Loading invitation...</h2>}
+      {error && <h2>Error: {error}</h2>}
+      {!loading && !error && (
+        <div style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
+          <HomeDisplay
+            invitation={invitation}
+            loggedInUserEmail={loggedInUserEmail}
+            handleGalleryClick={handleGalleryClick}
+            handleUploadClick={handleUploadClick}
+            handleShareClick={handleShareClick}
+            handleDeleteClick={handleDeleteClick}
+            handleAcceptClick={handleAcceptClick}
+            handleDeclineClick={handleDeclineClick}
+            hasAccepted={hasAccepted} // Pass the new state here
+            handleEditClick={handleEditClick} // Pass the new handler here
+          />
+              </div>
             )}
-            <div className="details-content">
-              <h3 className="details-title">All Details of Invitation</h3>
-              <div className="details-grid">
-                <div className="detail-item">
-                  <span className="material-symbols-outlined detail-icon">celebration</span>
-                  <div>
-                    <p className="detail-label">Event</p>
-                    <p className="detail-value">{invitation.eventName}</p>
-                  </div>
-                </div>
-                {invitation.dateTime && (
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">calendar_month</span>
-                    <div>
-                      <p className="detail-label">Date</p>
-                      <p className="detail-value">{new Date(invitation.dateTime).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                )}
-                {invitation.dateTime && (
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">schedule</span>
-                    <div>
-                      <p className="detail-label">Time</p>
-                      <p className="detail-value">{new Date(invitation.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} onwards</p>
-                    </div>
-                  </div>
-                )}
-                {invitation.location && (
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">location_on</span>
-                    <div>
-                      <p className="detail-label">Venue</p>
-                      <p className="detail-value">{invitation.location}</p>
-                    </div>
-                  </div>
-                )}
-                {invitation.additionalDetails && (
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">info</span>
-                    <div>
-                      <p className="detail-label">Additional Details</p>
-                      <p className="detail-value">{invitation.additionalDetails}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="share-button-container">
-                <button className="share-button" onClick={handleShareClick}>
-                  <span className="material-symbols-outlined">share</span>
-                  <span>Share Invitation</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          {privateInvitations.length > 0 && (
-            <div className="private-invitations-section">
-              <h3 className="private-invitations-title">My Private Invitations</h3>
-              <div className="private-invitations-grid">
-                {privateInvitations.map((privateInv) => (
-                  <div className="private-invitation-card" key={privateInv._id} onClick={() => handleInvitationCardClick(privateInv)}>
-                    <img className="private-invitation-image" src={privateInv.invitationImage?.url || 'https://via.placeholder.com/150'} alt={privateInv.eventName} />
-                    <div className="private-invitation-overlay"></div>
-                    <div className="private-invitation-name">
-                      <p>{privateInv.eventName}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+
       {showLoginPopup && (
         <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
       )}
-      <nav className="bottom-nav-container">
-        <div className="bottom-nav-items">
-          <a className="nav-item" onClick={() => navigate('/home')}>
-            <span className="material-symbols-outlined nav-icon">home</span>
-            <span className="nav-text">Home</span>
-          </a>
-          <a className="nav-item" onClick={() => navigate('/invitation')}>
-            <span className="material-symbols-outlined nav-icon">add_box</span>
-            <span className="nav-text">Create</span>
-          </a>
-          <a className="nav-item active" onClick={() => navigate('/invited')}>
-            <span className="material-symbols-outlined nav-icon">photo_library</span>
-            <span className="nav-text">Gallery</span>
-          </a>
-          <a className="nav-item" onClick={() => navigate('/profile')}>
-            <span className="material-symbols-outlined nav-icon">person</span>
-            <span className="nav-text">Profile</span>
-          </a>
-        </div>
-      </nav>
     </div>
   );
 }
