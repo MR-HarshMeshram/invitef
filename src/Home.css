@@ -1,165 +1,287 @@
 .home-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #2c3e50; /* Dark blue background */
-  color: white;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
+  background-color: #faf8fc;
   min-height: 100vh;
-  box-sizing: border-box;
+  padding-bottom: 80px; /* Space for the fixed bottom nav */
 }
 
-.home-container h1 {
-  margin-top: 50px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 2.5em; /* Adjusted font size */
-  line-height: 1.2;
-  border-bottom: none; /* Removed border */
-  padding-bottom: 0;
-}
-
-.home-container h1 .highlight {
-  color: #3498db; /* Blue color for highlight */
-}
-
-.home-container .subtitle {
-  margin-bottom: 40px;
-  font-size: 1.1em;
-  color: #ccc;
-  text-align: center;
-  max-width: 400px;
-}
-
-.card-container {
-  display: grid; /* Use grid for a more flexible layout */
-  grid-template-columns: 1fr; /* Display items in a single vertical column */
-  gap: 20px;
-  width: 100%;
-  max-width: 500px; /* Constrain max-width to stack cards vertically */
-  justify-content: center;
-}
-
-.card {
-  background: linear-gradient(135deg, #4a148c, #880e4f); /* Deeper purple gradient */
-  border-radius: 20px;
-  padding: 0;
-  text-align: left; /* Align text to left */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-  overflow: hidden; /* Ensures image corners are rounded with card */
+.header-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: rgba(250, 248, 252, 0.8);
+  backdrop-filter: blur(5px);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  padding-bottom: 8px;
+  justify-content: space-between;
+}
+
+.back-button {
+  color: #1a202c;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+.back-button .material-symbols-outlined {
+  font-size: 24px;
 }
 
-.event-card-image {
-  width: 100%;
-  height: 200px; /* Fixed height for event images */
-  object-fit: cover; /* Ensures image covers the area */
-  border-radius: 20px 20px 0 0; /* Top corners rounded */
-  margin-bottom: 0;
-}
-
-.card .event-details {
-  padding: 20px;
-}
-
-.card .event-details .event-date {
-  font-size: 0.9em;
-  color: #c0c0c0; /* Lighter color for date */
-  margin-bottom: 8px;
-}
-
-.card .event-details .event-name {
-  font-size: 1.8em; /* Larger font for event name */
+.header-title {
+  color: #1a202c;
+  font-size: 18px;
   font-weight: bold;
-  color: #ffffff;
-  margin-bottom: 10px;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  flex: 1;
+  text-align: center;
+  padding-right: 40px; /* To center the title despite the back button */
 }
 
-.card .event-details .event-location, 
-.card .event-details .event-host, 
-.card .event-details .event-privacy {
+.hero-section {
+  background: linear-gradient(to bottom right, #e0b0ff, #c084fc);
+  padding: 32px 16px;
+  text-align: center;
+  position: relative;
+}
+
+.hero-title {
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+  color: #1a202c;
+}
+
+.hero-subtitle {
+  margin-top: 8px;
+  color: #4a5568;
+}
+
+.create-invite-button {
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #a413ec;
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.create-invite-button:hover {
+  transform: scale(1.05);
+}
+
+.event-section {
+  padding-top: 20px;
+}
+
+.section-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1em;
-  color: #e0e0e0; /* Consistent color for details */
-  margin-bottom: 5px;
+  justify-content: space-between;
+  padding: 0 16px 12px;
 }
 
-.card .event-details .event-location img {
-  width: 20px;
-  height: 20px;
-  filter: invert(15%) sepia(90%) saturate(7000%) hue-rotate(330deg) brightness(100%) contrast(100%); /* Red filter for location icon */
+.section-title {
+  color: #1a202c;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
 }
 
-/* Specific styling for privacy icons */
-.card .event-details .event-privacy .lock-icon {
-  filter: none; /* Remove filter for specific icons */
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: #FFC107; /* Yellow for private */
-  padding: 4px;
-  box-sizing: content-box;
+.see-all-link {
+  color: #a413ec;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.card .event-details .event-privacy .globe-icon {
-  filter: none; /* Remove filter for specific icons */
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: #4CAF50; /* Green for public */
-  padding: 4px;
-  box-sizing: content-box;
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-left: 16px;
+  padding-right: 8px;
+  gap: 16px;
 }
 
-.show-events-title {
-  margin-top: 40px;
-  margin-bottom: 20px;
-  font-size: 2.2em; /* Larger title */
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.event-card {
+  flex-shrink: 0;
+  width: 288px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.event-image {
+  width: 100%;
+  height: 160px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.event-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.event-name {
+  color: #1a202c;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+.event-date {
+  color: #718096;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.view-details-button {
+  margin-top: 16px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
   color: white;
-  text-align: center;
+  background-color: #a413ec;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
 }
 
-/* Removed redundant/conflicting .card styles from previous iterations */
-.card h2, .card p, .card img:not(.card-icon) {
-  /* Reset or adjust if they are inherited unexpectedly */
+.featured-event-section {
+  padding-top: 20px;
 }
 
-.card.create-invitation-card {
-  background: linear-gradient(135deg, #4a148c, #880e4f); /* Deeper purple gradient for the card */
+.featured-event-title {
+  color: #1a202c;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  padding: 0 16px 12px;
+  margin-top: 20px;
+}
+
+.featured-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-left: 16px;
+  padding-right: 8px;
+  padding-bottom: 20px;
+  gap: 16px;
+}
+
+.featured-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.featured-event-card {
+  flex-shrink: 0;
+  width: 256px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 12px;
+}
+
+.featured-event-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+}
+
+.featured-event-name {
+  color: #1a202c;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.featured-event-description {
+  color: #718096;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 64px;
+}
+
+.nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px; /* Reduced padding to decrease height */
-  border-radius: 20px; /* Slightly more rounded corners */
-}
-
-.card-icon {
-  width: 100px; /* Larger icon */
-  height: 100px; /* Larger icon */
-  margin-bottom: 15px; /* Reduced space below icon */
-}
-
-.card.create-invitation-card h2 {
-  font-size: 2.5em; /* Larger heading */
-  margin-bottom: 10px; /* Reduced margin */
-  color: white;
-}
-
-.card.create-invitation-card p {
-  font-size: 1.2em; /* Slightly larger text */
-  color: #e0e0e0;
-  margin-bottom: 20px; /* Reduced space below paragraph */
-  line-height: 1.6;
   text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #718096;
+  transition: color 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: #a413ec;
+}
+
+.nav-icon {
+  font-size: 24px;
+}
+
+.nav-text {
+  margin-top: 2px;
 }
