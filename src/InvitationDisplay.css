@@ -1,18 +1,15 @@
-.invitation-page-container {
-  font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;
+.main-container {
   background-color: #faf8fc;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
   overflow-x: hidden;
 }
 
-.page-content-wrapper {
+.content-wrapper {
   flex: 1;
-  padding-bottom: 80px; /* Space for the fixed bottom nav */
 }
 
-.header-bar {
+.header {
   display: flex;
   align-items: center;
   background-color: #faf8fc;
@@ -33,14 +30,18 @@
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  transition: background-color 0.3s;
   background: none;
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .back-button:hover {
-  background-color: #e2e8f0; /* hover:bg-zinc-200 */
+  background-color: #e2e8f0; /* Equivalent to hover:bg-zinc-200 */
+}
+
+.back-button .material-symbols-outlined {
+  font-size: 24px;
 }
 
 .header-title {
@@ -54,24 +55,21 @@
   padding-right: 40px;
 }
 
-.invitation-details-section {
+.details-section {
   padding: 16px;
-  padding-top: 0;
-  padding-bottom: 24px;
+  padding-bottom: 24px; /* space-y-6 roughly translates to padding-bottom + margin-top */
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 24px; /* gap-6 */
 }
 
 .invitation-card-display {
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e2e8f0; /* border-zinc-200 */
   background-color: white;
-  display: flex;
-  flex-direction: column;
 }
 
-.invitation-image-main {
+.invitation-main-image {
   height: auto;
   width: 100%;
   border-top-left-radius: 12px;
@@ -79,31 +77,33 @@
   object-fit: cover;
 }
 
-.invitation-info-box {
+.invitation-details-content {
   padding: 16px;
 }
 
-.invitation-details-title {
+.details-title {
   font-size: 20px;
   font-weight: bold;
   color: #170d1b;
 }
 
-.detail-list {
+.details-list {
   margin-top: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 12px; /* space-y-3 */
 }
 
 .detail-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 }
 
 .detail-icon {
+  margin-top: 4px;
   color: #718096; /* text-zinc-500 */
+  font-size: 24px; /* Material symbols default size is 24px */
 }
 
 .detail-label {
@@ -131,17 +131,21 @@
   font-size: 16px;
   font-weight: bold;
   color: white;
-  transition: background-color 0.3s;
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .share-button:hover {
   background-color: #4a5568; /* hover:bg-zinc-700 */
 }
 
+.share-button .material-symbols-outlined {
+  font-size: 24px;
+}
+
 .private-invitations-section {
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0; /* border-zinc-200 */
   padding-top: 24px;
 }
 
@@ -160,25 +164,21 @@
   gap: 16px;
 }
 
-.private-invitation-item {
+.private-invitation-card {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  border-radius: 12px;
-  overflow: hidden;
+  display: block; /* To ensure it takes up space correctly */
 }
 
-.private-invitation-item::before {
-  content: '';
+.private-invitation-card .overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
   border-radius: 12px;
   transition: background-color 0.3s;
 }
 
-.private-invitation-item:hover::before {
-  background-color: rgba(0, 0, 0, 0.4);
+.private-invitation-card:hover .overlay {
+  background-color: rgba(0, 0, 0, 0.4); /* group-hover:bg-black/40 */
 }
 
 .private-invitation-image {
@@ -189,7 +189,7 @@
   aspect-ratio: 3 / 4;
 }
 
-.private-invitation-overlay {
+.private-invitation-name {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -197,62 +197,56 @@
   width: 100%;
 }
 
-.private-invitation-name {
+.private-invitation-name p {
   color: white;
   font-size: 16px;
   font-weight: bold;
   line-height: 1.3;
 }
 
-.bottom-navigation {
+.bottom-nav {
   position: sticky;
   bottom: 0;
-  width: 100%;
+  background-color: rgba(250, 248, 252, 0.8); /* bg-[#faf8fc]/80 */
+  backdrop-filter: blur(8px); /* backdrop-blur-lg */
+  padding: 8px 8px 0;
+  border-top: 1px solid #efe7f3; /* border-[#efe7f3] */
 }
 
-.nav-links-container {
+.nav-items {
   display: flex;
   justify-content: space-around;
-  border-top: 1px solid #efe7f3;
-  background-color: rgba(250, 248, 252, 0.8);
-  backdrop-filter: blur(8px);
-  padding: 8px 0;
+  padding: 0 0 8px; /* px-2 pb-2 pt-2 */
 }
 
-.bottom-nav-spacer {
-  height: 20px;
-  background-color: rgba(250, 248, 252, 0.8);
-  backdrop-filter: blur(8px);
-}
-
-.nav-link {
+.nav-item {
   display: flex;
-  flex: 1;
   flex-direction: column;
+  flex: 1;
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
-  color: #804c9a;
+  color: #804c9a; /* text-[#804c9a] */
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
   cursor: pointer;
 }
 
-.nav-link.active {
-  color: #a413ec; /* var(--primary-color) */
+.nav-item.active {
+  color: #a413ec; /* text-[var(--primary-color)] */
   font-weight: bold;
 }
 
-.nav-link-text {
-  font-size: 12px;
+.nav-icon {
+  font-size: 24px;
 }
 
-.loading-message,
-.error-message,
-.no-invitation-message {
-  text-align: center;
-  padding: 20px;
-  color: #4a5568;
-  font-size: 1.1em;
+.nav-text {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.nav-bottom-filler {
+  height: 20px;
+  background-color: rgba(250, 248, 252, 0.8); /* bg-[#faf8fc]/80 */
+  backdrop-filter: blur(8px); /* backdrop-blur-lg */
 }

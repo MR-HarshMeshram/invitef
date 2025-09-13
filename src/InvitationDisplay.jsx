@@ -207,126 +207,104 @@ function InvitationDisplay() {
   };
 
   return (
-    <div className="invitation-page-container">
-      <div className="page-content-wrapper" style={{ filter: showLoginPopup ? 'blur(5px)' : 'none' }}>
-        <div className="header-bar">
+    <div className="main-container" style={{ fontFamily: "'Plus Jakarta Sans', 'Noto Sans', sans-serif" }}>
+      <div className="content-wrapper">
+        <div className="header">
           <button className="back-button" onClick={() => navigate(-1)}>
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
           <h2 className="header-title">Private Invitation Gallery</h2>
         </div>
-        {loading ? (
-          <p className="loading-message">Loading invitation...</p>
-        ) : error ? (
-          <p className="error-message">Error: {error}</p>
-        ) : invitation ? (
-          <div className="invitation-details-section">
-            <div className="invitation-card-display">
-              <img alt="Invitation Card" className="invitation-image-main" src={invitation.invitationImage?.url || 'https://via.placeholder.com/300'} />
-              <div className="invitation-info-box">
-                <h3 className="invitation-details-title">All Details of Invitation</h3>
-                <div className="detail-list">
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">celebration</span>
-                    <div>
-                      <p className="detail-label">Event</p>
-                      <p className="detail-value">{invitation.eventName}</p>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">calendar_month</span>
-                    <div>
-                      <p className="detail-label">Date</p>
-                      <p className="detail-value">{invitation.dateTime ? new Date(invitation.dateTime).toLocaleDateString() : 'N/A'}</p>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">schedule</span>
-                    <div>
-                      <p className="detail-label">Time</p>
-                      <p className="detail-value">{invitation.dateTime ? new Date(invitation.dateTime).toLocaleTimeString() : 'N/A'}</p>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">location_on</span>
-                    <div>
-                      <p className="detail-label">Venue</p>
-                      <p className="detail-value">{invitation.location}</p>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <span className="material-symbols-outlined detail-icon">info</span>
-                    <div>
-                      <p className="detail-label">Additional Details</p>
-                      <p className="detail-value">{invitation.description || 'No additional details provided.'}</p>
-                    </div>
+        <div className="details-section">
+          <div className="invitation-card-display">
+            {invitation?.invitationImage?.url && (
+              <img alt="Invitation Card" className="invitation-main-image" src={invitation.invitationImage.url} />
+            )}
+            <div className="invitation-details-content">
+              <h3 className="details-title">All Details of Invitation</h3>
+              <div className="details-list">
+                <div className="detail-item">
+                  <span className="material-symbols-outlined detail-icon">celebration</span>
+                  <div>
+                    <p className="detail-label">Event</p>
+                    <p className="detail-value">{invitation?.eventName}</p>
                   </div>
                 </div>
-                <div className="share-button-container">
-                  <button className="share-button" onClick={handleShareClick}>
-                    <span className="material-symbols-outlined">share</span>
-                    <span>Share Invitation</span>
-                  </button>
+                <div className="detail-item">
+                  <span className="material-symbols-outlined detail-icon">calendar_month</span>
+                  <div>
+                    <p className="detail-label">Date</p>
+                    <p className="detail-value">{invitation?.dateTime ? new Date(invitation.dateTime).toLocaleDateString() : 'N/A'}</p>
+                  </div>
                 </div>
+                <div className="detail-item">
+                  <span className="material-symbols-outlined detail-icon">schedule</span>
+                  <div>
+                    <p className="detail-label">Time</p>
+                    <p className="detail-value">{invitation?.dateTime ? new Date(invitation.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'} onwards</p>
+                  </div>
+                </div>
+                <div className="detail-item">
+                  <span className="material-symbols-outlined detail-icon">location_on</span>
+                  <div>
+                    <p className="detail-label">Venue</p>
+                    <p className="detail-value">{invitation?.location}</p>
+                  </div>
+                </div>
+                <div className="detail-item">
+                  <span className="material-symbols-outlined detail-icon">info</span>
+                  <div>
+                    <p className="detail-label">Additional Details</p>
+                    <p className="detail-value">{invitation?.description}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="share-button-container">
+                <button className="share-button" onClick={handleShareClick}>
+                  <span className="material-symbols-outlined">share</span>
+                  <span>Share Invitation</span>
+                </button>
               </div>
             </div>
-            {invitation.invitationImage && (
-              <div className="private-invitations-section">
-                <h3 className="private-invitations-title">My Private Invitations</h3>
-                <div className="private-invitations-grid">
-                  {/* Static Private Invitations - to be replaced with dynamic data if needed */}
-                  <div className="private-invitation-item">
-                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMy08Zl6_WdE1R5x7pQUtNEk66GB5QCdqX4F_013e17exRCJD9cKh-3RKCAED7wWr049R3_cTUXYJqPs4BiKtoGFrtEnJf7GIdkWmExeDBVd_FoJxy5tKrdr4-k9LlMvOqTskXpZVSrqRkO06k39PppyErSFkrJnphIyqYfWdGNpiK1Qz4qWtM_W1C6zzDtBHEdptcZEGYsuuDah2zFjtfjM8ZXTeJ4rBYiyAqWBfxE-K3E-6JSA0t5BklCz_YY63TFVhfor2-Ilk" alt="Birthday Bash Invitation Card" />
-                    <div className="private-invitation-overlay">
-                      <p className="private-invitation-name">Birthday Bash</p>
-                    </div>
-                  </div>
-                  <div className="private-invitation-item">
-                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEPqjYhGdN3N_BfVGrBO4SF__Xs_0WXpOqJ6idWkwnekQDoQsPPdnmmbVyleUk_j5XAYBiKD0kmn0DukJlfhmtqQZhMqSUjoPx9rJU2VAQZo3BJw6rnWM-iq9xEE6BEr66G9g-dmo2Ipqyd51ArvUoGHl2rcl5x19_kfwIBk3iCVlk41X5a3SyUrQqy20DKjkUAI4OY6d5SmqQoi9isxIL-GBUkTMaNR7CR_hUFciyB318NWBW-zkM9doy4fmwRaib1AB-CoT0ols" alt="Wedding Celebration Invitation Card" />
-                    <div className="private-invitation-overlay">
-                      <p className="private-invitation-name">Wedding Celebration</p>
-                    </div>
-                  </div>
-                  <div className="private-invitation-item">
-                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEz4lzxfDLF5ulYNKVhBjKo7k9y3GMo7DTXDDsBAUDaXiz5HoIqcafI_uI1oX6FW1Q7TOwmkdiB_cOdP5zdE3CKw6YF0a8y6oVsL2MRqSjnw8YdhnvqEZXMPWbYp1Ishe4QzQGBiZNTYB0S_BBET6_jMPdh3RH-eJFeZURo_h1nJxTDVIkpGviNUr49OWDuLr1YcAvKDSHCM3t70TK7F-DJ7jzIiXvT3GdC3Fp8_3OyEjrybxqlxyH-MeHhLMP3SDQTMhUJMWPinU" alt="Anniversary Dinner Invitation Card" />
-                    <div className="private-invitation-overlay">
-                      <p className="private-invitation-name">Anniversary Dinner</p>
-                    </div>
-                  </div>
-                  <div className="private-invitation-item">
-                    <img className="private-invitation-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7CY0j-uJrWGmnZa-B_7Tx1XPKlzfQP_NGNooyFunvZzesSyuOjFs62BOxM5RqFPLMJA8Vi9Q2tVGziAvfhIer7Xiz2Mxe2vGQRwMsb-NS4nMeO7Iv_2LB5wX4uKP0r6O7mBSydqjOPvXWDY6UOrZGk7jVCFp66PcsbaKhRfd-erq7lfSYGDa53NQm6cvS5LvHaegNuplZVcJvxAUpNK_WgmOH_ECb4j4DCNBDswNijgGVCN38-JWgKn1oZ7U2h50kdd5XXpbARss" alt="Graduation Party Invitation Card" />
-                    <div className="private-invitation-overlay">
-                      <p className="private-invitation-name">Graduation Party</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
-        ) : (
-          <p className="no-invitation-message">No invitation data found.</p>
-        )}
+          {invitation?.eventMedia && invitation.eventMedia.length > 0 && (
+            <div className="private-invitations-section">
+              <h3 className="private-invitations-title">My Private Invitations</h3>
+              <div className="private-invitations-grid">
+                {invitation.eventMedia.map((media) => (
+                  <div className="private-invitation-card" key={media.public_id}>
+                    <div className="overlay"></div>
+                    <img className="private-invitation-image" src={media.url} alt="Private Invitation" />
+                    <div className="private-invitation-name">
+                      <p>{invitation.eventName}</p> {/* Using eventName as a placeholder */}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-      <nav className="bottom-navigation">
-        <div className="nav-links-container">
-          <a className="nav-link" onClick={() => navigate('/home')}>
-            <span className="material-symbols-outlined">home</span>
-            <p className="nav-link-text">Home</p>
+      <nav className="bottom-nav">
+        <div className="nav-items">
+          <a className="nav-item" onClick={() => navigate('/home', { replace: true })}>
+            <span className="material-symbols-outlined nav-icon">home</span>
+            <p className="nav-text">Home</p>
           </a>
-          <a className="nav-link" onClick={() => navigate('/invitation', { state: { showForm: true } })}>
-            <span className="material-symbols-outlined">add_box</span>
-            <p className="nav-link-text">Create</p>
+          <a className="nav-item" onClick={() => navigate('/invitation', { replace: true })}>
+            <span className="material-symbols-outlined nav-icon">add_box</span>
+            <p className="nav-text">Create</p>
           </a>
-          <a className="nav-link active" onClick={() => navigate('/event-gallery')}>
-            <span className="material-symbols-outlined">photo_library</span>
-            <p className="nav-link-text">Gallery</p>
+          <a className="nav-item active" onClick={() => navigate(`/event-gallery/${invitation._id}`, { replace: true })}>
+            <span className="material-symbols-outlined nav-icon">photo_library</span>
+            <p className="nav-text">Gallery</p>
           </a>
-          <a className="nav-link" onClick={() => navigate('/profile')}>
-            <span className="material-symbols-outlined">person</span>
-            <p className="nav-link-text">Profile</p>
+          <a className="nav-item" onClick={() => navigate('/profile', { replace: true })}>
+            <span className="material-symbols-outlined nav-icon">person</span>
+            <p className="nav-text">Profile</p>
           </a>
         </div>
-        <div className="bottom-nav-spacer"></div>
+        <div className="nav-bottom-filler"></div>
       </nav>
       {showLoginPopup && (
         <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
