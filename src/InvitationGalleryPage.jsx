@@ -253,9 +253,9 @@ function InvitationGalleryPage() {
           </button>
         </section>
 
-        {eventImages.length > 0 && (
+        {privateInvitations.length > 0 && (
           <section className="my-private-invitations-section">
-            <h2 className="section-heading">My Private Invitations</h2>
+            <h2 className="section-heading">Invitations Gallery</h2>
             <div className="private-invitations-grid">
               {privateInvitations.map((privateInv) => (
                 <div className="private-invitation-card" key={privateInv._id} onClick={() => handleInvitationCardClick(privateInv)}>
