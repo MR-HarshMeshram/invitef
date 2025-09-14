@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './InvitationForm.css';
-import { useLocation } from 'react-router-dom'; // Added useLocation import
+import { useLocation, useParams } from 'react-router-dom'; // Added useParams import
 
 function InvitationForm() {
   const [eventName, setEventName] = useState('');
@@ -19,31 +19,59 @@ function InvitationForm() {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const locationHook = useLocation(); // Use useLocation hook
+  const { invitationId } = useParams(); // Get invitationId from URL parameters
 
   // Check for navigation state on initial load
   useEffect(() => {
-    if (locationHook.state) {
-      if (locationHook.state.showForm) {
-        setIsEditing(false); // Not editing when creating a new form
-        setCurrentInvitationId(null);
-        // Clear the state so it doesn't persist if the user navigates away and back
-        navigate(locationHook.pathname, { replace: true, state: {} });
-      } else if (locationHook.state.invitation && locationHook.state.isEditing) {
-        const { invitation } = locationHook.state;
-        setEventName(invitation.eventName);
-        setLocation(invitation.location);
-        setDescription(invitation.description || '');
-        setDateTime(invitation.dateTime ? new Date(invitation.dateTime).toISOString().slice(0, 16) : '');
-        setInvitedBy(invitation.invitedBy);
-        setEventPrivacy(invitation.eventPrivacy);
-        setPreviewUrl(invitation.invitationImage.url); // Pre-fill image preview
-        setSelectedFile(null); // No file selected initially for edit, only URL
-        setIsEditing(true); // Set editing mode to true
-        setCurrentInvitationId(invitation._id); // Set the ID of the invitation being edited
-        navigate(locationHook.pathname, { replace: true, state: {} }); // Clear state
-      }
+    console.log('useEffect triggered. invitationId:', invitationId);
+    if (invitationId) {
+      setIsEditing(true);
+      setCurrentInvitationId(invitationId);
+      fetchInvitationDetails(invitationId);
+    } else {
+      setIsEditing(false);
+      setCurrentInvitationId(null);
+      // Clear form fields if not editing
+      setEventName('');
+      setLocation('');
+      setDescription('');
+      setDateTime('');
+      setInvitedBy('');
+      setEventPrivacy('private');
+      setSelectedFile(null);
+      setPreviewUrl('');
     }
-  }, [locationHook.state, navigate]); // Add locationHook.state and navigate to dependencies
+  }, [invitationId]); // Depend on invitationId to refetch if it changes
+
+  const fetchInvitationDetails = async (id) => {
+    setIsLoading(true);
+    console.log('Fetching invitation details for ID:', id);
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const headers = accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {};
+
+      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${id}`, { headers });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch invitation details.');
+      }
+      const data = await response.json();
+      console.log('Fetched invitation data:', data);
+      setEventName(data.eventName);
+      setLocation(data.location);
+      setDescription(data.description || '');
+      setDateTime(data.dateTime ? new Date(data.dateTime).toISOString().slice(0, 16) : '');
+      setInvitedBy(data.invitedBy || '');
+      setEventPrivacy(data.eventPrivacy);
+      setPreviewUrl(data.invitationImage?.url || ''); // Pre-fill image preview if available
+    } catch (error) {
+      console.error('Error fetching invitation details:', error);
+      setError(error.message);
+      // Optionally navigate away or show error message
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Function to fetch invitations
   const fetchUserInvitations = async () => {
@@ -200,7 +228,7 @@ function InvitationForm() {
         <button className="back-button" onClick={() => navigate(-1)}>
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
-        <h1 className="header-title">Create Invitation</h1>
+        <h1 className="header-title">{isEditing ? 'Edit Invitation' : 'Create Invitation'}</h1>
       </header>
 
       <main className="form-content">
