@@ -94,6 +94,7 @@
   padding: 20px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+  margin-bottom: 25px; /* Adjust spacing below the section */
 }
 
 .upload-area {
