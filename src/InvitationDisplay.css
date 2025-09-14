@@ -1,165 +1,203 @@
-/* InvitationDisplay.css */
-
 .invitation-display-container {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #faf8fc;
-    min-height: 100vh;
-    padding-bottom: 20px; /* Space for the bottom part */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #2c2c2c;
+  min-height: 100vh;
+  color: #fff;
+  margin-top: 50px; /* Add margin to push content below the global header */
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    background-color: #faf8fc;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+.invitation-card {
+  background: linear-gradient(135deg, #6a1b9a, #4a148c); /* Purple gradient */
+  border-radius: 20px;
+  padding: 0;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Reduced shadow for a flatter look */
+  text-align: left; /* Align text to left */
+  width: 100%;
+  max-width: 500px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ensures image corners are rounded with card */
 }
 
-.header-button {
-    background: none;
-    border: none;
-    color: #1f2937;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
+.invitation-image {
+  width: 100%;
+  height: 250px; /* Fixed height for the image */
+  object-fit: cover; /* Ensures image covers the area */
+  border-radius: 20px 20px 0 0; /* Top corners rounded */
+  margin-bottom: 0;
+  box-shadow: none; /* Remove individual image shadow */
 }
 
-.header-title {
-    color: #1f2937;
-    font-size: 18px;
-    font-weight: bold;
-    flex: 1;
-    text-align: center;
-    padding-right: 40px; /* To visually center the title despite the back button */
+.invitation-content {
+  padding: 20px 30px;
+  margin-bottom: 20px; /* Add margin-bottom to create space before the buttons */
 }
 
-.main-content {
-    padding: 0 16px;
+.invitation-card h3 {
+  color: #ffffff;
+  font-size: 2.5em; /* Larger font for event name */
+  margin: 0 0 5px 0;
+  font-weight: bold;
 }
 
-.invitation-card-display {
-    background-color: #fce4d4; /* Light peach background */
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+.event-date {
+  color: #c0c0c0; /* Lighter color for details */
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  text-align: left; /* Align text to left */
 }
 
-.invitation-card-image {
-    width: 70%; /* Adjust as needed */
-    max-width: 300px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.location-display, .host-display, .privacy-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1em;
+  color: #c0c0c0; /* Lighter color for details */
+  margin-bottom: 5px;
+  justify-content: flex-start; /* Align text to left */
 }
 
-.invitation-details-section {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+.location-display {
+  color: #b39ddb; /* Slightly different shade for location */
+  font-weight: 500;
+  margin-top: 10px;
 }
 
-.details-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #1f2937;
-    margin-bottom: 15px;
+.host-display {
+  margin-bottom: 15px;
 }
 
-.detail-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 12px;
+.privacy-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1em;
+  color: #c0c0c0; /* Lighter color for details */
+  margin-bottom: 5px;
+  justify-content: flex-start;
 }
 
-.detail-item-icon {
-    font-size: 24px;
-    color: #6b7280;
-    margin-right: 10px;
-    min-width: 24px;
+.privacy-display img {
+  filter: none; /* Remove previous filter */
+  width: 24px; /* Default size */
+  height: 24px; /* Default size */
+  border-radius: 50%; /* Make it circular */
+  /* background-color: #4CAF50; */ /* Green background for public */
+  padding: 4px; /* Add padding to make it visible */
+  box-sizing: content-box; /* Ensure padding adds to size */
 }
 
-.detail-item-content p {
-    margin: 0;
-    font-size: 16px;
-    color: #1f2937;
-    line-height: 1.4;
+.privacy-display .globe-icon {
+  display: inline-block;
+  width: 24px; /* Default size */
+  height: 24px; /* Default size */
+  border-radius: 50%; /* Make it circular */
+  background-color: #4CAF50; /* Green background for public */
+  padding: 4px; /* Add padding to make it visible */
+  box-sizing: content-box; /* Ensure padding adds to size */
+  background-image: url('https://img.icons8.com/ios-filled/24/000000/globe--v1.png'); /* Globe icon */
+  background-size: cover;
 }
 
-.detail-item-content .label {
-    font-weight: bold;
+/* Override for private icon to be yellow */
+.privacy-display .lock-icon {
+  background-color: #FFC107; /* Yellow background for private */
 }
 
-.share-button {
-    background-color: #333;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 12px 20px;
-    border-radius: 9999px;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 20px;
+.card-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
-.share-button-icon {
-    margin-right: 8px;
+.action-button {
+  background-color: #6200ea; 
+  color: white;
+  border: none;
+  border-radius: 6px;       /* less rounded */
+  padding: 8px 15px;        /* increased padding */
+  font-size: 0.9em;        /* increased font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* lighter shadow */
+  text-align: center;       /* Center text horizontally */
+  display: flex;            /* Use flexbox for vertical centering */
+  align-items: center;      /* Center text vertically */
+  justify-content: center;  /* Center text horizontally using flexbox */
 }
 
-.my-private-invitations-section {
-    padding: 0 16px;
-    margin-top: 30px;
+.action-button:hover {
+  background-color: #7a1fdc; /* Slightly lighter purple on hover */
+  transform: translateY(-1px); /* Reduced lift on hover */
 }
 
-.my-private-invitations-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #1f2937;
-    margin-bottom: 15px;
+.action-button:active {
+  transform: translateY(0);
 }
 
-.invitation-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns */
-    gap: 15px;
+.book-tickets-button {
+  background-color: #616161; /* Dark grey button */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  margin: 20px 30px 30px 30px; /* Adjust margin for placement */
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  align-self: flex-end; /* Align to the right within the card */
 }
 
-.private-invitation-card {
-    background-color: #f7e7e1; /* Light peach/pink background for cards */
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    cursor: pointer;
+.book-tickets-button:hover {
+  background-color: #757575; /* Lighter grey on hover */
+  transform: translateY(-2px);
 }
 
-.private-invitation-card-image {
-    width: 100%;
-    max-width: 120px; /* Adjust size as needed */
-    border-radius: 8px;
-    margin-bottom: 10px;
+.book-tickets-button:active {
+  transform: translateY(0);
 }
 
-.private-invitation-card-title {
-    font-size: 15px;
-    font-weight: bold;
-    color: #1f2937;
+.action-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.action-icon:hover {
+  transform: scale(1.1);
+}
+
+.action-icon-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50px; /* Reduced size */
+  height: 50px; /* Reduced size */
+}
+
+.action-icon-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-text {
+  font-size: 0.6em; /* Reduced font size */
+  color: #333;
+  margin-top: 3px; /* Reduced margin */
 }
