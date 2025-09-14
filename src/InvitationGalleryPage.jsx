@@ -381,6 +381,10 @@ function InvitationGalleryPage() {
 
   return (
     <div className="invitation-gallery-page-container">
+      {showLoginPopup && (
+        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
+      )}
+
       <header className="gallery-header">
         <button className="back-button" onClick={() => navigate(-1)}>
           <span className="material-symbols-outlined">arrow_back</span>
@@ -501,10 +505,6 @@ function InvitationGalleryPage() {
             )}
           </div>
         </div>
-      )}
-
-      {showLoginPopup && (
-        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
       )}
     </div>
   );
