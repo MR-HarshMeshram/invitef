@@ -69,12 +69,12 @@ function InvitationForm() {
 
     try {
       const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/user/${userEmail}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      });
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+            },
+          });
 
-      if (!response.ok) {
+          if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to fetch invitations.');
       }
@@ -87,9 +87,9 @@ function InvitationForm() {
       //   setShowCreateForm(true);
       // }
 
-    } catch (err) {
+        } catch (err) {
       setFetchError(err.message);
-    } finally {
+        } finally {
       setIsFetchingInvitations(false);
     }
   };
@@ -224,30 +224,72 @@ function InvitationForm() {
   };
 
   return (
-    <div className="create-invitation-page">
-      <header className="header">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <span className="material-symbols-outlined">arrow_back</span>
-        </button>
-        <h1 className="header-title">Create Invitation</h1>
-      </header>
-
+    <div className="invitation-form-container">
       {showCreateForm ? (
-        <div className="section-container">
-          <form onSubmit={handleSubmit}> {/* Moved form tag here to wrap all form elements and the submit button */}
-            <section className="upload-photo-section">
-              <h2 className="section-heading">Upload Photo</h2>
-              <div className="upload-area" onClick={() => fileInputRef.current.click()}>
+        <div className="create-invite-card"> {/* New wrapper card */}
+          <div className="header-card">
+            <h2>Create Invitation</h2>
+            <p>Design your perfect event invitation</p>
+                </div>
+
+          <div className="event-buttons-container">
+            <button onClick={handleGalleryClick}>event gallery</button>
+            <button onClick={handleUploadClick}>event uplode media</button>
+            </div>
+
+          <form onSubmit={handleSubmit}> {/* Wrap content in form and add onSubmit */}
+            <div className="form-section">
+              <label htmlFor="eventName">Event Name</label>
+              <input
+                type="text"
+                id="eventName"
+                placeholder="Enter event name"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+              />
+            </div>
+
+            <div className="form-section">
+              <label htmlFor="location">Address / Location</label>
+              <input
+                type="text"
+                id="location"
+                placeholder="Enter event location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+
+            <div className="form-section">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                placeholder="Describe your event"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+            </div>
+
+            <div className="form-section">
+              <label htmlFor="dateTime">Date & Time</label>
+              <input
+                type="datetime-local"
+                id="dateTime"
+                value={dateTime}
+                onChange={(e) => setDateTime(e.target.value)}
+              />
+            </div>
+
+            <div className="form-section">
+              <label>Upload Invitation Card</label>
+              <div className="upload-card-area" onClick={() => fileInputRef.current.click()}>
                 {previewUrl ? (
-                  <div className="image-preview-container">
-                    <img src={previewUrl} alt="Invitation Preview" className="image-preview" />
-                  </div>
+                  <img src={previewUrl} alt="Invitation Preview" className="image-preview" />
                 ) : (
                   <>
-                    <span className="material-symbols-outlined upload-icon">cloud_upload</span>
-                    <p className="upload-text-main">Drag and drop or browse</p>
-                    <p className="upload-text-sub">Upload a photo to personalize your invitation card.</p>
-                    <button type="button" className="browse-button">Browse</button>
+                    <img src="https://img.icons8.com/ios/50/000000/camera--v1.png" alt="Camera icon" />
+                    <p>Click to upload or drag & drop</p>
+                    <p>PNG, JPG up to 5MB</p>
                   </>
                 )}
               </div>
@@ -258,125 +300,96 @@ function InvitationForm() {
                 accept=".png,.jpg,.jpeg"
                 onChange={handleFileChange}
               />
-            </section>
+            </div>
 
-            <section className="customize-text-section">
-              <h2 className="section-heading">Customize Text</h2>
-              <div className="form-field-group">
-                <input
-                  type="text"
-                  id="eventName"
-                  placeholder="Event Title"
-                  value={eventName}
-                  onChange={(e) => setEventName(e.target.value)}
-                />
+            <div className="form-section">
+              <label htmlFor="invitedBy">Invited By</label>
+              <input
+                type="text"
+                id="invitedBy"
+                placeholder="Your name"
+                value={invitedBy}
+                onChange={(e) => setInvitedBy(e.target.value)}
+              />
+            </div>
+
+            <div className="form-section">
+              <label>Event Privacy</label>
+            <div className="privacy-options">
+                <button
+                  type="button" // Prevent form submission on click
+                  className={`privacy-button ${eventPrivacy === 'private' ? 'active' : ''}`}
+                  onClick={() => setEventPrivacy('private')}
+                >
+                  <img src="https://img.icons8.com/ios-filled/24/000000/lock.png" alt="Lock icon" />
+                  Private
+                </button>
+                <button
+                  type="button" // Prevent form submission on click
+                  className={`privacy-button ${eventPrivacy === 'public' ? 'active' : ''}`}
+                  onClick={() => setEventPrivacy('public')}
+                >
+                  <img src="https://img.icons8.com/ios-filled/24/000000/globe--v1.png" alt="Globe icon" />
+                  Public
+                </button>
               </div>
+            </div>
 
-              <div className="form-field-group date-time-inputs">
-                <input
-                  type="date"
-                  id="date"
-                  value={dateTime ? dateTime.split('T')[0] : ''}
-                  onChange={(e) => setDateTime(`${e.target.value}T${dateTime ? dateTime.split('T')[1] : '00:00'}`)}
-                />
-                <input
-                  type="time"
-                  id="time"
-                  value={dateTime ? dateTime.split('T')[1] : ''}
-                  onChange={(e) => setDateTime(`${dateTime ? dateTime.split('T')[0] : ''}T${e.target.value}`)}
-                />
-              </div>
+            <div className="preview-card">
+              <h3>Preview</h3>
+              <h4>{eventName || 'Event Name'}</h4>
+              <p className="location-preview">
+                📍 {location || 'Location'}
+              </p>
+              <p className="description-preview">
+                {description || 'Event Description'}
+              </p>
+              <p className="date-time-preview">
+                🗓️ {dateTime ? new Date(dateTime).toLocaleString() : 'Date & Time'}
+              </p>
+              <p className="host-preview">Hosted by: {invitedBy || 'Host Name'}</p>
+              <p className="privacy-preview">
+                {eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}
+              </p>
+            </div>
 
-              <div className="form-field-group">
-                <input
-                  type="text"
-                  id="location"
-                  placeholder="Location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
-              </div>
+            {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
 
-              <div className="form-field-group">
-                <textarea
-                  id="description"
-                  placeholder="Additional Details"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
-              </div>
-            </section>
-
-            <section className="invite-visibility-section">
-              <h2 className="section-heading">Invite Visibility</h2>
-              <div className="privacy-options">
-                <div className={`privacy-card ${eventPrivacy === 'private' ? 'active' : ''}`} onClick={() => setEventPrivacy('private')}>
-                  <div className={`privacy-radio ${eventPrivacy === 'private' ? 'active' : ''}`}></div>
-                  <div className="privacy-text">
-                    <h4>Private Invite</h4>
-                    <p>Only people you invite can see this.</p>
-                  </div>
-                </div>
-                <div className={`privacy-card ${eventPrivacy === 'public' ? 'active' : ''}`} onClick={() => setEventPrivacy('public')}>
-                  <div className={`privacy-radio ${eventPrivacy === 'public' ? 'active' : ''}`}></div>
-                  <div className="privacy-text">
-                    <h4>Public Invite</h4>
-                    <p>Anyone with the link can see this.</p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section className="preview-section">
-              <h2 className="section-heading">Preview</h2>
-              <div className="preview-content">
-                <img src="/images/invitation-mock.png" alt="Invitation Mockup" className="preview-invitation-image-mock" />
-                <div className="preview-invitation-details">
-                  <h3>You're Invited!</h3>
-                  <p>Join us for a {eventName || 'birthday celebration'}</p>
-                  <p>{dateTime ? new Date(dateTime).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Sat, Dec 25, 2024 at 7:00 PM'}</p>
-                  <p>{location || '123 Party Lane, Fun City'}</p>
-                </div>
-              </div>
-            </section>
-
-            {error && <p className="error-message">{error}</p>}
-
-            <button type="submit" className="create-invitation-submit-button" disabled={isLoading}>
-              {isLoading ? (isEditing ? 'Saving...' : 'Creating...') : (isEditing ? 'Save Changes' : 'Create Invitation')}
-            </button>
+            <button type="submit" className="send-invitations-button" disabled={isLoading}>
+              {isLoading ? (isEditing ? 'Saving...' : 'Sending...') : (isEditing ? 'Save Changes' : 'Send Invitations')} <img src="https://img.icons8.com/emoji/24/000000/rocket-emoji.png" alt="Rocket emoji" />
+          </button>
           </form>
         </div>
       ) : (
         <div className="user-invitations-section"> {/* This section is always visible */}
           <h2>Your Created Invitations</h2>
           {isFetchingInvitations ? (
-            <p className="no-invitations-message">Loading your invitations...</p>
+            <p>Loading your invitations...</p>
           ) : fetchError ? (
-            <p className="no-invitations-message" style={{ color: 'red' }}>No invitation created yet.</p>
+            <p style={{ color: 'white' }}>No invitation created yet.</p>
           ) : userInvitations.length > 0 ? (
-            <div className="card-grid">
+            <div className="card-container">
               {userInvitations.map((invitation) => (
-                <div className="invitation-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
+                <div className="card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)} style={{ cursor: 'pointer' }}>
                   {invitation.invitationImage && (
-                    <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-card-image" />
+                    <img src={invitation.invitationImage.url} alt="Invitation Card" className="event-card-image" />
                   )}
-                  <div className="invitation-card-content">
-                    {invitation.eventName && <p className="invitation-card-title">{invitation.eventName}</p>}
-                    {invitation.dateTime && <p className="invitation-card-date">{new Date(invitation.dateTime).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>}
-                    <button className="view-details-btn">View Details</button>
+                  <div className="event-details">
+                    <p className="event-date">{invitation.eventName}</p>
+                    <p className="event-name">{invitation.location}</p>
+                    {invitation.description && <p className="event-description">{invitation.description}</p>}
+                    {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
+                    <p className="event-price">Hosted by: {invitation.invitedBy}</p>
+                    <p className="event-privacy">{invitation.eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="no-invitations-message">You haven't created any invitations yet.</p>
+            <p>You haven't created any invitations yet.</p>
           )}
-          <button className="create-new-invitation-fab" onClick={() => setShowCreateForm(true)}>
-            <span className="material-symbols-outlined">add</span>
-            Create New Invitation
-          </button>
-        </div>
+          <button className="send-invitations-button" onClick={() => setShowCreateForm(true)}>Create New Invitation</button> {/* Button to show create form */}
+      </div>
       )}
     </div>
   );

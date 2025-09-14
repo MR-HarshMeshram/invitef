@@ -1,300 +1,333 @@
-.create-invitation-page {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #faf8fc;
-  min-height: 100vh;
-}
-
-.header {
+.invitation-form-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 16px;
-  background-color: #faf8fc;
-  backdrop-filter: blur(5px);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid #eee;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  color: #1f2937;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-}
-
-.header-title {
-  color: #1f2937;
-  font-size: 18px;
-  font-weight: bold;
-  flex: 1;
-  text-align: center;
-  padding-right: 40px; /* To visually center the title despite the back button */
-}
-
-.section-container {
   padding: 20px;
-}
-
-.section-heading {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 15px;
-  margin-top: 30px;
-}
-
-.upload-photo-section {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.upload-area {
-  border: 2px dashed #e0e0e0;
-  border-radius: 10px;
-  padding: 30px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-
-.upload-area:hover {
-  border-color: #a413ec;
-}
-
-.image-preview-container {
-  max-width: 100%;
-  max-height: 200px;
-  overflow: hidden;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.image-preview {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.upload-icon {
-  font-size: 48px;
-  color: #ccc;
-  margin-bottom: 10px;
-}
-
-.upload-text-main {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.upload-text-sub {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 20px;
-}
-
-.browse-button {
-  background-color: #a413ec;
+  padding-top: 70px; /* Added to push content below fixed header */
+  background-color: #282c34;
   color: white;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.browse-button:hover {
-  background-color: #8a0dbb;
-}
-
-.customize-text-section {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.form-field-group {
-  margin-bottom: 15px;
-}
-
-.form-field-group input,
-.form-field-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 16px;
-  color: #333;
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
-.form-field-group input:focus,
-.form-field-group textarea:focus {
-  outline: none;
-  border-color: #a413ec;
-  box-shadow: 0 0 0 2px rgba(164, 19, 236, 0.2);
-}
-
-.form-field-group input::placeholder,
-.form-field-group textarea::placeholder {
-  color: #999;
-}
-
-.date-time-inputs {
-  display: flex;
-  gap: 10px;
-}
-
-.date-time-inputs input {
-  flex: 1;
-}
-
-.invite-visibility-section {
-  background-color: white;
-  border-radius: 12px;
+.header-card {
+  background: linear-gradient(135deg, #6200ea, #aa00ff);
+  border-radius: 15px;
   padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.header-card h2 {
+  margin-bottom: 5px;
+  font-size: 1.8em;
+}
+
+.header-card p {
+  font-size: 1em;
+  color: #e0e0e0;
+}
+
+.event-buttons-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.event-buttons-container button {
+  background-color: #3a3f47; /* Darker grey */
+  color: #e0e0e0;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.event-buttons-container button:hover {
+  background-color: #4a4f56;
+}
+
+.create-invite-card {
+  background-color: #3a3f47; /* Card background color */
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); /* Shadow for depth */
+  width: 100%;
+  max-width: 550px; /* Slightly wider than 500px to give it some breathing room */
+  margin-bottom: 40px; /* Space between this card and the user invitations section */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+}
+
+.create-invite-card .header-card {
+  margin-bottom: 30px; /* Space below header within the card */
+}
+
+.create-invite-card .event-buttons-container {
+  margin-bottom: 30px; /* Space below buttons within the card */
+}
+
+.form-section {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+  color: #e0e0e0;
+  text-align: center; /* Center the label */
+}
+
+.form-section input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #3a3f47;
+  color: white;
+  font-size: 1em;
+  box-sizing: border-box;
+  text-align: center; /* Center the input text */
+}
+
+.form-section input::placeholder {
+  color: #aaa;
+}
+
+.upload-card-area {
+  border: 2px dashed #6200ea;
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #3a3f47;
+  width: 100%; /* Ensure it takes full available width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.upload-card-area img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.upload-card-area p {
+  margin: 5px 0;
+  color: #e0e0e0;
 }
 
 .privacy-options {
   display: flex;
-  gap: 15px;
-  margin-top: 15px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.privacy-card {
+.privacy-button {
   flex: 1;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
   padding: 15px;
-  display: flex;
-  align-items: flex-start;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.privacy-card.active {
-  border-color: #a413ec;
-  box-shadow: 0 0 0 2px rgba(164, 19, 236, 0.2);
-}
-
-.privacy-radio {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ccc;
-  border-radius: 50%;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #3a3f47;
+  color: #e0e0e0;
+  font-size: 1em;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
-  flex-shrink: 0;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.privacy-radio.active {
-  border-color: #a413ec;
+.privacy-button img {
+  margin-right: 8px;
+  width: 24px;
+  height: 24px;
 }
 
-.privacy-radio.active::after {
-  content: '';
-  width: 10px;
-  height: 10px;
-  background-color: #a413ec;
-  border-radius: 50%;
+.privacy-button.active {
+  background: linear-gradient(90deg, #6200ea, #aa00ff);
+  border-color: #aa00ff;
+  color: white;
 }
 
-.privacy-text h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 5px;
-}
-
-.privacy-text p {
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.4;
-}
-
-.preview-section {
-  background-color: white;
-  border-radius: 12px;
+.preview-card {
+  background-color: #3a3f47;
+  border-radius: 15px;
   padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.preview-content {
-  background-color: #f7ede3; /* Light peach background */
-  border-radius: 8px;
-  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 20px;
   text-align: center;
 }
 
-.preview-invitation-image-mock {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+.preview-card h3 {
+  color: #61dafb;
   margin-bottom: 15px;
 }
 
-.preview-invitation-details h3 {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 10px;
-}
-
-.preview-invitation-details p {
-  font-size: 14px;
-  color: #6b7280;
+.preview-card h4 {
+  font-size: 1.5em;
   margin-bottom: 5px;
 }
 
-.create-invitation-submit-button {
-  background-color: #a413ec;
+.location-preview, .host-preview, .privacy-preview {
+  color: #e0e0e0;
+  margin: 5px 0;
+}
+
+.send-invitations-button {
+  background: linear-gradient(90deg, #6200ea, #aa00ff);
   color: white;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 15px 25px;
-  border-radius: 9999px;
   border: none;
-  width: 100%;
+  border-radius: 8px;
+  padding: 15px 30px;
+  font-size: 1.2em;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-top: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  transition: opacity 0.3s;
 }
 
-.create-invitation-submit-button:hover {
-  background-color: #8a0dbb;
+.send-invitations-button:hover {
+  opacity: 0.9;
 }
 
-.create-invitation-submit-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.error-message {
-  color: red;
+/* New styles for user invitations section */
+.user-invitations-section {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #555;
   text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
+}
+
+.user-invitations-section h2 {
+  font-size: 2em;
+  color: #a050ff;
+  margin-bottom: 20px;
+}
+
+.user-invitations-section .card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.user-invitations-section .card {
+  background: linear-gradient(135deg, #4a148c, #2a0a3c); /* Darker purple gradient */
+  border-radius: 15px;
+  padding: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 280px; /* Adjust card width */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-invitations-section .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.user-invitations-section .event-card-image {
+  width: 100%;
+  height: 150px; /* Smaller height for card images */
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+}
+
+.user-invitations-section .event-details {
+  padding: 15px;
+  text-align: left;
+}
+
+.user-invitations-section .event-details p {
+  margin: 5px 0;
+  color: #e0e0e0;
+}
+
+.user-invitations-section .event-details .event-name {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+.user-invitations-section .event-details .event-price, 
+.user-invitations-section .event-details .event-privacy {
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .invitation-form-container {
+    padding: 10px;
+  }
+
+  .header-card,
+  .form-section,
+  .upload-card-area,
+  .preview-card,
+  .send-invitations-button {
+    width: calc(100% - 20px);
+  }
+
+  .header-card h2 {
+    font-size: 1.5em;
+  }
+
+  .header-card p {
+    font-size: 0.9em;
+  }
+
+  .form-section label {
+    font-size: 1em;
+  }
+
+  .form-section input {
+    padding: 8px;
+    font-size: 0.9em;
+  }
+
+  .privacy-button {
+    padding: 12px;
+    font-size: 0.9em;
+  }
+
+  .privacy-button img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .preview-card h4 {
+    font-size: 1.2em;
+  }
+
+  .send-invitations-button {
+    font-size: 1em;
+    padding: 12px 20px;
+  }
+
+  .user-invitations-section .card {
+    max-width: 100%;
+  }
 }
