@@ -322,8 +322,12 @@ function InvitationGalleryPage() {
             <div className="private-invitations-grid">
               {privateInvitations.map((privateInv) => (
                 <div className="private-invitation-card" key={privateInv._id} onClick={() => handleInvitationCardClick(privateInv)}>
-                  {privateInv.invitationImage && (
+                  {privateInv.eventMedia && privateInv.eventMedia.length > 0 ? (
+                    <img src={privateInv.eventMedia[0].url} alt={privateInv.eventName} className="private-invitation-image" />
+                  ) : privateInv.invitationImage ? (
                     <img src={privateInv.invitationImage.url} alt={privateInv.eventName} className="private-invitation-image" />
+                  ) : (
+                    <div className="no-image-placeholder">No Media</div>
                   )}
                   <p className="private-invitation-title">{privateInv.eventName}</p>
                 </div>
