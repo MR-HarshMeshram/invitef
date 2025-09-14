@@ -35,6 +35,12 @@ function InvitationGalleryPage() {
       }
       const data = await response.json();
       setInvitation(data);
+
+      // Check if the logged-in user has accepted or declined this invitation
+      if (loggedInUserEmail) {
+        setHasAccepted(data.acceptedUsers.includes(loggedInUserEmail));
+      }
+
     } catch (error) {
       console.error('Error fetching invitation:', error);
       setError(error.message);
@@ -42,7 +48,7 @@ function InvitationGalleryPage() {
     } finally {
       setLoading(false);
     }
-  }, [urlInvitationId]);
+  }, [urlInvitationId, loggedInUserEmail]);
 
   // Removed fetchPrivateInvitations as it's no longer needed for this section
 
@@ -63,7 +69,11 @@ function InvitationGalleryPage() {
   const handleLoginSuccess = () => {
     setLoggedInUserEmail(localStorage.getItem('userEmail'));
     setShowLoginPopup(false);
-    if (urlInvitationId) {
+    const pendingInvitationId = localStorage.getItem('pendingInvitationId');
+    if (pendingInvitationId) {
+      localStorage.removeItem('pendingInvitationId');
+      navigate(`/invitation/${pendingInvitationId}`, { replace: true });
+    } else if (urlInvitationId) {
       fetchInvitation();
       // fetchPrivateInvitations(); // Removed this call
     }
@@ -283,9 +293,77 @@ function InvitationGalleryPage() {
       fetchInvitation(); // Refresh the current invitation to show new media
     } catch (err) {
       console.error('Error uploading media:', err);
-      alert(`Upload failed: ${err.message}`);
+      alert('Upload failed: ' + err.message);
     } finally {
       // setIsLoading(false);
+    }
+  };
+
+  const handleAcceptInvite = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const userEmail = localStorage.getItem('userEmail');
+
+      if (!accessToken || !userEmail) {
+        alert('Please log in to accept the invitation.');
+        setShowLoginPopup(true);
+        localStorage.setItem('pendingInvitationId', urlInvitationId);
+        return;
+      }
+
+      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}/accept`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ userEmail }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to accept invitation.');
+      }
+
+      alert('Invitation accepted!');
+      fetchInvitation(); // Refresh invitation data
+    } catch (error) {
+      console.error('Error accepting invitation:', error);
+      alert(`Error accepting invitation: ${error.message}`);
+    }
+  };
+
+  const handleDeclineInvite = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const userEmail = localStorage.getItem('userEmail');
+
+      if (!accessToken || !userEmail) {
+        alert('Please log in to decline the invitation.');
+        setShowLoginPopup(true);
+        localStorage.setItem('pendingInvitationId', urlInvitationId);
+        return;
+      }
+
+      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}/decline`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ userEmail }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to decline invitation.');
+      }
+
+      alert('Invitation declined.');
+      fetchInvitation(); // Refresh invitation data
+    } catch (error) {
+      console.error('Error declining invitation:', error);
+      alert(`Error declining invitation: ${error.message}`);
     }
   };
 
@@ -359,6 +437,17 @@ function InvitationGalleryPage() {
             <span className="material-symbols-outlined">share</span>
             Share Invitation
           </button>
+
+          {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
+            <div className="response-buttons">
+              <button className="accept-invite-button" onClick={handleAcceptInvite}>
+                <span className="material-symbols-outlined">check_circle</span> Accept Invite
+              </button>
+              <button className="decline-invite-button" onClick={handleDeclineInvite}>
+                <span className="material-symbols-outlined">cancel</span> Reject Invite
+              </button>
+            </div>
+          )}
         </section>
 
         {loggedInUserEmail === invitation.createdByEmail && (

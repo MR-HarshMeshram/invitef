@@ -4,68 +4,65 @@ import './Invited.css';
 
 function Invited() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [acceptedInvitations, setAcceptedInvitations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Load existing accepted invitations from local storage on component mount
-    const storedInvitations = JSON.parse(localStorage.getItem('acceptedInvitations')) || [];
-    setAcceptedInvitations(storedInvitations);
+    const fetchAcceptedInvitations = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const userEmail = localStorage.getItem('userEmail');
+        const accessToken = localStorage.getItem('accessToken');
 
-    // Check if there's a new accepted invitation from navigation state
-    if (location.state?.acceptedInvitation) {
-      const newInvitation = location.state.acceptedInvitation;
-      const isAlreadyAdded = storedInvitations.some(inv => inv._id === newInvitation._id);
-
-      if (!isAlreadyAdded) {
-        const updatedInvitations = [...storedInvitations, newInvitation];
-        localStorage.setItem('acceptedInvitations', JSON.stringify(updatedInvitations));
-        setAcceptedInvitations(updatedInvitations);
-      }
-      // Clear the state so it doesn't re-add on subsequent visits
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state]);
-
-  useEffect(() => {
-    const validateAndSetInvitations = async () => {
-      const storedInvitations = JSON.parse(localStorage.getItem('acceptedInvitations')) || [];
-      const validInvitations = [];
-
-      for (const inv of storedInvitations) {
-        try {
-          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${inv._id}`);
-          if (response.ok) {
-            validInvitations.push(inv); // Invitation still exists, keep it
-          } else if (response.status === 404) {
-            console.log(`Invitation with ID ${inv._id} no longer exists and will be removed.`);
-          } else {
-            // Handle other potential errors, maybe keep for now or log
-            console.error(`Error validating invitation ${inv._id}: ${response.status}`);
-            validInvitations.push(inv); // Keep if other error, can be re-evaluated
-          }
-        } catch (error) {
-          console.error(`Network error validating invitation ${inv._id}:`, error);
-          validInvitations.push(inv); // Keep on network error to retry later
+        if (!userEmail || !accessToken) {
+          // If not logged in, clear invitations and stop loading
+          setAcceptedInvitations([]);
+          setIsLoading(false);
+          return;
         }
-      }
 
-      setAcceptedInvitations(validInvitations);
-      localStorage.setItem('acceptedInvitations', JSON.stringify(validInvitations));
+        // Assuming a new endpoint to fetch invitations accepted by a user
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/accepted-by-user/${userEmail}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch accepted invitations.');
+        }
+
+        const data = await response.json();
+        setAcceptedInvitations(data.invitations || []);
+      } catch (err) {
+        console.error('Error fetching accepted invitations:', err);
+        setError(err.message);
+        setAcceptedInvitations([]); // Ensure it's empty on error
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    validateAndSetInvitations();
-  }, []); // Run once on mount
+    fetchAcceptedInvitations();
+  }, []); // Empty dependency array means this runs once on mount
 
   const handleCardClick = (invitationId) => {
-    navigate(`/event-gallery/${invitationId}`);
+    navigate(`/invitation/${invitationId}`); // Navigate to InvitationGalleryPage
   };
 
   return (
     <div className="invited-container">
       <h1>Invited Events</h1>
+      {isLoading && <p>Loading accepted invitations...</p>}
+      {error && <p className="error-message">Error: {error}</p>}
+      {!isLoading && !error && acceptedInvitations.length === 0 && (
+        <p>No accepted invitations yet.</p>
+      )}
       <div className="card-container">
-        {acceptedInvitations.length > 0 ? (
+        {acceptedInvitations.length > 0 && (
           acceptedInvitations.map((invitation) => (
             <div
               className="card"
@@ -88,8 +85,6 @@ function Invited() {
               </div>
             </div>
           ))
-        ) : (
-          <p>No accepted invitations yet.</p>
         )}
       </div>
     </div>
