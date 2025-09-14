@@ -238,7 +238,7 @@ function InvitationForm() {
 
           <section className="customize-text-section">
             <div className="form-field">
-              <label htmlFor="eventName">Event Title</label>
+              <label htmlFor="eventName" className="text-align-left">Event Title</label>
               <input
                 type="text"
                 id="eventName"
@@ -270,7 +270,7 @@ function InvitationForm() {
             </div>
 
             <div className="form-field">
-              <label htmlFor="location">Location</label>
+              <label htmlFor="location" className="text-align-left">Location</label>
               <input
                 type="text"
                 id="location"
@@ -281,7 +281,7 @@ function InvitationForm() {
             </div>
 
             <div className="form-field">
-              <label htmlFor="description">Additional Details</label>
+              <label htmlFor="description" className="text-align-left">Additional Details</label>
               <textarea
                 id="description"
                 placeholder="Additional Details"
