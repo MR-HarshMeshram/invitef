@@ -20,8 +20,4 @@ body {
   /* Removed specific #root styling to let Tailwind manage it */
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+/* Any other global styles you might want to add, but ensure they don't override Tailwind defaults */
