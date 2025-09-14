@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './InvitationGalleryPage.css'; // Custom CSS for this page
 import LoginModal from './LoginModal'; // Import the LoginModal component
@@ -16,6 +16,9 @@ function InvitationGalleryPage() {
   const [hasAccepted, setHasAccepted] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // For image modal in gallery
   const [hoveredMediaId, setHoveredMediaId] = useState(null); // For delete button on media
+  const [selectedUploadFile, setSelectedUploadFile] = useState(null); // New state for file to upload
+  const [uploadPreviewUrl, setUploadPreviewUrl] = useState(''); // New state for upload image preview
+  const uploadFileInputRef = useRef(null); // Ref for hidden file input
   const [privateInvitations, setPrivateInvitations] = useState([]); // For "My Private Invitations"
 
   const fetchInvitation = useCallback(async () => {
@@ -204,7 +207,76 @@ function InvitationGalleryPage() {
   };
 
   const handleUploadClick = () => {
-    navigate(`/upload-media/${urlInvitationId}`);
+    // Trigger the hidden file input
+    uploadFileInputRef.current.click();
+  };
+
+  const handleFileSelectForUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+      const maxSize = 10 * 1024 * 1024; // 10MB
+
+      if (!allowedTypes.includes(file.type)) {
+        alert('Please upload a PNG or JPG image.');
+        return;
+      }
+
+      if (file.size > maxSize) {
+        alert('File size exceeds 10MB.');
+        return;
+      }
+
+      setSelectedUploadFile(file);
+      setUploadPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePerformUpload = async () => {
+    if (!selectedUploadFile) {
+      alert('Please select an image to upload.');
+      return;
+    }
+
+    // Disable buttons and show loading if needed
+    // setIsLoading(true);
+    // setError(null);
+
+    const formData = new FormData();
+    formData.append('media', selectedUploadFile);
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        alert('Authentication token missing. Please log in again.');
+        return;
+      }
+
+      const uploadUrl = `https://invite-backend-vk36.onrender.com/invitations/media/${urlInvitationId}`;
+
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to upload media.');
+      }
+
+      alert('Media uploaded successfully!');
+      setSelectedUploadFile(null);
+      setUploadPreviewUrl('');
+      fetchInvitation(); // Refresh the current invitation to show new media
+    } catch (err) {
+      console.error('Error uploading media:', err);
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      // setIsLoading(false);
+    }
   };
 
   if (loading) {
@@ -281,9 +353,23 @@ function InvitationGalleryPage() {
 
         {loggedInUserEmail === invitation.createdByEmail && (
           <div className="upload-media-section">
-            <button className="upload-media-button" onClick={handleUploadClick}>
+            <button type="button" className="upload-media-button" onClick={handleUploadClick}>
               <span className="material-symbols-outlined">cloud_upload</span> Upload Image
             </button>
+            <input
+              type="file"
+              ref={uploadFileInputRef}
+              style={{ display: 'none' }}
+              accept=".png,.jpg,.jpeg"
+              onChange={handleFileSelectForUpload}
+            />
+            {uploadPreviewUrl && (
+              <div className="upload-preview-container">
+                <img src={uploadPreviewUrl} alt="Upload Preview" className="upload-preview-image" />
+                <button type="button" className="remove-upload-preview-button" onClick={() => { setSelectedUploadFile(null); setUploadPreviewUrl(''); }}>&times;</button>
+                <button type="button" className="perform-upload-button" onClick={handlePerformUpload}>Perform Upload</button>
+              </div>
+            )}
           </div>
         )}
 

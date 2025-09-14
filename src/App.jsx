@@ -4,7 +4,6 @@ import LoginPage from './LoginPage'; // Import the new LoginPage component
 import Home from './Home';
 import InvitationForm from './InvitationForm';
 import Invited from './Invited';
-import UploadMedia from './UploadMedia';
 import InvitationGalleryPage from './InvitationGalleryPage'; // Import the new combined component
 import Profile from './Profile';
 import Dashboard from './Dashboard'; // Import the new Dashboard component
@@ -35,7 +34,6 @@ function MainContent() {
         <Route path="/invitation/:invitationId" element={<InvitationGalleryPage />} /> {/* Use the new combined component here */}
         <Route path="/edit-invitation/:invitationId" element={<InvitationForm />} /> {/* New route for editing an invitation */}
         <Route path="/invited" element={<Invited />} />
-        <Route path="/upload-media" element={<UploadMedia />} />
         <Route path="/my-invitations" element={<MyInvitations />} /> {/* New route for MyInvitations */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard/:date" element={<Dashboard />} /> {/* New route for Dashboard */}

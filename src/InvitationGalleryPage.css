@@ -192,6 +192,61 @@
   font-size: 24px;
 }
 
+.upload-preview-container {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 300px; /* Adjust as needed */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.upload-preview-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.remove-upload-preview-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.perform-upload-button {
+  background-color: #a413ec;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s;
+  width: fit-content;
+}
+
+.perform-upload-button:hover {
+  background-color: #8a10cc;
+}
+
 .event-media-gallery-section {
   background-color: white;
   border-radius: 12px;
