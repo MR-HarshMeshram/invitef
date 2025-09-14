@@ -364,31 +364,31 @@ function InvitationForm() {
         <div className="user-invitations-section"> {/* This section is always visible */}
           <h2>Your Created Invitations</h2>
           {isFetchingInvitations ? (
-            <p>Loading your invitations...</p>
+            <p className="no-invitations-message">Loading your invitations...</p>
           ) : fetchError ? (
-            <p style={{ color: 'white' }}>No invitation created yet.</p>
+            <p className="no-invitations-message" style={{ color: 'red' }}>No invitation created yet.</p>
           ) : userInvitations.length > 0 ? (
-            <div className="card-container">
+            <div className="card-grid">
               {userInvitations.map((invitation) => (
-                <div className="card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)} style={{ cursor: 'pointer' }}>
+                <div className="invitation-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
                   {invitation.invitationImage && (
-                    <img src={invitation.invitationImage.url} alt="Invitation Card" className="event-card-image" />
+                    <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-card-image" />
                   )}
-                  <div className="event-details">
-                    <p className="event-date">{invitation.eventName}</p>
-                    <p className="event-name">{invitation.location}</p>
-                    {invitation.description && <p className="event-description">{invitation.description}</p>}
-                    {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
-                    <p className="event-price">Hosted by: {invitation.invitedBy}</p>
-                    <p className="event-privacy">{invitation.eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}</p>
+                  <div className="invitation-card-content">
+                    {invitation.eventName && <p className="invitation-card-title">{invitation.eventName}</p>}
+                    {invitation.dateTime && <p className="invitation-card-date">{new Date(invitation.dateTime).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>}
+                    <button className="view-details-btn">View Details</button>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p>You haven't created any invitations yet.</p>
+            <p className="no-invitations-message">You haven't created any invitations yet.</p>
           )}
-          <button className="send-invitations-button" onClick={() => setShowCreateForm(true)}>Create New Invitation</button> {/* Button to show create form */}
+          <button className="create-new-invitation-fab" onClick={() => setShowCreateForm(true)}>
+            <span className="material-symbols-outlined">add</span>
+            Create New Invitation
+          </button>
         </div>
       )}
     </div>

@@ -1,13 +1,9 @@
 .invitation-form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  padding-top: 70px; /* Added to push content below fixed header */
-  background-color: #282c34;
-  color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #faf8fc;
   min-height: 100vh;
-  box-sizing: border-box;
+  padding: 20px;
+  position: relative; /* Needed for floating button */
 }
 
 .header-card {
@@ -208,73 +204,111 @@
 
 /* New styles for user invitations section */
 .user-invitations-section {
-  width: 100%;
-  max-width: 500px;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #555;
-  text-align: center;
+  padding-top: 20px; /* Space for the header */
 }
 
 .user-invitations-section h2 {
-  font-size: 2em;
-  color: #a050ff;
+  font-size: 24px;
+  font-weight: bold;
+  color: #1f2937;
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.user-invitations-section .card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  justify-content: center;
+  padding: 0 10px;
 }
 
-.user-invitations-section .card {
-  background: linear-gradient(135deg, #4a148c, #2a0a3c); /* Darker purple gradient */
-  border-radius: 15px;
-  padding: 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  max-width: 280px; /* Adjust card width */
-  display: flex;
-  flex-direction: column;
+.invitation-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease-in-out;
 }
 
-.user-invitations-section .card:hover {
+.invitation-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.user-invitations-section .event-card-image {
+.invitation-card-image {
   width: 100%;
-  height: 150px; /* Smaller height for card images */
+  height: 180px;
   object-fit: cover;
-  border-radius: 15px 15px 0 0;
 }
 
-.user-invitations-section .event-details {
+.invitation-card-content {
   padding: 15px;
-  text-align: left;
 }
 
-.user-invitations-section .event-details p {
-  margin: 5px 0;
-  color: #e0e0e0;
-}
-
-.user-invitations-section .event-details .event-name {
+.invitation-card-title {
+  font-size: 18px;
   font-weight: bold;
-  font-size: 1.1em;
-  color: #ffffff;
+  color: #1f2937;
+  margin-bottom: 5px;
 }
 
-.user-invitations-section .event-details .event-price, 
-.user-invitations-section .event-details .event-privacy {
-  font-size: 0.9em;
-  color: #ccc;
+.invitation-card-date {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.view-details-btn {
+  background-color: #a413ec;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 15px;
+  border-radius: 9999px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.view-details-btn:hover {
+  background-color: #8a0dbb;
+}
+
+.create-new-invitation-fab {
+  position: fixed;
+  bottom: 80px; /* Adjust based on navbar height */
+  right: 20px;
+  background-color: #a413ec;
+  color: white;
+  border-radius: 9999px;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.2s ease-in-out;
+}
+
+.create-new-invitation-fab:hover {
+  transform: scale(1.05);
+}
+
+.create-new-invitation-fab span {
+  font-size: 24px;
+}
+
+.no-invitations-message {
+  text-align: center;
+  color: #6b7280;
+  font-size: 16px;
+  margin-top: 30px;
 }
 
 /* Responsive adjustments */
