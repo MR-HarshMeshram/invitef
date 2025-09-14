@@ -206,6 +206,18 @@
   text-align: left; /* Aligned left now */
 }
 
+.form-field input[type="date"],
+.form-field input[type="time"] {
+  padding-right: 10px; /* Adjust padding for date/time inputs */
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #a413ec;
+  box-shadow: 0 0 0 2px rgba(164, 19, 236, 0.2);
+}
+
 .form-field input::placeholder,
 .form-field textarea::placeholder {
   color: #999; /* Lighter placeholder */
@@ -238,7 +250,7 @@
   top: 50%;
   transform: translateY(-50%);
   color: #6b7280; /* Darker icon color */
-  pointer-events: none;
+  /* pointer-events: none; Remove this to make icons clickable */
 }
 
 .visibility-options {
