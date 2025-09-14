@@ -37,8 +37,10 @@ function InvitationGalleryPage() {
       setInvitation(data);
 
       // Check if the logged-in user has accepted or declined this invitation
-      if (loggedInUserEmail) {
-        setHasAccepted(data.acceptedUsers.includes(loggedInUserEmail));
+      const currentLoggedInUserEmail = localStorage.getItem('userEmail');
+      if (currentLoggedInUserEmail) {
+        setHasAccepted(data.acceptedUsers.includes(currentLoggedInUserEmail));
+        setLoggedInUserEmail(currentLoggedInUserEmail); // Update state if changed
       }
 
     } catch (error) {
@@ -55,19 +57,22 @@ function InvitationGalleryPage() {
   useEffect(() => {
     if (urlInvitationId) {
       const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
+      const userEmail = localStorage.getItem('userEmail'); // Get user email directly
+
+      if (!accessToken || !userEmail) {
         setShowLoginPopup(true);
         localStorage.setItem('pendingInvitationId', urlInvitationId);
         setLoading(false);
+        setLoggedInUserEmail(null); // Explicitly set to null if not logged in
       } else {
+        setLoggedInUserEmail(userEmail); // Ensure state is updated if logged in
         fetchInvitation();
-        // fetchPrivateInvitations(); // Removed this call
       }
     }
-  }, [urlInvitationId, fetchInvitation]); // Removed fetchPrivateInvitations from dependencies
+  }, [urlInvitationId, fetchInvitation]); // Depend on fetchInvitation only
 
   const handleLoginSuccess = () => {
-    setLoggedInUserEmail(localStorage.getItem('userEmail'));
+    setLoggedInUserEmail(localStorage.getItem('userEmail')); // Ensure this is up to date
     setShowLoginPopup(false);
     const pendingInvitationId = localStorage.getItem('pendingInvitationId');
     if (pendingInvitationId) {
