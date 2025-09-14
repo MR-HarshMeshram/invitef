@@ -126,6 +126,7 @@ function InvitationForm() {
     formData.append('description', description); // Append description
     formData.append('dateTime', dateTime); // Append dateTime
     formData.append('eventPrivacy', eventPrivacy);
+    formData.append('invitedBy', userEmail); // Re-add invitedBy using userEmail
     // Only append new image if selected
     if (selectedFile) {
       formData.append('invitationImage', selectedFile);
