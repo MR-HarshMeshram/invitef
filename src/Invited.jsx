@@ -5,93 +5,81 @@ import './Invited.css';
 function Invited() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [acceptedInvitations, setAcceptedInvitations] = useState([]);
+  const [userCreatedInvitations, setUserCreatedInvitations] = useState([]); // Renamed state
+  const [loading, setLoading] = useState(true); // Added loading state
+  const [error, setError] = useState(null); // Added error state
 
   useEffect(() => {
-    // Load existing accepted invitations from local storage on component mount
-    const storedInvitations = JSON.parse(localStorage.getItem('acceptedInvitations')) || [];
-    setAcceptedInvitations(storedInvitations);
-
-    // Check if there's a new accepted invitation from navigation state
-    if (location.state?.acceptedInvitation) {
-      const newInvitation = location.state.acceptedInvitation;
-      const isAlreadyAdded = storedInvitations.some(inv => inv._id === newInvitation._id);
-
-      if (!isAlreadyAdded) {
-        const updatedInvitations = [...storedInvitations, newInvitation];
-        localStorage.setItem('acceptedInvitations', JSON.stringify(updatedInvitations));
-        setAcceptedInvitations(updatedInvitations);
-      }
-      // Clear the state so it doesn't re-add on subsequent visits
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state]);
-
-  useEffect(() => {
-    const validateAndSetInvitations = async () => {
-      const storedInvitations = JSON.parse(localStorage.getItem('acceptedInvitations')) || [];
-      const validInvitations = [];
-
-      for (const inv of storedInvitations) {
-        try {
-          const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${inv._id}`);
-          if (response.ok) {
-            validInvitations.push(inv); // Invitation still exists, keep it
-          } else if (response.status === 404) {
-            console.log(`Invitation with ID ${inv._id} no longer exists and will be removed.`);
-          } else {
-            // Handle other potential errors, maybe keep for now or log
-            console.error(`Error validating invitation ${inv._id}: ${response.status}`);
-            validInvitations.push(inv); // Keep if other error, can be re-evaluated
-          }
-        } catch (error) {
-          console.error(`Network error validating invitation ${inv._id}:`, error);
-          validInvitations.push(inv); // Keep on network error to retry later
+    const fetchUserCreatedInvitations = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          setError('Authentication token missing. Please log in.');
+          setLoading(false);
+          return;
         }
-      }
 
-      setAcceptedInvitations(validInvitations);
-      localStorage.setItem('acceptedInvitations', JSON.stringify(validInvitations));
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/user`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch user invitations.');
+        }
+
+        const result = await response.json();
+        setUserCreatedInvitations(result.invitations);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    validateAndSetInvitations();
-  }, []); // Run once on mount
+    fetchUserCreatedInvitations();
+  }, []);
 
   const handleCardClick = (invitationId) => {
-    navigate(`/event-gallery/${invitationId}`);
+    navigate(`/invitation/${invitationId}`); // Navigate to InvitationGalleryPage
   };
 
   return (
-    <div className="invited-container">
-      <h1>Invited Events</h1>
-      <div className="card-container">
-        {acceptedInvitations.length > 0 ? (
-          acceptedInvitations.map((invitation) => (
-            <div
-              className="card"
-              key={invitation._id}
-              onClick={() => handleCardClick(invitation._id)}
-              style={{ cursor: 'pointer' }}
-            >
-              {invitation.invitationImage && (
-                <img src={invitation.invitationImage.url} alt="Invitation Card" className="invitation-image" />
-              )}
-              <div className="event-details">
-                {/* Removed eventDate as dateTime is now used for event date and time */}
-                {invitation.eventName && <p className="event-name">{invitation.eventName}</p>}
-                {invitation.location && <p className="event-location">📍 {invitation.location}</p>}
-                {invitation.description && <p className="event-description">{invitation.description}</p>}
-                {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
-                <p className="event-host">Hosted by: {invitation.invitedBy}</p>
-                <p className="event-privacy">{invitation.eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}</p>
+    <div className="invited-page-container">
+      <header className="invited-header">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <span className="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 className="header-title">My Invitations</h1>
+      </header>
 
+      <main className="invited-content">
+        {loading ? (
+          <p className="loading-message">Loading invitations...</p>
+        ) : error ? (
+          <p className="error-message">Error: {error}</p>
+        ) : userCreatedInvitations.length > 0 ? (
+          <div className="invitation-grid">
+            {userCreatedInvitations.map((invitation) => (
+              <div className="invitation-card" key={invitation._id} onClick={() => handleCardClick(invitation._id)}>
+                {invitation.invitationImage && (
+                  <img src={invitation.invitationImage.url} alt={invitation.eventName} className="invitation-card-image" />
+                )}
+                <div className="invitation-card-details">
+                  <h2 className="invitation-card-title">{invitation.eventName}</h2>
+                  <p className="invitation-card-host">From {invitation.invitedBy || 'Unknown'}</p>
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
-          <p>No accepted invitations yet.</p>
+          <p className="no-invitations-message">You haven't created any invitations yet.</p>
         )}
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,99 +1,112 @@
-.invited-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  padding-top: 70px; /* Adjust for fixed header */
-  background-color: #282c34; /* Changed to dark gray */
-  color: white; /* Ensure text is white */
+.invited-page-container {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #faf8fc;
   min-height: 100vh;
-  box-sizing: border-box;
-}
-
-.invited-container h1 {
-  margin-top: 20px;
-  margin-bottom: 40px;
-  text-align: center;
-  font-size: 2em;
-  border-bottom: 2px solid #61dafb;
-  padding-bottom: 10px;
-}
-
-.invited-container .card-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 500px;
 }
 
-.invited-container .card {
-  background: linear-gradient(135deg, #6200ea, #aa00ff); /* Changed to purple gradient */
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+.invited-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.invited-container .card span {
-  font-size: 60px;
-  margin-bottom: 10px;
-  display: block;
-  color: white; /* Ensure emoji color is visible */
+.back-button {
+  background: none;
+  border: none;
+  color: #1f2937;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
-.invited-container .event-details {
-  text-align: left;
-  margin-top: 15px;
-}
-
-.invited-container .event-details p {
-  margin: 5px 0;
-  color: white; /* Ensure event details text is white */
-}
-
-.invited-container .event-details .event-date {
-  font-size: 0.9em;
-  opacity: 0.8;
-  color: white; /* Ensure event date is white */
-}
-
-.invited-container .event-details .event-name {
-  font-size: 1.2em;
+.header-title {
+  color: #1f2937;
+  font-size: 18px;
   font-weight: bold;
-  color: white; /* Ensure event name is white */
+  flex: 1;
+  text-align: center;
+  padding-right: 40px;
 }
 
-.invited-container .event-details .event-price {
+.invited-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.loading-message,
+.error-message,
+.no-invitations-message {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 30px;
+  font-size: 1.1em;
+}
+
+.invitation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+  justify-content: center; /* Center items in the grid */
+}
+
+.invitation-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.invitation-card:hover {
+  transform: translateY(-5px);
+}
+
+.invitation-card-image {
+  width: 100%;
+  height: 180px; /* Fixed height for consistent card size */
+  object-fit: cover;
+}
+
+.invitation-card-details {
+  padding: 15px;
+  text-align: center;
+}
+
+.invitation-card-title {
   font-size: 1.1em;
   font-weight: bold;
-  color: #61dafb; /* Ensure event price color */
+  color: #1f2937;
+  margin-bottom: 5px;
 }
 
-/* Responsive adjustments */
+.invitation-card-host {
+  font-size: 0.9em;
+  color: #6b7280;
+}
+
 @media (max-width: 600px) {
-  .invited-container {
+  .invited-content {
     padding: 10px;
-    padding-top: 60px; /* Adjust for fixed header on smaller screens */
   }
 
-  .invited-container h1 {
-    font-size: 1.5em;
+  .invitation-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
   }
 
-  .invited-container .card {
-    padding: 15px;
-  }
-
-  .invited-container .card span {
-    font-size: 50px;
-  }
-
-  .invited-container .event-details .event-name {
-    font-size: 1em;
-  }
-
-  .invited-container .event-details .event-price {
-    font-size: 1em;
+  .invitation-card-image {
+    height: 160px;
   }
 }
