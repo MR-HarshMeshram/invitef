@@ -30,8 +30,7 @@ function MainContent() {
       <Routes>
         <Route path="/" element={<LoginPage />} /> {/* Use LoginPage component for the root route */}
         <Route path="/home" element={<Home />} />
-        <Route path="/create-invitation" element={<InvitationForm />} /> {/* New route for creating invitations */}
-        <Route path="/edit-invitation/:invitationId" element={<InvitationForm />} /> {/* Route for editing existing invitations */}
+        <Route path="/invitation" element={<InvitationForm />} />
         <Route path="/invitation/:invitationId" element={<InvitationGalleryPage />} /> {/* Use the new combined component here */}
         <Route path="/invited" element={<Invited />} />
         <Route path="/upload-media" element={<UploadMedia />} />
