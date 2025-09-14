@@ -151,7 +151,7 @@ function Home() {
         </a>
         <a className="nav-item" href="/my-invitations">
           <span className="material-symbols-outlined nav-item-icon">recent_invitations</span>
-          <span>Invitations</span>
+          <span>My Invitations</span>
         </a>
         <a className="nav-item" href="#" onClick={handleCreateInvitationClick}>
           <span className="material-symbols-outlined nav-item-icon">add_circle</span>
