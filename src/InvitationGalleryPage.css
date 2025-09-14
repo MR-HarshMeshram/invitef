@@ -192,7 +192,7 @@
   font-size: 24px;
 }
 
-.my-private-invitations-section {
+.event-media-gallery-section {
   background-color: white;
   border-radius: 12px;
   padding: 20px;
@@ -200,14 +200,14 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.private-invitations-grid {
+.event-media-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
   margin-top: 15px;
 }
 
-.private-invitation-card {
+.event-media-card {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -216,13 +216,13 @@
   background-color: #f7f7f7;
 }
 
-.private-invitation-image {
+.event-media-image {
   width: 100%;
   height: 120px;
   object-fit: cover;
 }
 
-.private-invitation-title {
+.event-media-title {
   font-size: 14px;
   font-weight: 500;
   color: #333;

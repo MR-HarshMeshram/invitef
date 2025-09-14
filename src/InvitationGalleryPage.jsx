@@ -41,36 +41,7 @@ function InvitationGalleryPage() {
     }
   }, [urlInvitationId]);
 
-  const fetchPrivateInvitations = useCallback(async () => {
-    // This function will fetch a list of private invitations for the logged-in user
-    // For now, I'll mock this or adapt an existing API call if available.
-    // Assuming a user-specific endpoint exists, or filtering from all invitations.
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      const userEmail = localStorage.getItem('userEmail'); // Get user email
-      if (!accessToken || !userEmail) {
-        // If not logged in, can't fetch private invitations, so return empty
-        setPrivateInvitations([]);
-        return;
-      }
-
-      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/user/${userEmail}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch private invitations.');
-      }
-      const data = await response.json();
-      setPrivateInvitations(data.invitations || []);
-    } catch (error) {
-      console.error('Error fetching private invitations:', error);
-      setPrivateInvitations([]); // Ensure it's empty on error
-    }
-  }, []); // Dependencies for useCallback
+  // Removed fetchPrivateInvitations as it's no longer needed for this section
 
   useEffect(() => {
     if (urlInvitationId) {
@@ -81,17 +52,17 @@ function InvitationGalleryPage() {
         setLoading(false);
       } else {
         fetchInvitation();
-        fetchPrivateInvitations(); // Fetch private invitations when logged in
+        // fetchPrivateInvitations(); // Removed this call
       }
     }
-  }, [urlInvitationId, fetchInvitation, fetchPrivateInvitations]);
+  }, [urlInvitationId, fetchInvitation]); // Removed fetchPrivateInvitations from dependencies
 
   const handleLoginSuccess = () => {
     setLoggedInUserEmail(localStorage.getItem('userEmail'));
     setShowLoginPopup(false);
     if (urlInvitationId) {
       fetchInvitation();
-      fetchPrivateInvitations(); // Refetch private invitations after login
+      // fetchPrivateInvitations(); // Removed this call
     }
   };
 
@@ -316,20 +287,14 @@ function InvitationGalleryPage() {
           </div>
         )}
 
-        {privateInvitations.length > 0 && (
-          <section className="my-private-invitations-section">
-            <h2 className="section-heading">Invitations Gallery</h2>
-            <div className="private-invitations-grid">
-              {privateInvitations.map((privateInv) => (
-                <div className="private-invitation-card" key={privateInv._id} onClick={() => handleInvitationCardClick(privateInv)}>
-                  {privateInv.eventMedia && privateInv.eventMedia.length > 0 ? (
-                    <img src={privateInv.eventMedia[0].url} alt={privateInv.eventName} className="private-invitation-image" />
-                  ) : privateInv.invitationImage ? (
-                    <img src={privateInv.invitationImage.url} alt={privateInv.eventName} className="private-invitation-image" />
-                  ) : (
-                    <div className="no-image-placeholder">No Media</div>
-                  )}
-                  <p className="private-invitation-title">{privateInv.eventName}</p>
+        {invitation.eventMedia && invitation.eventMedia.length > 0 && ( // Display Event Media Gallery
+          <section className="event-media-gallery-section">
+            <h2 className="section-heading">Event Media Gallery</h2>
+            <div className="event-media-grid">
+              {invitation.eventMedia.map((media) => (
+                <div className="event-media-card" key={media.public_id} onClick={() => handleImageClick({ src: media.url, title: media.original_filename, public_id: media.public_id })}>
+                  <img src={media.url} alt={media.original_filename} className="event-media-image" />
+                  <p className="event-media-title">{media.original_filename}</p>
                 </div>
               ))}
             </div>
