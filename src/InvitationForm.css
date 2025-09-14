@@ -1,333 +1,397 @@
 .invitation-form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  padding-top: 70px; /* Added to push content below fixed header */
+  font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #282c34;
   color: white;
   min-height: 100vh;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
-.header-card {
-  background: linear-gradient(135deg, #6200ea, #aa00ff);
-  border-radius: 15px;
-  padding: 20px;
+.form-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #282c34;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.header-title {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  flex: 1;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding-right: 40px;
+}
+
+.form-content {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create-invitation-banner {
+  background: linear-gradient(135deg, #6200ea, #aa00ff);
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 500px;
-  margin-bottom: 20px;
-}
-
-.header-card h2 {
-  margin-bottom: 5px;
-  font-size: 1.8em;
-}
-
-.header-card p {
-  font-size: 1em;
-  color: #e0e0e0;
-}
-
-.event-buttons-container {
-  display: flex;
-  gap: 15px;
   margin-bottom: 30px;
 }
 
-.event-buttons-container button {
-  background-color: #3a3f47; /* Darker grey */
+.create-invitation-banner h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.create-invitation-banner p {
+  font-size: 15px;
   color: #e0e0e0;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 25px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.event-buttons-container button:hover {
-  background-color: #4a4f56;
-}
-
-.create-invite-card {
-  background-color: #3a3f47; /* Card background color */
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); /* Shadow for depth */
-  width: 100%;
-  max-width: 550px; /* Slightly wider than 500px to give it some breathing room */
-  margin-bottom: 40px; /* Space between this card and the user invitations section */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center content horizontally */
-}
-
-.create-invite-card .header-card {
-  margin-bottom: 30px; /* Space below header within the card */
-}
-
-.create-invite-card .event-buttons-container {
-  margin-bottom: 30px; /* Space below buttons within the card */
-}
-
-.form-section {
+.invitation-form {
   width: 100%;
   max-width: 500px;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.form-section label {
+.section-label {
   display: block;
-  margin-bottom: 8px;
   font-size: 1.1em;
   color: #e0e0e0;
-  text-align: center; /* Center the label */
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 500;
 }
 
-.form-section input {
+.upload-photo-section {
+  background-color: #3a3f47;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.upload-area {
+  border: 2px dashed #6200ea;
+  border-radius: 10px;
+  padding: 30px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: #a413ec;
+}
+
+.drag-drop-text {
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.upload-description {
+  font-size: 0.9em;
+  color: #bbb;
+}
+
+.browse-button {
+  background-color: #a413ec;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.2s;
+}
+
+.browse-button:hover {
+  background-color: #8a10cc;
+}
+
+.image-preview-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px; /* Adjust as needed */
+  margin: 15px auto 0;
+}
+
+.image-preview {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.customize-text-section,
+.invite-visibility-section,
+.preview-section {
+  background-color: #3a3f47;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-field {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95em;
+  color: #e0e0e0;
+}
+
+.form-field input,
+.form-field textarea {
   width: calc(100% - 20px);
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #555;
-  background-color: #3a3f47;
+  background-color: #282c34;
   color: white;
   font-size: 1em;
   box-sizing: border-box;
-  text-align: center; /* Center the input text */
+  text-align: center;
 }
 
-.form-section input::placeholder {
+.form-field input::placeholder,
+.form-field textarea::placeholder {
   color: #aaa;
 }
 
-.upload-card-area {
-  border: 2px dashed #6200ea;
-  border-radius: 15px;
-  padding: 30px;
-  text-align: center;
-  cursor: pointer;
-  background-color: #3a3f47;
-  width: 100%; /* Ensure it takes full available width */
-  box-sizing: border-box; /* Include padding in width calculation */
+.form-field textarea {
+  min-height: 80px;
+  resize: vertical;
 }
 
-.upload-card-area img {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
-}
-
-.upload-card-area p {
-  margin: 5px 0;
-  color: #e0e0e0;
-}
-
-.privacy-options {
+.form-field-group {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.privacy-button {
-  flex: 1;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #555;
-  background-color: #3a3f47;
-  color: #e0e0e0;
-  font-size: 1em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s;
-}
-
-.privacy-button img {
-  margin-right: 8px;
-  width: 24px;
-  height: 24px;
-}
-
-.privacy-button.active {
-  background: linear-gradient(90deg, #6200ea, #aa00ff);
-  border-color: #aa00ff;
-  color: white;
-}
-
-.preview-card {
-  background-color: #3a3f47;
-  border-radius: 15px;
-  padding: 20px;
-  width: 100%;
-  max-width: 500px;
-  margin-top: 20px;
-  text-align: center;
-}
-
-.preview-card h3 {
-  color: #61dafb;
-  margin-bottom: 15px;
-}
-
-.preview-card h4 {
-  font-size: 1.5em;
-  margin-bottom: 5px;
-}
-
-.location-preview, .host-preview, .privacy-preview {
-  color: #e0e0e0;
-  margin: 5px 0;
-}
-
-.send-invitations-button {
-  background: linear-gradient(90deg, #6200ea, #aa00ff);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 15px 30px;
-  font-size: 1.2em;
-  cursor: pointer;
-  margin-top: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  max-width: 300px;
-  transition: opacity 0.3s;
-}
-
-.send-invitations-button:hover {
-  opacity: 0.9;
-}
-
-/* New styles for user invitations section */
-.user-invitations-section {
-  width: 100%;
-  max-width: 500px;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #555;
-  text-align: center;
-}
-
-.user-invitations-section h2 {
-  font-size: 2em;
-  color: #a050ff;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
-.user-invitations-section .card-container {
+.form-field-group .form-field {
+  flex: 1;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.form-field-group .form-field input {
+  padding-right: 40px; /* Make space for icon */
+}
+
+.form-field-group .form-field .material-symbols-outlined {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none;
+}
+
+.visibility-options {
   display: flex;
+  gap: 15px;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
 }
 
-.user-invitations-section .card {
-  background: linear-gradient(135deg, #4a148c, #2a0a3c); /* Darker purple gradient */
-  border-radius: 15px;
-  padding: 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  max-width: 280px; /* Adjust card width */
+.visibility-button {
+  flex: 1;
+  min-width: 150px;
+  background-color: #282c34;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  align-items: center;
+  text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-.user-invitations-section .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+.visibility-button.active {
+  background: linear-gradient(135deg, #6200ea, #aa00ff);
+  border-color: #aa00ff;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.user-invitations-section .event-card-image {
+.radio-icon {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.visibility-button.active .radio-icon {
+  color: white;
+}
+
+.description-text {
+  font-size: 0.8em;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.visibility-button.active .description-text {
+  color: #eee;
+}
+
+.preview-card {
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #333;
+  text-align: center;
+}
+
+.preview-image-container {
+  background-color: #f7ede3;
+  padding: 20px;
+}
+
+.preview-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.placeholder-image {
   width: 100%;
-  height: 150px; /* Smaller height for card images */
-  object-fit: cover;
-  border-radius: 15px 15px 0 0;
+  height: 180px; /* Placeholder height */
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  color: #888;
+  border-radius: 8px;
 }
 
-.user-invitations-section .event-details {
-  padding: 15px;
-  text-align: left;
+.preview-details {
+  padding: 20px;
+  text-align: center;
 }
 
-.user-invitations-section .event-details p {
-  margin: 5px 0;
-  color: #e0e0e0;
-}
-
-.user-invitations-section .event-details .event-name {
+.preview-event-name {
+  font-size: 1.5em;
   font-weight: bold;
-  font-size: 1.1em;
-  color: #ffffff;
+  margin-bottom: 5px;
+  color: #1f2937;
 }
 
-.user-invitations-section .event-details .event-price, 
-.user-invitations-section .event-details .event-privacy {
+.preview-description {
   font-size: 0.9em;
-  color: #ccc;
+  color: #555;
+  margin-bottom: 10px;
 }
 
-/* Responsive adjustments */
+.preview-date-time,
+.preview-location {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.create-invitation-button {
+  background: linear-gradient(90deg, #6200ea, #aa00ff);
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 30px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s, transform 0.2s;
+}
+
+.create-invitation-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
 @media (max-width: 600px) {
-  .invitation-form-container {
+  .form-content {
     padding: 10px;
   }
 
-  .header-card,
-  .form-section,
-  .upload-card-area,
-  .preview-card,
-  .send-invitations-button {
-    width: calc(100% - 20px);
+  .create-invitation-banner {
+    padding: 20px 15px;
   }
 
-  .header-card h2 {
-    font-size: 1.5em;
+  .create-invitation-banner h2 {
+    font-size: 24px;
   }
 
-  .header-card p {
-    font-size: 0.9em;
+  .visibility-options {
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .form-section label {
-    font-size: 1em;
-  }
-
-  .form-section input {
-    padding: 8px;
-    font-size: 0.9em;
-  }
-
-  .privacy-button {
-    padding: 12px;
-    font-size: 0.9em;
-  }
-
-  .privacy-button img {
-    width: 20px;
-    height: 20px;
-  }
-
-  .preview-card h4 {
-    font-size: 1.2em;
-  }
-
-  .send-invitations-button {
-    font-size: 1em;
-    padding: 12px 20px;
-  }
-
-  .user-invitations-section .card {
-    max-width: 100%;
+  .visibility-button {
+    min-width: unset;
+    width: 100%;
   }
 }
