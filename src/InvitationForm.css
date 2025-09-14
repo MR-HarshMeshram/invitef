@@ -1,11 +1,13 @@
-.invitation-form-container {
+/* General Container */
+.create-invitation-page {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #faf8fc;
   min-height: 100vh;
-  padding-bottom: 20px; /* Space for button at bottom */
+  padding-bottom: 20px;
 }
 
-.form-header {
+/* Header */
+.header {
   display: flex;
   align-items: center;
   padding: 16px;
@@ -29,16 +31,17 @@
   cursor: pointer;
 }
 
-.form-title {
+.header-title {
   color: #1f2937;
   font-size: 18px;
   font-weight: bold;
   flex: 1;
   text-align: center;
-  padding-right: 40px; /* To visually center the title despite the back button */
+  padding-right: 40px;
 }
 
-.form-content {
+/* Main Content Sections */
+.section-container {
   padding: 0 20px;
 }
 
@@ -46,49 +49,55 @@
   font-size: 20px;
   font-weight: bold;
   color: #1f2937;
-  margin-top: 25px;
   margin-bottom: 15px;
 }
 
-.upload-photo-area {
-  border: 2px dashed #e0e0e0;
-  border-radius: 12px;
-  padding: 30px 20px;
-  text-align: center;
+/* Upload Photo Section */
+.upload-photo-section {
   background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.upload-area {
+  border: 2px dashed #e0e0e0;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
   cursor: pointer;
   transition: border-color 0.3s ease;
 }
 
-.upload-photo-area:hover {
+.upload-area:hover {
   border-color: #a413ec;
 }
 
 .upload-icon {
-  width: 50px;
-  height: 50px;
+  font-size: 48px;
   color: #a413ec;
   margin-bottom: 10px;
 }
 
 .upload-text-main {
   font-size: 16px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 500;
+  color: #1f2937;
   margin-bottom: 5px;
 }
 
 .upload-text-sub {
   font-size: 14px;
   color: #6b7280;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .browse-button {
   background-color: #a413ec;
   color: white;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: bold;
   padding: 10px 25px;
   border-radius: 9999px;
   border: none;
@@ -97,195 +106,182 @@
 }
 
 .browse-button:hover {
-  background-color: #8a0db8;
+  background-color: #880e4f;
+}
+
+.image-preview-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-top: 20px;
 }
 
 .image-preview {
-  max-width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  border-radius: 8px;
-  margin-top: 15px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.form-group {
+/* Customize Text Section (Form Fields) */
+.customize-text-section {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-field-group {
   margin-bottom: 15px;
 }
 
-.form-group label {
+.form-field-group label {
   display: block;
   font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
+  color: #4b5563;
+  margin-bottom: 5px;
 }
 
-.form-group input[type="text"],
-.form-group input[type="datetime-local"],
-.form-group textarea {
+.form-field-group input, .form-field-group textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 16px;
   color: #333;
-  background-color: white;
-  box-sizing: border-box;
+  background-color: #f9fafb;
+  transition: border-color 0.3s ease;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #999;
+.form-field-group input:focus, .form-field-group textarea:focus {
+  outline: none;
+  border-color: #a413ec;
+  box-shadow: 0 0 0 2px rgba(164, 19, 236, 0.2);
 }
 
-.datetime-inputs {
+.date-time-inputs {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 
-.datetime-inputs > div {
+.date-time-inputs input {
   flex: 1;
-  position: relative;
 }
 
-.datetime-inputs input {
-  padding-right: 40px; /* Space for icon */
-}
-
-.datetime-icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6b7280;
-  font-size: 20px;
-  pointer-events: none;
-}
-
-.invite-visibility-options {
-  display: flex;
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.privacy-option-card {
-  flex: 1;
+/* Invite Visibility Section */
+.invite-visibility-section {
   background-color: white;
-  border: 2px solid #e0e0e0;
   border-radius: 12px;
   padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.privacy-options {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.privacy-card {
+  flex: 1;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 15px;
   cursor: pointer;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: flex-start;
 }
 
-.privacy-option-card.active {
+.privacy-card.active {
   border-color: #a413ec;
-  box-shadow: 0 0 0 3px rgba(164, 19, 236, 0.2);
+  background-color: #f7e6fc; /* Light purple background for active */
 }
 
-.privacy-option-card input[type="radio"] {
-  appearance: none;
+.privacy-radio {
   width: 20px;
   height: 20px;
-  border: 2px solid #999;
   border-radius: 50%;
-  outline: none;
-  cursor: pointer;
-  position: relative;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
 }
 
-.privacy-option-card input[type="radio"]:checked {
+.privacy-radio.active {
   border-color: #a413ec;
 }
 
-.privacy-option-card input[type="radio"]:checked::before {
+.privacy-radio.active::after {
   content: '';
   width: 10px;
   height: 10px;
-  background-color: #a413ec;
   border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  background-color: #a413ec;
 }
 
-.privacy-option-card .option-content {
-  margin-left: 10px;
-  text-align: left;
-}
-
-.privacy-option-card .option-title {
+.privacy-text h4 {
   font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  font-weight: 500;
+  color: #1f2937;
+  margin-top: 0;
   margin-bottom: 5px;
 }
 
-.privacy-option-card .option-description {
+.privacy-text p {
   font-size: 13px;
   color: #6b7280;
+  line-height: 1.4;
 }
 
+/* Preview Section */
 .preview-section {
   background-color: white;
   border-radius: 12px;
   padding: 20px;
-  margin-top: 25px;
+  margin-bottom: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.preview-heading {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 15px;
-}
-
-.preview-card-display {
-  background-color: #f7ede3; /* Light peach background */
+.preview-content {
+  background-color: #f7ede3;
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 150px; /* Ensures space even without an image */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.preview-invitation-image {
-  max-width: 100%;
-  max-height: 200px;
-  object-fit: contain;
+.preview-invitation-image-mock {
+  width: 80%;
+  max-width: 300px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.preview-details {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
+.preview-invitation-details {
+  margin-top: 20px;
   text-align: left;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.preview-details h3 {
+.preview-invitation-details h3 {
   font-size: 18px;
   font-weight: bold;
   color: #1f2937;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.preview-details p {
+.preview-invitation-details p {
   font-size: 14px;
-  color: #6b7280;
+  color: #4b5563;
   margin-bottom: 5px;
 }
 
+/* Create Invitation Button at bottom */
 .create-invitation-submit-button {
   background-color: #a413ec;
   color: white;
@@ -295,14 +291,14 @@
   border-radius: 9999px;
   border: none;
   cursor: pointer;
-  width: 100%;
-  margin-top: 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
+  width: calc(100% - 40px); /* Adjust for padding on sides */
+  margin: 0 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
 }
 
 .create-invitation-submit-button:hover {
-  transform: scale(1.02);
+  transform: translateY(-2px);
 }
 
 .error-message {
