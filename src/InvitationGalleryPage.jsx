@@ -257,14 +257,17 @@ function InvitationGalleryPage() {
           <section className="my-private-invitations-section">
             <h2 className="section-heading">Invitations Gallery</h2>
             <div className="private-invitations-grid">
-              {privateInvitations.map((privateInv) => (
-                <div className="private-invitation-card" key={privateInv._id} onClick={() => handleInvitationCardClick(privateInv)}>
-                  {privateInv.invitationImage && (
-                    <img src={privateInv.invitationImage.url} alt={privateInv.eventName} className="private-invitation-image" />
-                  )}
-                  <p className="private-invitation-title">{privateInv.eventName}</p>
-                </div>
-              ))}
+              {privateInvitations.map((privateInv) => {
+                console.log("Private Invitation Card Data:", privateInv); // Add this line to debug
+                return (
+                  <div className="private-invitation-card" key={privateInv._id} onClick={() => handleInvitationCardClick(privateInv)}>
+                    {privateInv.invitationImage && (
+                      <img src={privateInv.invitationImage.url} alt={privateInv.eventName} className="private-invitation-image" />
+                    )}
+                    <p className="private-invitation-title">{privateInv.eventName}</p>
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
