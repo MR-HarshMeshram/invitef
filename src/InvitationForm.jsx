@@ -181,7 +181,7 @@ function InvitationForm() {
       setPreviewUrl('');
       setIsEditing(false); // Reset editing state
       setCurrentInvitationId(null); // Clear current invitation ID
-      navigate('/invitation-display', { state: { invitation: result.invitation } }); // Navigate to display page
+      navigate(`/invitation/${result.invitation._id}`); // Navigate to the new InvitationGalleryPage with the ID
     } catch (err) {
       setError(err.message);
     } finally {
