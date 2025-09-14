@@ -244,6 +244,7 @@ function InvitationGalleryPage() {
 
     const formData = new FormData();
     formData.append('media', selectedUploadFile);
+    formData.append('invitationId', urlInvitationId); // Add invitationId to form data
 
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -252,7 +253,7 @@ function InvitationGalleryPage() {
         return;
       }
 
-      const uploadUrl = `https://invite-backend-vk36.onrender.com/invitations/media/${urlInvitationId}`;
+      const uploadUrl = `https://invite-backend-vk36.onrender.com/invitations/media/upload`; // Corrected URL
 
       const response = await fetch(uploadUrl, {
         method: 'POST',
