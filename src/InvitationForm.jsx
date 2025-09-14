@@ -14,7 +14,6 @@ function InvitationForm() {
   const [previewUrl, setPreviewUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentInvitationId, setCurrentInvitationId] = useState(null);
   const fileInputRef = useRef(null);
@@ -35,19 +34,7 @@ function InvitationForm() {
 
     const idToFetch = pathInvitationId !== 'create-invitation' && pathInvitationId !== 'invitation' ? pathInvitationId : invitationIdParam;
 
-    if (locationHook.state?.showForm || locationHook.pathname === '/create-invitation') {
-      setShowCreateForm(true);
-      setIsEditing(false);
-      setCurrentInvitationId(null);
-      setEventName('');
-      setLocation('');
-      setDescription('');
-      setDateTime('');
-      setInvitedBy(localStorage.getItem('userEmail') || ''); // Set invitedBy to logged-in user's email
-      setEventPrivacy('private');
-      setSelectedFile(null);
-      setPreviewUrl('');
-    } else if (idToFetch && locationHook.pathname.startsWith('/edit-invitation/')) {
+    if (idToFetch && locationHook.pathname.startsWith('/edit-invitation/')) {
       const fetchInvitationForEdit = async () => {
         setIsLoading(true); // Changed from setLoading to setIsLoading
         try {
@@ -212,135 +199,137 @@ function InvitationForm() {
       </header>
 
       <div className="section-container">
-        <section className="upload-photo-section">
-          <h2 className="section-heading">Upload Photo</h2>
-          <div className="upload-area" onClick={() => fileInputRef.current.click()}>
-            {previewUrl ? (
-              <div className="image-preview-container">
-                <img src={previewUrl} alt="Invitation Preview" className="image-preview" />
+        <form onSubmit={handleSubmit}> {/* Moved form tag here to wrap all form elements and the submit button */}
+          <section className="upload-photo-section">
+            <h2 className="section-heading">Upload Photo</h2>
+            <div className="upload-area" onClick={() => fileInputRef.current.click()}>
+              {previewUrl ? (
+                <div className="image-preview-container">
+                  <img src={previewUrl} alt="Invitation Preview" className="image-preview" />
+                </div>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined upload-icon">cloud_upload</span>
+                  <p className="upload-text-main">Drag and drop or browse</p>
+                  <p className="upload-text-sub">Upload a photo to personalize your invitation card.</p>
+                  <button type="button" className="browse-button">Browse</button>
+                </>
+              )}
+            </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              accept=".png,.jpg,.jpeg"
+              onChange={handleFileChange}
+            />
+          </section>
+
+          <section className="customize-text-section">
+            <h2 className="section-heading">Customize Text</h2>
+            <div className="form-field-group">
+              {/* <label htmlFor="eventName">Event Title</label> */}
+              <input
+                type="text"
+                id="eventName"
+                placeholder="Event Title"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+              />
+            </div>
+
+            <div className="form-field-group date-time-inputs">
+              {/* <label htmlFor="dateTime">Date</label> */}
+              <input
+                type="date"
+                id="date"
+                value={dateTime ? dateTime.split('T')[0] : ''}
+                onChange={(e) => setDateTime(`${e.target.value}T${dateTime ? dateTime.split('T')[1] : '00:00'}`)}
+              />
+              {/* <label htmlFor="dateTime">Time</label> */}
+              <input
+                type="time"
+                id="time"
+                value={dateTime ? dateTime.split('T')[1] : ''}
+                onChange={(e) => setDateTime(`${dateTime ? dateTime.split('T')[0] : ''}T${e.target.value}`)}
+              />
+            </div>
+
+            <div className="form-field-group">
+              {/* <label htmlFor="location">Location</label> */}
+              <input
+                type="text"
+                id="location"
+                placeholder="Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+
+            <div className="form-field-group">
+              {/* <label htmlFor="description">Additional Details</label> */}
+              <textarea
+                id="description"
+                placeholder="Additional Details"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+            </div>
+
+            {/* Assuming invitedBy is removed or handled elsewhere based on new design */}
+            {/* <div className="form-field-group">
+              <label htmlFor="invitedBy">Invited By</label>
+              <input
+                type="text"
+                id="invitedBy"
+                placeholder="Your name"
+                value={invitedBy}
+                onChange={(e) => setInvitedBy(e.target.value)}
+              />
+            </div> */}
+          </section>
+
+          <section className="invite-visibility-section">
+            <h2 className="section-heading">Invite Visibility</h2>
+            <div className="privacy-options">
+              <div className={`privacy-card ${eventPrivacy === 'private' ? 'active' : ''}`} onClick={() => setEventPrivacy('private')}>
+                <div className={`privacy-radio ${eventPrivacy === 'private' ? 'active' : ''}`}></div>
+                <div className="privacy-text">
+                  <h4>Private Invite</h4>
+                  <p>Only people you invite can see this.</p>
+                </div>
               </div>
-            ) : (
-              <>
-                <span className="material-symbols-outlined upload-icon">cloud_upload</span>
-                <p className="upload-text-main">Drag and drop or browse</p>
-                <p className="upload-text-sub">Upload a photo to personalize your invitation card.</p>
-                <button type="button" className="browse-button">Browse</button>
-              </>
-            )}
-          </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            accept=".png,.jpg,.jpeg"
-            onChange={handleFileChange}
-          />
-        </section>
-
-        <section className="customize-text-section">
-          <h2 className="section-heading">Customize Text</h2>
-          <div className="form-field-group">
-            {/* <label htmlFor="eventName">Event Title</label> */}
-            <input
-              type="text"
-              id="eventName"
-              placeholder="Event Title"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-            />
-          </div>
-
-          <div className="form-field-group date-time-inputs">
-            {/* <label htmlFor="dateTime">Date</label> */}
-            <input
-              type="date"
-              id="date"
-              value={dateTime ? dateTime.split('T')[0] : ''}
-              onChange={(e) => setDateTime(`${e.target.value}T${dateTime ? dateTime.split('T')[1] : '00:00'}`)}
-            />
-            {/* <label htmlFor="dateTime">Time</label> */}
-            <input
-              type="time"
-              id="time"
-              value={dateTime ? dateTime.split('T')[1] : ''}
-              onChange={(e) => setDateTime(`${dateTime ? dateTime.split('T')[0] : ''}T${e.target.value}`)}
-            />
-          </div>
-
-          <div className="form-field-group">
-            {/* <label htmlFor="location">Location</label> */}
-            <input
-              type="text"
-              id="location"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-
-          <div className="form-field-group">
-            {/* <label htmlFor="description">Additional Details</label> */}
-            <textarea
-              id="description"
-              placeholder="Additional Details"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
-          </div>
-
-          {/* Assuming invitedBy is removed or handled elsewhere based on new design */}
-          {/* <div className="form-field-group">
-            <label htmlFor="invitedBy">Invited By</label>
-            <input
-              type="text"
-              id="invitedBy"
-              placeholder="Your name"
-              value={invitedBy}
-              onChange={(e) => setInvitedBy(e.target.value)}
-            />
-          </div> */}
-        </section>
-
-        <section className="invite-visibility-section">
-          <h2 className="section-heading">Invite Visibility</h2>
-          <div className="privacy-options">
-            <div className={`privacy-card ${eventPrivacy === 'private' ? 'active' : ''}`} onClick={() => setEventPrivacy('private')}>
-              <div className={`privacy-radio ${eventPrivacy === 'private' ? 'active' : ''}`}></div>
-              <div className="privacy-text">
-                <h4>Private Invite</h4>
-                <p>Only people you invite can see this.</p>
+              <div className={`privacy-card ${eventPrivacy === 'public' ? 'active' : ''}`} onClick={() => setEventPrivacy('public')}>
+                <div className={`privacy-radio ${eventPrivacy === 'public' ? 'active' : ''}`}></div>
+                <div className="privacy-text">
+                  <h4>Public Invite</h4>
+                  <p>Anyone with the link can see this.</p>
+                </div>
               </div>
             </div>
-            <div className={`privacy-card ${eventPrivacy === 'public' ? 'active' : ''}`} onClick={() => setEventPrivacy('public')}>
-              <div className={`privacy-radio ${eventPrivacy === 'public' ? 'active' : ''}`}></div>
-              <div className="privacy-text">
-                <h4>Public Invite</h4>
-                <p>Anyone with the link can see this.</p>
+          </section>
+
+          <section className="preview-section">
+            <h2 className="section-heading">Preview</h2>
+            <div className="preview-content">
+              {/* This will be a mock-up based on the screenshot, not dynamic content */}
+              <img src="/images/invitation-mock.png" alt="Invitation Mockup" className="preview-invitation-image-mock" />
+              <div className="preview-invitation-details">
+                <h3>You're Invited!</h3>
+                <p>Join us for a {eventName || 'birthday celebration'}</p>
+                <p>{dateTime ? new Date(dateTime).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Sat, Dec 25, 2024 at 7:00 PM'}</p>
+                <p>{location || '123 Party Lane, Fun City'}</p>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="preview-section">
-          <h2 className="section-heading">Preview</h2>
-          <div className="preview-content">
-            {/* This will be a mock-up based on the screenshot, not dynamic content */}
-            <img src="/images/invitation-mock.png" alt="Invitation Mockup" className="preview-invitation-image-mock" />
-            <div className="preview-invitation-details">
-              <h3>You're Invited!</h3>
-              <p>Join us for a {eventName || 'birthday celebration'}</p>
-              <p>{dateTime ? new Date(dateTime).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Sat, Dec 25, 2024 at 7:00 PM'}</p>
-              <p>{location || '123 Party Lane, Fun City'}</p>
-            </div>
-          </div>
-        </section>
+          {error && <p className="error-message">{error}</p>}
+
+          <button type="submit" className="create-invitation-submit-button" disabled={isLoading}>
+            {isLoading ? (isEditing ? 'Saving...' : 'Creating...') : (isEditing ? 'Save Changes' : 'Create Invitation')}
+          </button>
+        </form> {/* Closing form tag */}
       </div>
-
-      {error && <p className="error-message">{error}</p>}
-
-      <button type="submit" className="create-invitation-submit-button" disabled={isLoading} onClick={handleSubmit}>
-        {isLoading ? (isEditing ? 'Saving...' : 'Creating...') : (isEditing ? 'Save Changes' : 'Create Invitation')}
-      </button>
     </div>
   );
 }
