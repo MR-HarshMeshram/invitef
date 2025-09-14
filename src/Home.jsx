@@ -78,7 +78,7 @@ function Home() {
             <div class="relative z-10">
               <h2 class="text-3xl font-bold tracking-tight text-slate-900">Design Your Perfect Invitation</h2>
               <p class="mt-2 text-slate-600">Create beautiful and personalized cards for any occasion.</p>
-              <button class="mt-6 inline-flex items-center justify-center rounded-full bg-[var(--primary-color)] px-8 py-3 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105" onClick={handleCreateInvitationClick}>
+              <button class="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105" onClick={handleCreateInvitationClick}>
                 Create Invite
               </button>
             </div>
@@ -87,7 +87,7 @@ function Home() {
           <div class="py-5">
             <div class="flex items-center justify-between px-4 pb-3">
               <h2 class="text-slate-900 text-2xl font-bold leading-tight tracking-[-0.015em]">Upcoming Events</h2>
-              <a class="text-[var(--primary-color)] text-sm font-semibold" href="#">See all</a>
+              <a class="text-primary text-sm font-semibold" href="#">See all</a>
             </div>
             <div class="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pl-4 pr-2">
               <div class="flex items-stretch gap-4">
@@ -105,7 +105,7 @@ function Home() {
                       <div class="p-4 flex flex-col flex-grow">
                         {invitation.eventName && <p class="text-slate-900 text-lg font-bold leading-tight">{invitation.eventName}</p>}
                         {invitation.dateTime && <p class="text-slate-500 text-sm font-normal leading-normal mt-1">{new Date(invitation.dateTime).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>}
-                        <button class="mt-4 w-full text-sm font-bold text-white bg-[var(--primary-color)] py-2.5 px-4 rounded-full">View Details</button>
+                        <button class="mt-4 w-full text-sm font-bold text-white bg-primary py-2.5 px-4 rounded-full">View Details</button>
                       </div>
                     </div>
                   ))
@@ -143,19 +143,19 @@ function Home() {
         </div>
         <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-2px_4px_rgba(0,0,0,0.05)]">
           <div class="flex justify-around items-center h-16">
-            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-[var(--primary-color)]" href="#">
+            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-primary" href="#">
               <span class="material-symbols-outlined text-2xl">home</span>
               <span>Home</span>
             </a>
-            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-[var(--primary-color)]" href="#">
+            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-primary" href="#">
               <span class="material-symbols-outlined text-2xl">mail</span>
               <span>Invited</span>
             </a>
-            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-[var(--primary-color)]" href="#" onClick={handleCreateInvitationClick}>
+            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-primary" href="#" onClick={handleCreateInvitationClick}>
               <span class="material-symbols-outlined text-2xl">add_circle</span>
               <span>Invite</span>
             </a>
-            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-[var(--primary-color)]" href="#">
+            <a class="flex flex-col items-center justify-center text-center text-sm font-medium text-slate-500 transition-colors hover:text-primary" href="#">
               <span class="material-symbols-outlined text-2xl">person</span>
               <span>Profile</span>
             </a>
