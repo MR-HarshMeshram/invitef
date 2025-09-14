@@ -264,12 +264,13 @@ function InvitationGalleryPage() {
 
       if (!response.ok) {
         let errorMessage = 'Failed to upload media.';
+        const clonedResponse = response.clone(); // Clone the response before trying to read it
         try {
           const errorData = await response.json();
           errorMessage = errorData.message || errorMessage;
         } catch (jsonError) {
-          // If response is not JSON (e.g., HTML error page), read as text
-          const errorText = await response.text();
+          // If response is not JSON (e.g., HTML error page), read as text from the cloned response
+          const errorText = await clonedResponse.text();
           errorMessage = `Server error: ${response.status} - ${errorText.substring(0, 150)}...`; // Limit text length
         }
         throw new Error(errorMessage);
