@@ -192,6 +192,49 @@ function InvitationGalleryPage() {
     navigate(`/invitation/${invitationItem._id}`);
   };
 
+  const handleEditClick = () => {
+    navigate(`/edit-invitation/${urlInvitationId}`);
+  };
+
+  const handleDeleteClick = () => {
+    if (window.confirm('Are you sure you want to delete this invitation?')) {
+      deleteInvitation();
+    }
+  };
+
+  const deleteInvitation = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        alert('Authentication token missing. Please log in again.');
+        return;
+      }
+
+      const deleteUrl = `https://invite-backend-vk36.onrender.com/invitations/${urlInvitationId}`;
+      const response = await fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete invitation.');
+      }
+
+      alert('Invitation deleted successfully!');
+      navigate('/home'); // Redirect to home or a generic success page
+    } catch (error) {
+      console.error('Error deleting invitation:', error);
+      alert(`Error: ${error.message}`);
+    }
+  };
+
+  const handleUploadClick = () => {
+    navigate(`/upload-media/${urlInvitationId}`);
+  };
+
   if (loading) {
     return <div className="invitation-gallery-page-container">Loading invitation...</div>;
   }
@@ -224,6 +267,17 @@ function InvitationGalleryPage() {
 
         <section className="invitation-details-section">
           <h2 className="section-heading">All Details of Invitation</h2>
+          {loggedInUserEmail === invitation.createdByEmail && (
+            <div className="owner-actions">
+              <button className="action-button edit-button" onClick={handleEditClick}>
+                <span className="material-symbols-outlined">edit</span> Edit
+              </button>
+              <button className="action-button delete-button" onClick={handleDeleteClick}>
+                <span className="material-symbols-outlined">delete</span> Delete
+              </button>
+            </div>
+          )}
+
           <div className="detail-item">
             <span className="material-symbols-outlined">event</span>
             <p>Event: {invitation.eventName}</p>
@@ -252,6 +306,14 @@ function InvitationGalleryPage() {
             Share Invitation
           </button>
         </section>
+
+        {loggedInUserEmail === invitation.createdByEmail && (
+          <div className="upload-media-section">
+            <button className="upload-media-button" onClick={handleUploadClick}>
+              <span className="material-symbols-outlined">cloud_upload</span> Upload Image
+            </button>
+          </div>
+        )}
 
         {privateInvitations.length > 0 && (
           <section className="my-private-invitations-section">

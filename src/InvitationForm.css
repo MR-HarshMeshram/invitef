@@ -89,45 +89,46 @@
 }
 
 .upload-photo-section {
-  background-color: white;
+  background-color: #f9f9f9; /* Light gray background */
   border-radius: 12px;
-  padding: 20px; /* Keep padding here for the white card effect */
+  padding: 20px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   margin-bottom: 25px;
-  overflow: hidden; /* Ensure content is clipped within rounded corners */
+  overflow: hidden;
+  border: 2px dashed #e0e0e0; /* Dashed border on the section itself */
 }
 
 .upload-area {
-  border: 2px dashed #6200ea; /* Purple dashed border */
+  border: none; /* Remove border from here */
   border-radius: 10px;
-  padding: 30px;
+  padding: 0; /* Remove padding as it's now on the section */
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 0; /* No margin-bottom on the upload-area itself */
-  background-color: #3a3f47; /* Dark gray background */
-  width: auto; /* Allow it to take natural width within parent */
+  margin-bottom: 0;
+  background-color: transparent; /* Transparent background */
+  width: auto;
   box-sizing: border-box;
 }
 
 .upload-icon {
   font-size: 48px;
-  color: #ccc; /* Lighter icon color */
+  color: #6b7280; /* Darker icon color for light background */
 }
 
 .drag-drop-text {
   font-size: 1em;
   font-weight: 500;
-  color: white; /* White text for dark background */
+  color: #333; /* Darker text */
 }
 
 .upload-description {
   font-size: 0.9em;
-  color: #bbb; /* Lighter text for dark background */
+  color: #6b7280; /* Medium dark text */
 }
 
 .browse-button {

@@ -33,6 +33,7 @@ function MainContent() {
         <Route path="/home" element={<Home />} />
         <Route path="/invitation" element={<InvitationForm />} />
         <Route path="/invitation/:invitationId" element={<InvitationGalleryPage />} /> {/* Use the new combined component here */}
+        <Route path="/edit-invitation/:invitationId" element={<InvitationForm />} /> {/* New route for editing an invitation */}
         <Route path="/invited" element={<Invited />} />
         <Route path="/upload-media" element={<UploadMedia />} />
         <Route path="/my-invitations" element={<MyInvitations />} /> {/* New route for MyInvitations */}

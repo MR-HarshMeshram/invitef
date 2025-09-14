@@ -97,6 +97,49 @@
   font-size: 20px;
 }
 
+.owner-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.action-button {
+  flex: 1;
+  background-color: white;
+  color: #1f2937;
+  border: 1px solid #e0e0e0;
+  border-radius: 9999px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+
+.action-button span {
+  font-size: 20px;
+}
+
+.action-button.delete-button {
+  color: #dc3545; /* Red color for delete icon/text */
+  border-color: #dc3545; /* Red border for delete */
+}
+
+.action-button.delete-button:hover {
+  background-color: #fbe6e8;
+}
+
 .share-invitation-button {
   background-color: #333;
   color: white;
@@ -117,6 +160,36 @@
 .share-invitation-button span {
   margin-right: 8px;
   font-size: 20px;
+}
+
+.upload-media-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.upload-media-button {
+  background-color: #a413ec; /* Purple button */
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.upload-media-button:hover {
+  background-color: #8a10cc;
+  transform: translateY(-2px);
+}
+
+.upload-media-button span {
+  font-size: 24px;
 }
 
 .my-private-invitations-section {
