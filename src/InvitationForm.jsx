@@ -225,172 +225,142 @@ function InvitationForm() {
 
   return (
     <div className="invitation-form-container">
-      {showCreateForm ? (
-        <div className="create-invite-card"> {/* New wrapper card */}
-          <div className="header-card">
-            <h2>Create Invitation</h2>
-            <p>Design your perfect event invitation</p>
+      <header className="form-header">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <span className="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 className="form-title">Create Invitation</h1>
+      </header>
+
+      <main className="form-content">
+        <section>
+          <h2 className="section-heading">Upload Photo</h2>
+          <div className="upload-photo-area" onClick={() => fileInputRef.current.click()}>
+            {previewUrl ? (
+              <img src={previewUrl} alt="Invitation Preview" className="image-preview" />
+            ) : (
+              <>
+                <span className="material-symbols-outlined upload-icon">cloud_upload</span>
+                <p className="upload-text-main">Drag and drop or browse</p>
+                <p className="upload-text-sub">Upload a photo to personalize your invitation card.</p>
+                <button type="button" className="browse-button">Browse</button>
+              </>
+            )}
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              accept=".png,.jpg,.jpeg"
+              onChange={handleFileChange}
+            />
           </div>
+        </section>
 
-          <div className="event-buttons-container">
-            <button onClick={handleGalleryClick}>event gallery</button>
-            <button onClick={handleUploadClick}>event uplode media</button>
+        <section>
+          <h2 className="section-heading">Customize Text</h2>
+          <div className="form-group">
+            <input
+              type="text"
+              id="eventName"
+              placeholder="Event Title"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+            />
           </div>
-
-          <form onSubmit={handleSubmit}> {/* Wrap content in form and add onSubmit */}
-            <div className="form-section">
-              <label htmlFor="eventName">Event Name</label>
+          <div className="datetime-inputs">
+            <div className="form-group">
               <input
-                type="text"
-                id="eventName"
-                placeholder="Enter event name"
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
+                type="date"
+                id="date"
+                value={dateTime ? dateTime.split('T')[0] : ''}
+                onChange={(e) => setDateTime(e.target.value + (dateTime ? `T${dateTime.split('T')[1]}` : 'T00:00'))}
               />
+              <span className="material-symbols-outlined datetime-icon">calendar_today</span>
             </div>
-
-            <div className="form-section">
-              <label htmlFor="location">Address / Location</label>
+            <div className="form-group">
               <input
-                type="text"
-                id="location"
-                placeholder="Enter event location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                type="time"
+                id="time"
+                value={dateTime ? dateTime.split('T')[1] : ''}
+                onChange={(e) => setDateTime((dateTime ? dateTime.split('T')[0] : '2024-01-01') + `T${e.target.value}`)}
               />
+              <span className="material-symbols-outlined datetime-icon">schedule</span>
             </div>
+          </div>
+          <div className="form-group">
+            <input
+              type="text"
+              id="location"
+              placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <textarea
+              id="description"
+              placeholder="Additional Details"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+          </div>
+        </section>
 
-            <div className="form-section">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                placeholder="Describe your event"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></textarea>
-            </div>
-
-            <div className="form-section">
-              <label htmlFor="dateTime">Date & Time</label>
+        <section>
+          <h2 className="section-heading">Invite Visibility</h2>
+          <div className="invite-visibility-options">
+            <label className={`privacy-option-card ${eventPrivacy === 'private' ? 'active' : ''}`}>
               <input
-                type="datetime-local"
-                id="dateTime"
-                value={dateTime}
-                onChange={(e) => setDateTime(e.target.value)}
+                type="radio"
+                name="eventPrivacy"
+                value="private"
+                checked={eventPrivacy === 'private'}
+                onChange={() => setEventPrivacy('private')}
               />
-            </div>
-
-            <div className="form-section">
-              <label>Upload Invitation Card</label>
-              <div className="upload-card-area" onClick={() => fileInputRef.current.click()}>
-                {previewUrl ? (
-                  <img src={previewUrl} alt="Invitation Preview" className="image-preview" />
-                ) : (
-                  <>
-                    <img src="https://img.icons8.com/ios/50/000000/camera--v1.png" alt="Camera icon" />
-                    <p>Click to upload or drag & drop</p>
-                    <p>PNG, JPG up to 5MB</p>
-                  </>
-                )}
+              <div className="option-content">
+                <p className="option-title">Private Invite</p>
+                <p className="option-description">Only people you invite can see this.</p>
               </div>
+            </label>
+            <label className={`privacy-option-card ${eventPrivacy === 'public' ? 'active' : ''}`}>
               <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                accept=".png,.jpg,.jpeg"
-                onChange={handleFileChange}
+                type="radio"
+                name="eventPrivacy"
+                value="public"
+                checked={eventPrivacy === 'public'}
+                onChange={() => setEventPrivacy('public')}
               />
-            </div>
-
-            <div className="form-section">
-              <label htmlFor="invitedBy">Invited By</label>
-              <input
-                type="text"
-                id="invitedBy"
-                placeholder="Your name"
-                value={invitedBy}
-                onChange={(e) => setInvitedBy(e.target.value)}
-              />
-            </div>
-
-            <div className="form-section">
-              <label>Event Privacy</label>
-              <div className="privacy-options">
-                <button
-                  type="button" // Prevent form submission on click
-                  className={`privacy-button ${eventPrivacy === 'private' ? 'active' : ''}`}
-                  onClick={() => setEventPrivacy('private')}
-                >
-                  <img src="https://img.icons8.com/ios-filled/24/000000/lock.png" alt="Lock icon" />
-                  Private
-                </button>
-                <button
-                  type="button" // Prevent form submission on click
-                  className={`privacy-button ${eventPrivacy === 'public' ? 'active' : ''}`}
-                  onClick={() => setEventPrivacy('public')}
-                >
-                  <img src="https://img.icons8.com/ios-filled/24/000000/globe--v1.png" alt="Globe icon" />
-                  Public
-                </button>
+              <div className="option-content">
+                <p className="option-title">Public Invite</p>
+                <p className="option-description">Anyone with the link can see this.</p>
               </div>
-            </div>
+            </label>
+          </div>
+        </section>
 
-            <div className="preview-card">
-              <h3>Preview</h3>
-              <h4>{eventName || 'Event Name'}</h4>
-              <p className="location-preview">
-                📍 {location || 'Location'}
-              </p>
-              <p className="description-preview">
-                {description || 'Event Description'}
-              </p>
-              <p className="date-time-preview">
-                🗓️ {dateTime ? new Date(dateTime).toLocaleString() : 'Date & Time'}
-              </p>
-              <p className="host-preview">Hosted by: {invitedBy || 'Host Name'}</p>
-              <p className="privacy-preview">
-                {eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}
-              </p>
-            </div>
+        <section className="preview-section">
+          <h2 className="preview-heading">Preview</h2>
+          <div className="preview-card-display">
+            {previewUrl ? (
+              <img src={previewUrl} alt="Invitation Preview" className="preview-invitation-image" />
+            ) : (
+              <div className="no-image-placeholder">Invitation Preview</div>
+            )}
+          </div>
+          <div className="preview-details">
+            <h3>You're Invited!</h3>
+            <p>Join us for a {eventName || 'event'} celebration</p>
+            <p>{dateTime ? new Date(dateTime).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Date & Time'}</p>
+            <p>{location || 'Location'}</p>
+          </div>
+        </section>
 
-            {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
 
-            <button type="submit" className="send-invitations-button" disabled={isLoading}>
-              {isLoading ? (isEditing ? 'Saving...' : 'Sending...') : (isEditing ? 'Save Changes' : 'Send Invitations')} <img src="https://img.icons8.com/emoji/24/000000/rocket-emoji.png" alt="Rocket emoji" />
-            </button>
-          </form>
-        </div>
-      ) : (
-        <div className="user-invitations-section"> {/* This section is always visible */}
-          <h2>Your Created Invitations</h2>
-          {isFetchingInvitations ? (
-            <p>Loading your invitations...</p>
-          ) : fetchError ? (
-            <p style={{ color: 'white' }}>No invitation created yet.</p>
-          ) : userInvitations.length > 0 ? (
-            <div className="card-container">
-              {userInvitations.map((invitation) => (
-                <div className="card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)} style={{ cursor: 'pointer' }}>
-                  {invitation.invitationImage && (
-                    <img src={invitation.invitationImage.url} alt="Invitation Card" className="event-card-image" />
-                  )}
-                  <div className="event-details">
-                    <p className="event-date">{invitation.eventName}</p>
-                    <p className="event-name">{invitation.location}</p>
-                    {invitation.description && <p className="event-description">{invitation.description}</p>}
-                    {invitation.dateTime && <p className="event-date-time">🗓️ {new Date(invitation.dateTime).toLocaleString()}</p>}
-                    <p className="event-price">Hosted by: {invitation.invitedBy}</p>
-                    <p className="event-privacy">{invitation.eventPrivacy === 'private' ? '🔒 Private' : '🌍 Public'}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p>You haven't created any invitations yet.</p>
-          )}
-          <button className="send-invitations-button" onClick={() => setShowCreateForm(true)}>Create New Invitation</button> {/* Button to show create form */}
-        </div>
-      )}
+        <button type="submit" className="create-invitation-submit-button" disabled={isLoading}>
+          {isLoading ? (isEditing ? 'Saving...' : 'Creating...') : (isEditing ? 'Save Changes' : 'Create Invitation')}
+        </button>
+      </main>
     </div>
   );
 }

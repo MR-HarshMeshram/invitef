@@ -64,6 +64,7 @@ function InvitationGalleryPage() {
         throw new Error(errorData.message || 'Failed to fetch private invitations.');
       }
       const data = await response.json();
+      console.log("Fetched private invitations data:", data.invitations); // Add this line for debugging
       setPrivateInvitations(data.invitations || []);
     } catch (error) {
       console.error('Error fetching private invitations:', error);
