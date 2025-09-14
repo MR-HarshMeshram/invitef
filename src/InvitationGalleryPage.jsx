@@ -47,13 +47,14 @@ function InvitationGalleryPage() {
     // Assuming a user-specific endpoint exists, or filtering from all invitations.
     try {
       const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
+      const userEmail = localStorage.getItem('userEmail'); // Get user email
+      if (!accessToken || !userEmail) {
         // If not logged in, can't fetch private invitations, so return empty
         setPrivateInvitations([]);
         return;
       }
 
-      const response = await fetch('https://invite-backend-vk36.onrender.com/invitations/user', {
+      const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/user/${userEmail}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         },
