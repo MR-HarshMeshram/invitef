@@ -1,69 +1,67 @@
 import React, { useState } from 'react';
 import './UploadMedia.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 function UploadMedia() {
   const location = useLocation();
-  const { invitationId } = location.state || {}; // Get invitationId from location.state
-  const [activeTab, setActiveTab] = useState('images');
-  const [imagesCount, setImagesCount] = useState(0);
-  const [videosCount, setVideosCount] = useState(0);
-  const [storiesCount, setStoriesCount] = useState(0);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState({});
-  const [imagePreviews, setImagePreviews] = useState([]); // Re-introduce state for image previews
+  const navigate = useNavigate();
+  const { invitationId } = useParams(); // Get invitationId from URL parameters
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleFileChange = (event) => {
-    const newFiles = Array.from(event.target.files);
-    const currentFilesCount = selectedFiles.length;
-    const filesToAdd = 3 - currentFilesCount; // How many more files can be added
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+      const maxSize = 10 * 1024 * 1024; // 10MB
 
-    if (filesToAdd <= 0) {
-      alert('You can only upload a maximum of 3 files.');
-      return;
+      if (!allowedTypes.includes(file.type)) {
+        alert('Please upload a PNG or JPG image.');
+        return;
+      }
+
+      if (file.size > maxSize) {
+        alert('File size exceeds 10MB.');
+        return;
+      }
+
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setError(null);
     }
-
-    const filesForUpload = [...selectedFiles, ...newFiles.slice(0, filesToAdd)];
-    setSelectedFiles(filesForUpload);
-
-    // Generate image previews for all selected image files
-    const newImagePreviews = filesForUpload
-      .filter(file => file.type.startsWith('image/'))
-      .map(file => URL.createObjectURL(file));
-
-    // Revoke previous object URLs to prevent memory leaks for *removed* previews
-    const prevUrls = imagePreviews;
-    const currentUrls = newImagePreviews;
-    prevUrls.filter(url => !currentUrls.includes(url)).forEach(url => URL.revokeObjectURL(url));
-
-    setImagePreviews(newImagePreviews);
   };
 
   const handleUpload = async () => {
-    if (selectedFiles.length === 0) {
-      alert('Please select files to upload.');
+    if (!selectedFile) {
+      setError('Please select an image to upload.');
       return;
     }
 
+    setIsLoading(true);
+    setError(null);
+
     const formData = new FormData();
-    selectedFiles.forEach(file => {
-      formData.append('media', file);
-    });
-    formData.append('invitationId', invitationId);
+    formData.append('media', selectedFile);
+    // The backend endpoint typically expects invitationId in the URL path for media upload
+    // formData.append('invitationId', invitationId);
 
     try {
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
-        alert('Authentication token missing. Please log in again.');
+        setError('Authentication token missing. Please log in again.');
+        setIsLoading(false);
         return;
       }
 
-      // Replace with your actual upload API endpoint
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/invitations/media/upload`, {
+      // Assuming the API endpoint for uploading media to a specific invitation is structured like this:
+      const uploadUrl = `https://invite-backend-vk36.onrender.com/invitations/media/${invitationId}`;
+
+      const response = await fetch(uploadUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          // 'Content-Type': 'multipart/form-data', // Browser sets this automatically with FormData
         },
         body: formData,
       });
@@ -73,117 +71,57 @@ function UploadMedia() {
         throw new Error(errorData.message || 'Failed to upload media.');
       }
 
-      alert('Media uploaded to Cloudinary and URI saved to MongoDB successfully!');
-      setSelectedFiles([]); // Clear selected files after upload
-      setImagePreviews([]); // Clear image previews as well
-      // Optionally, refresh counts or navigate
-    } catch (error) {
-      console.error('Error uploading media:', error);
-      alert(`Error: ${error.message}`);
+      alert('Media uploaded successfully!');
+      setSelectedFile(null); // Clear selected file after upload
+      setPreviewUrl(''); // Clear image preview
+      navigate(`/invitation/${invitationId}`); // Navigate back to the invitation gallery page
+    } catch (err) {
+      console.error('Error uploading media:', err);
+      setError(`Upload failed: ${err.message}`);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleClearAll = () => {
-    setSelectedFiles([]);
-    imagePreviews.forEach(url => URL.revokeObjectURL(url)); // Revoke object URLs
-    setImagePreviews([]); // Clear image previews as well
-  }
-
-  const handleRemovePreview = (index) => {
-    const newImagePreviews = imagePreviews.filter((_, i) => i !== index);
-    setImagePreviews(newImagePreviews);
-    // Revoke the object URL for the removed preview
-    URL.revokeObjectURL(imagePreviews[index]);
   };
 
   return (
     <div className="upload-media-container">
-      <div className="header">
-        <div className="back-arrow"></div>
-        <div className="title-section">
-          <h3>Upload Event Media</h3>
-          <p>Share your event moments with the world</p>
-        </div>
-      </div>
-
-      <div className="tabs">
-        <button className={`tab-button ${activeTab === 'images' ? 'active' : ''}`} onClick={() => setActiveTab('images')}>
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/image.png" alt="Images icon" />
-          Images
+      <header className="upload-header">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <span className="material-symbols-outlined">arrow_back</span>
         </button>
-        <button className={`tab-button ${activeTab === 'videos' ? 'active' : ''}`} onClick={() => setActiveTab('videos')}>
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/video.png" alt="Videos icon" />
-          Videos
-        </button>
-        <button className={`tab-button ${activeTab === 'stories' ? 'active' : ''}`} onClick={() => setActiveTab('stories')}>
-          <img src="https://img.icons8.com/ios-filled/24/ffffff/instagram-stories.png" alt="Stories icon" />
-          Stories
-        </button>
-      </div>
+        <h1 className="header-title">Upload Event Image</h1>
+      </header>
 
-      <div className="counts-section">
-        <div className="count-item">
-          <p className="count-number">{imagesCount}</p>
-          <p className="count-label">Images</p>
-        </div>
-        <div className="count-item">
-          <p className="count-number">{videosCount}</p>
-          <p className="count-label">Videos</p>
-        </div>
-        <div className="count-item">
-          <p className="count-number">{storiesCount}</p>
-          <p className="count-label">Stories</p>
-        </div>
-      </div>
-
-      <div className="upload-area">
-        <img src="https://img.icons8.com/ios/80/000000/camera--v1.png" alt="Camera icon" />
-        <h4>Upload Images</h4>
-        <p>Drag & drop or click to browse</p>
-        <p className="file-types">JPG, PNG, GIF up to 10MB each</p>
-        <div className="file-input-wrapper">
-          <input
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            className="hidden-file-input"
-            id="file-upload"
-            accept="image/*,video/*"
-          />
-          <label htmlFor="file-upload" className="choose-files-button">Choose Files</label>
-          <div className="selected-file-names">
-            {selectedFiles.length > 0 ? (
-              selectedFiles.map((file, index) => (
-                <span key={index} className="file-name">{file.name}{index < selectedFiles.length - 1 ? ', ' : ''}</span>
-              ))
-            ) : (
-              <span>No files chosen</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {imagePreviews.length > 0 ? (
-        <div className="image-previews">
-          {imagePreviews.map((preview, index) => (
-            <div key={index} className="preview-item">
-              <img src={preview} alt="Preview" className="preview-image" />
-              <button className="remove-preview-button" onClick={() => handleRemovePreview(index)}>X</button>
+      <main className="upload-content">
+        <div className="upload-area">
+          {!previewUrl ? (
+            <label htmlFor="file-upload" className="upload-label">
+              <span className="material-symbols-outlined upload-icon">cloud_upload</span>
+              <p className="drag-drop-text">Drag and drop or browse</p>
+              <p className="upload-description">Upload a photo for your event gallery.</p>
+              <button type="button" className="browse-button">Browse</button>
+            </label>
+          ) : (
+            <div className="image-preview-container">
+              <img src={previewUrl} alt="Image Preview" className="image-preview" />
+              <button type="button" className="remove-image-button" onClick={() => { setSelectedFile(null); setPreviewUrl(''); setError(null); }}>&times;</button>
             </div>
-          ))}
+          )}
+          <input
+            id="file-upload"
+            type="file"
+            style={{ display: 'none' }}
+            accept=".png,.jpg,.jpeg"
+            onChange={handleFileChange}
+          />
         </div>
-      ) : (
-        <div className="no-media-message">
-          <img src="https://img.icons8.com/plasticine/100/000000/no-image.png" alt="No image uploaded" />
-          <p>No images uploaded yet</p>
-          <p>Share beautiful moments from your event.</p>
-        </div>
-      )}
 
-      <div className="footer-buttons">
-        <button className="clear-all-button" onClick={handleClearAll}>Clear All</button>
-        <button className="publish-media-button" onClick={handleUpload}>Publish Media</button>
-      </div>
+        {error && <p className="error-message">{error}</p>}
+
+        <button type="button" className="upload-button" onClick={handleUpload} disabled={isLoading}>
+          {isLoading ? 'Uploading...' : 'Upload Image'}
+        </button>
+      </main>
     </div>
   );
 }
