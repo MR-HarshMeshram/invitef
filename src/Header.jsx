@@ -12,8 +12,8 @@ function Header() {
         <Link to="/invited" className="nav-item">
           <span>INVITED</span>
         </Link>
-        <Link to="/invitation" className="nav-item">
-          <span>INVITATION</span>
+        <Link to="/my-invitations" className="nav-item">
+          <span>MY INVITATIONS</span>
         </Link>
         <Link to="/profile" className="nav-item">
           <span>PROFILE</span>

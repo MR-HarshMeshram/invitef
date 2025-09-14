@@ -140,7 +140,7 @@ function Home() {
         </div>
       </main>
 
-      <nav className="navbar">
+      {/* <nav className="navbar">
         <a className="nav-item" href="#">
           <span className="material-symbols-outlined nav-item-icon">home</span>
           <span>Home</span>
@@ -151,7 +151,7 @@ function Home() {
         </a>
         <a className="nav-item" href="/my-invitations">
           <span className="material-symbols-outlined nav-item-icon">recent_invitations</span>
-          <span>My Invitations</span>
+          <span>Invitations</span>
         </a>
         <a className="nav-item" href="#" onClick={handleCreateInvitationClick}>
           <span className="material-symbols-outlined nav-item-icon">add_circle</span>
@@ -161,7 +161,7 @@ function Home() {
           <span className="material-symbols-outlined nav-item-icon">person</span>
           <span>Profile</span>
         </a>
-      </nav>
+      </nav> */}
     </div>
   );
 }
