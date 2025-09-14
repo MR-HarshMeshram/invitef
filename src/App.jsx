@@ -8,6 +8,7 @@ import UploadMedia from './UploadMedia';
 import InvitationGalleryPage from './InvitationGalleryPage'; // Import the new combined component
 import Profile from './Profile';
 import Dashboard from './Dashboard'; // Import the new Dashboard component
+import MyInvitations from './MyInvitations'; // Import the new MyInvitations component
 import Header from './Header';
 import { useEffect } from 'react'; // Import useEffect
 import './App.css';
@@ -34,6 +35,7 @@ function MainContent() {
         <Route path="/invitation/:invitationId" element={<InvitationGalleryPage />} /> {/* Use the new combined component here */}
         <Route path="/invited" element={<Invited />} />
         <Route path="/upload-media" element={<UploadMedia />} />
+        <Route path="/my-invitations" element={<MyInvitations />} /> {/* New route for MyInvitations */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard/:date" element={<Dashboard />} /> {/* New route for Dashboard */}
       </Routes>

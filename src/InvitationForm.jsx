@@ -186,16 +186,12 @@ function InvitationForm() {
       setPreviewUrl('');
       setIsEditing(false); // Reset editing state
       setCurrentInvitationId(null); // Clear current invitation ID
-      navigate('/invitation-display', { state: { invitation: result.invitation } }); // Navigate to display page
+      navigate('/my-invitations'); // Navigate to the new MyInvitations page
     } catch (err) {
       setError(err.message);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleInvitationCardClick = (invitation) => {
-    navigate('/invitation-display', { state: { invitation } });
   };
 
   return (
