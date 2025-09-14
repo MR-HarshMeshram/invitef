@@ -218,7 +218,7 @@ function InvitationForm() {
               <span className="material-symbols-outlined upload-icon">cloud_upload</span>
               <p className="drag-drop-text">Drag and drop or browse</p>
               <p className="upload-description">Upload a photo to personalize your invitation card.</p>
-              <button type="button" className="browse-button">Browse</button>
+              <button type="button" className="browse-button" onClick={() => fileInputRef.current.click()}>Browse</button>
             </label>
             <input
               id="file-upload"
