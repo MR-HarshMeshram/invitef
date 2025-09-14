@@ -263,8 +263,16 @@ function InvitationGalleryPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to upload media.');
+        let errorMessage = 'Failed to upload media.';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (jsonError) {
+          // If response is not JSON (e.g., HTML error page), read as text
+          const errorText = await response.text();
+          errorMessage = `Server error: ${response.status} - ${errorText.substring(0, 150)}...`; // Limit text length
+        }
+        throw new Error(errorMessage);
       }
 
       alert('Media uploaded successfully!');
