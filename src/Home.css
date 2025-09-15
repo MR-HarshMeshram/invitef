@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
 .home-container {
   padding: 20px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #faf8fc;
   min-height: 100vh;
+  font-style: italic;
 }
 
 .header {
@@ -51,6 +54,7 @@
   font-weight: bold;
   color: #1f2937;
   margin-bottom: 8px;
+  font-family: 'Dancing Script', cursive; /* Apply the new font family */
 }
 
 .invitation-banner p {
