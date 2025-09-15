@@ -449,7 +449,7 @@ function InvitationGalleryPage() {
                 Share Invitation
               </button>
 
-              {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
+              {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && invitation.eventPrivacy === 'private' && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
                 <div className="response-buttons">
                   <button className="accept-invite-button" onClick={handleAcceptInvite}>
                     <span className="material-symbols-outlined">check_circle</span> Accept Invite
