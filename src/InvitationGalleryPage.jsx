@@ -40,7 +40,9 @@ function InvitationGalleryPage() {
       const currentLoggedInUserEmail = localStorage.getItem('userEmail');
       if (currentLoggedInUserEmail) {
         setHasAccepted(data.acceptedUsers.includes(currentLoggedInUserEmail));
-        setLoggedInUserEmail(currentLoggedInUserEmail); // Update state if changed
+        // No need to setLoggedInUserEmail here, it's handled in the main useEffect
+      } else {
+        setHasAccepted(false); // No user, so can't have accepted
       }
 
     } catch (error) {
@@ -50,7 +52,7 @@ function InvitationGalleryPage() {
     } finally {
       setLoading(false);
     }
-  }, [urlInvitationId, loggedInUserEmail]);
+  }, [urlInvitationId]); // Removed loggedInUserEmail from dependencies
 
   // Removed fetchPrivateInvitations as it's no longer needed for this section
 
