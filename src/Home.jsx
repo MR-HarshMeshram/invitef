@@ -161,7 +161,7 @@ function Home() {
         </section>
 
         <section className="featured-events-section">
-          <h2 className="section-header">Featured Events</h2>
+          <h2 className="section-header">Events</h2>
           <div className="events-scroll-container">
             {isLoading ? (
               <p>Loading featured events...</p>
