@@ -61,7 +61,7 @@ function InvitationForm() {
       setLocation(data.location);
       setDescription(data.description || '');
       setDateTime(data.dateTime ? new Date(data.dateTime).toISOString().slice(0, 16) : '');
-      setInvitedBy(data.invitedBy || '');
+      setInvitedBy(data.invitedBy || ''); // Populate the new invitedBy field
       setEventPrivacy(data.eventPrivacy);
       setPreviewUrl(data.invitationImage?.url || ''); // Pre-fill image preview if available
     } catch (error) {
@@ -154,7 +154,7 @@ function InvitationForm() {
     formData.append('description', description); // Append description
     formData.append('dateTime', dateTime); // Append dateTime
     formData.append('eventPrivacy', eventPrivacy);
-    formData.append('invitedBy', userEmail); // Re-add invitedBy using userEmail
+    formData.append('invitedBy', invitedBy); // Use the new invitedBy state
     // Only append new image if selected
     if (selectedFile) {
       formData.append('invitationImage', selectedFile);
@@ -306,6 +306,17 @@ function InvitationForm() {
             </div>
 
             <div className="form-field">
+              <label htmlFor="invitedBy" className="text-align-left">Hosted By</label>
+              <input
+                type="text"
+                id="invitedBy"
+                placeholder="Hosted By"
+                value={invitedBy}
+                onChange={(e) => setInvitedBy(e.target.value)}
+              />
+            </div>
+
+            <div className="form-field">
               <label htmlFor="description" className="text-align-left">Additional Details</label>
               <textarea
                 id="description"
@@ -359,6 +370,7 @@ function InvitationForm() {
                 <p className="preview-description">{description || "Join us for a birthday celebration"}</p>
                 <p className="preview-date-time">{dateTime ? new Date(dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : "Sat, Dec 25, 2024"} at {dateTime ? new Date(dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "7:00 PM"}</p>
                 <p className="preview-location">{location || "123 Party Lane, Fun-City"}</p>
+                <p className="preview-invited-by">Hosted by: {invitedBy || "[Host Name]"}</p>
               </div>
             </div>
           </section>
