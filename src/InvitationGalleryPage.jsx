@@ -9,7 +9,7 @@ function InvitationGalleryPage() {
   const { invitationId: urlInvitationId } = useParams();
 
   const [invitation, setInvitation] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Changed initial state to false
   const [error, setError] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loggedInUserEmail, setLoggedInUserEmail] = useState(localStorage.getItem('userEmail'));
@@ -380,7 +380,7 @@ function InvitationGalleryPage() {
     return <div className="invitation-gallery-page-container">Error: {error}</div>;
   }
 
-  if (!invitation) {
+  if (!invitation && !showLoginPopup && !loading) { // Added !loading and !showLoginPopup
     return <div className="invitation-gallery-page-container">No invitation found.</div>;
   }
 
@@ -390,126 +390,130 @@ function InvitationGalleryPage() {
         <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
       )}
 
-      <header className="gallery-header">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <span className="material-symbols-outlined">arrow_back</span>
-        </button>
-        <h1 className="gallery-title">Private Invitation Gallery</h1>
-      </header>
-
-      <main className="gallery-content">
-        <div className="invitation-card-display">
-          {invitation.invitationImage ? (
-            <img src={invitation.invitationImage.url} alt="Invitation Card" className="main-invitation-image" />
-          ) : (
-            <div className="no-image-placeholder">No Image Available</div>
-          )}
-        </div>
-
-        <section className="invitation-details-section">
-          <h2 className="section-heading">All Details of Invitation</h2>
-          {loggedInUserEmail === invitation.createdByEmail && (
-            <div className="owner-actions">
-              <button className="action-button edit-button" onClick={handleEditClick}>
-                <span className="material-symbols-outlined">edit</span> Edit
-              </button>
-              <button className="action-button delete-button" onClick={handleDeleteClick}>
-                <span className="material-symbols-outlined">delete</span> Delete
-              </button>
-            </div>
-          )}
-
-          <div className="detail-item">
-            <span className="material-symbols-outlined">event</span>
-            <p>Event: {invitation.eventName}</p>
-          </div>
-          <div className="detail-item">
-            <span className="material-symbols-outlined">calendar_today</span>
-            <p>Date: {new Date(invitation.dateTime).toLocaleDateString()}</p>
-          </div>
-          <div className="detail-item">
-            <span className="material-symbols-outlined">schedule</span>
-            <p>Time: {new Date(invitation.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} onwards</p>
-          </div>
-          <div className="detail-item">
-            <span className="material-symbols-outlined">location_on</span>
-            <p>Venue: {invitation.location}</p>
-          </div>
-          {invitation.description && (
-            <div className="detail-item">
-              <span className="material-symbols-outlined">info</span>
-              <p>Additional Details: {invitation.description}</p>
-            </div>
-          )}
-
-          <button className="share-invitation-button" onClick={handleShareClick}>
-            <span className="material-symbols-outlined">share</span>
-            Share Invitation
-          </button>
-
-          {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
-            <div className="response-buttons">
-              <button className="accept-invite-button" onClick={handleAcceptInvite}>
-                <span className="material-symbols-outlined">check_circle</span> Accept Invite
-              </button>
-              <button className="decline-invite-button" onClick={handleDeclineInvite}>
-                <span className="material-symbols-outlined">cancel</span> Reject Invite
-              </button>
-            </div>
-          )}
-        </section>
-
-        {loggedInUserEmail === invitation.createdByEmail && (
-          <div className="upload-media-section">
-            <button type="button" className="upload-media-button" onClick={handleUploadClick}>
-              <span className="material-symbols-outlined">cloud_upload</span> Upload Image
+      {!showLoginPopup && invitation && (
+        <>
+          <header className="gallery-header">
+            <button className="back-button" onClick={() => navigate(-1)}>
+              <span className="material-symbols-outlined">arrow_back</span>
             </button>
-            <input
-              type="file"
-              ref={uploadFileInputRef}
-              style={{ display: 'none' }}
-              accept=".png,.jpg,.jpeg"
-              onChange={handleFileSelectForUpload}
-            />
-            {uploadPreviewUrl && (
-              <div className="upload-preview-container">
-                <img src={uploadPreviewUrl} alt="Upload Preview" className="upload-preview-image" />
-                <button type="button" className="remove-upload-preview-button" onClick={() => { setSelectedUploadFile(null); setUploadPreviewUrl(''); }}>&times;</button>
-                <button type="button" className="perform-upload-button" onClick={handlePerformUpload}>Perform Upload</button>
+            <h1 className="gallery-title">Private Invitation Gallery</h1>
+          </header>
+
+          <main className="gallery-content">
+            <div className="invitation-card-display">
+              {invitation.invitationImage ? (
+                <img src={invitation.invitationImage.url} alt="Invitation Card" className="main-invitation-image" />
+              ) : (
+                <div className="no-image-placeholder">No Image Available</div>
+              )}
+            </div>
+
+            <section className="invitation-details-section">
+              <h2 className="section-heading">All Details of Invitation</h2>
+              {loggedInUserEmail === invitation.createdByEmail && (
+                <div className="owner-actions">
+                  <button className="action-button edit-button" onClick={handleEditClick}>
+                    <span className="material-symbols-outlined">edit</span> Edit
+                  </button>
+                  <button className="action-button delete-button" onClick={handleDeleteClick}>
+                    <span className="material-symbols-outlined">delete</span> Delete
+                  </button>
+                </div>
+              )}
+
+              <div className="detail-item">
+                <span className="material-symbols-outlined">event</span>
+                <p>Event: {invitation.eventName}</p>
+              </div>
+              <div className="detail-item">
+                <span className="material-symbols-outlined">calendar_today</span>
+                <p>Date: {new Date(invitation.dateTime).toLocaleDateString()}</p>
+              </div>
+              <div className="detail-item">
+                <span className="material-symbols-outlined">schedule</span>
+                <p>Time: {new Date(invitation.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} onwards</p>
+              </div>
+              <div className="detail-item">
+                <span className="material-symbols-outlined">location_on</span>
+                <p>Venue: {invitation.location}</p>
+              </div>
+              {invitation.description && (
+                <div className="detail-item">
+                  <span className="material-symbols-outlined">info</span>
+                  <p>Additional Details: {invitation.description}</p>
+                </div>
+              )}
+
+              <button className="share-invitation-button" onClick={handleShareClick}>
+                <span className="material-symbols-outlined">share</span>
+                Share Invitation
+              </button>
+
+              {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
+                <div className="response-buttons">
+                  <button className="accept-invite-button" onClick={handleAcceptInvite}>
+                    <span className="material-symbols-outlined">check_circle</span> Accept Invite
+                  </button>
+                  <button className="decline-invite-button" onClick={handleDeclineInvite}>
+                    <span className="material-symbols-outlined">cancel</span> Reject Invite
+                  </button>
+                </div>
+              )}
+            </section>
+
+            {loggedInUserEmail === invitation.createdByEmail && (
+              <div className="upload-media-section">
+                <button type="button" className="upload-media-button" onClick={handleUploadClick}>
+                  <span className="material-symbols-outlined">cloud_upload</span> Upload Image
+                </button>
+                <input
+                  type="file"
+                  ref={uploadFileInputRef}
+                  style={{ display: 'none' }}
+                  accept=".png,.jpg,.jpeg"
+                  onChange={handleFileSelectForUpload}
+                />
+                {uploadPreviewUrl && (
+                  <div className="upload-preview-container">
+                    <img src={uploadPreviewUrl} alt="Upload Preview" className="upload-preview-image" />
+                    <button type="button" className="remove-upload-preview-button" onClick={() => { setSelectedUploadFile(null); setUploadPreviewUrl(''); }}>&times;</button>
+                    <button type="button" className="perform-upload-button" onClick={handlePerformUpload}>Perform Upload</button>
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        )}
 
-        {invitation.eventMedia && invitation.eventMedia.length > 0 && ( // Display Event Media Gallery
-          <section className="event-media-gallery-section">
-            <h2 className="section-heading">Event Media Gallery</h2>
-            <div className="event-media-grid">
-              {invitation.eventMedia.map((media) => (
-                <div className="event-media-card" key={media.public_id} onClick={() => handleImageClick({ src: media.url, title: media.original_filename, public_id: media.public_id })}>
-                  <img src={media.url} alt={media.original_filename} className="event-media-image" />
-                  <p className="event-media-title">{media.original_filename}</p>
+            {invitation.eventMedia && invitation.eventMedia.length > 0 && (
+              <section className="event-media-gallery-section">
+                <h2 className="section-heading">Event Media Gallery</h2>
+                <div className="event-media-grid">
+                  {invitation.eventMedia.map((media) => (
+                    <div className="event-media-card" key={media.public_id} onClick={() => handleImageClick({ src: media.url, title: media.original_filename, public_id: media.public_id })}>
+                      <img src={media.url} alt={media.original_filename} className="event-media-image" />
+                      <p className="event-media-title">{media.original_filename}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-      </main>
-
-      {selectedImage && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button" onClick={handleCloseModal}>&times;</span>
-            <img src={selectedImage.src} alt={selectedImage.title} className="modal-image" />
-            <p>{selectedImage.title}</p>
-            {loggedInUserEmail === invitation.createdByEmail ? (
-              <button className="modal-action-button delete-button" onClick={(e) => handleDeleteMedia(e, selectedImage.public_id)}>Delete</button>
-            ) : (
-              <button className="modal-action-button download-button" onClick={handleDownload}>Download</button>
+              </section>
             )}
-          </div>
-        </div>
+
+          </main>
+
+          {selectedImage && (
+            <div className="modal-overlay" onClick={handleCloseModal}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <span className="close-button" onClick={handleCloseModal}>&times;</span>
+                <img src={selectedImage.src} alt={selectedImage.title} className="modal-image" />
+                <p>{selectedImage.title}</p>
+                {loggedInUserEmail === invitation.createdByEmail ? (
+                  <button className="modal-action-button delete-button" onClick={(e) => handleDeleteMedia(e, selectedImage.public_id)}>Delete</button>
+                ) : (
+                  <button className="modal-action-button download-button" onClick={handleDownload}>Download</button>
+                )}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
