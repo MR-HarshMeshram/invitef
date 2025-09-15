@@ -184,8 +184,8 @@ function Home() {
 
       <main>
         <div className="invitation-banner">
-          <h2>Design Your Perfect Invitation</h2>
-          <p>Create beautiful and personalized cards for any occasion.</p>
+          <h2>Turn you'r images into shareable cards and share them instantly with friends</h2>
+          {/* <p>Create beautiful and personalized cards for any occasion.</p> */}
           <button className="create-invite-button" onClick={handleCreateInvitationClick}>
             Create Invite
           </button>
