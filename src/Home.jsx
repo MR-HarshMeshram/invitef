@@ -175,12 +175,12 @@ function Home() {
 
   return (
     <div className="home-container">
-      <header className="header">
+      {/* <header className="header">
         <button className="header-button" onClick={() => navigate(-1)}>
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
         <h1 className="header-title">Public Events</h1>
-      </header>
+      </header> */}
 
       <main>
         <div className="invitation-banner">
