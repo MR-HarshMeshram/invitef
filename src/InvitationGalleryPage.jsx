@@ -64,7 +64,7 @@ function InvitationGalleryPage() {
         localStorage.setItem('pendingInvitationId', urlInvitationId);
         setLoading(false);
         setLoggedInUserEmail(null); // Explicitly set to null if not logged in
-      } else {
+      } else if (accessToken && userEmail) {
         setLoggedInUserEmail(userEmail); // Ensure state is updated if logged in
         fetchInvitation();
       }
