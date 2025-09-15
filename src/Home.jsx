@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Home.css';
+import LoginModal from './LoginModal';
 
 function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const [allInvitations, setAllInvitations] = useState([]);
+  const [pastOrCurrentInvitations, setPastOrCurrentInvitations] = useState([]); // Renamed from filteredInvitations
+  const [upcomingInvitations, setUpcomingInvitations] = useState([]); // New state for upcoming events
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -57,12 +61,49 @@ function Home() {
     fetchAllInvitations();
   }, [location, navigate]);
 
+  // Filter invitations based on date
+  useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize today's date to the start of the day
+
+    const upcoming = allInvitations.filter(invitation => {
+      const invitationDate = new Date(invitation.dateTime);
+      invitationDate.setHours(0, 0, 0, 0);
+      return invitationDate > today;
+    });
+    setUpcomingInvitations(upcoming);
+
+    const pastOrCurrent = allInvitations.filter(invitation => {
+      const invitationDate = new Date(invitation.dateTime);
+      invitationDate.setHours(0, 0, 0, 0);
+      return invitationDate <= today;
+    });
+    setPastOrCurrentInvitations(pastOrCurrent);
+  }, [allInvitations]);
+
   const handleCreateInvitationClick = () => {
     navigate('/invitation', { state: { showForm: true } });
   };
 
   const handleInvitationCardClick = (invitation) => {
     navigate(`/invitation/${invitation._id}`); // Pass invitation ID as a URL parameter
+  };
+
+  const handleCreateInviteClick = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      setShowLoginPopup(true);
+    } else {
+      navigate('/invitation');
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setShowLoginPopup(false);
+    // Re-fetch public invitations after successful login
+    // This part of the logic needs to be re-evaluated if you want to refetch all invitations
+    // or if you only want to refetch the ones that are currently displayed.
+    // For now, we'll just close the popup.
   };
 
   return (
@@ -83,26 +124,23 @@ function Home() {
           </button>
         </div>
 
-        <div className="section">
-          <div className="section-header">
-            <h2 className="section-title">Upcoming Events</h2>
-            <a className="see-all-link" href="#">See all</a>
-          </div>
+        <section className="upcoming-events-section">
+          <h2 className="section-header">Upcoming Events</h2>
           <div className="events-scroll-container">
             {isLoading ? (
               <p>Loading invitations...</p>
             ) : error ? (
               <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : allInvitations.length > 0 ? (
-              allInvitations.map((invitation) => (
+            ) : upcomingInvitations.length > 0 ? ( // Changed to upcomingInvitations
+              upcomingInvitations.map((invitation) => (
                 <div className="event-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
                   {invitation.invitationImage && (
-                    <img src={invitation.invitationImage.url} alt="Invitation Card" className="event-card-image" />
+                    <img src={invitation.invitationImage.url} alt="Event" className="event-card-image" />
                   )}
                   <div className="event-card-content">
                     {invitation.eventName && <p className="event-card-title">{invitation.eventName}</p>}
-                    {invitation.dateTime && <p className="event-card-date">{new Date(invitation.dateTime).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>}
-                    <button className="view-details-button">View Details</button>
+                    {invitation.dateTime && <p className="event-card-date">{new Date(invitation.dateTime).toLocaleDateString()}</p>}
+                    <button className="view-details-button" onClick={(e) => { e.stopPropagation(); handleInvitationCardClick(invitation); }}>View Details</button>
                   </div>
                 </div>
               ))
@@ -110,19 +148,17 @@ function Home() {
               <p>No upcoming events available yet.</p>
             )}
           </div>
-        </div>
+        </section>
 
-        <div className="section">
-          <div className="section-header">
-            <h2 className="section-title">Featured Events</h2>
-          </div>
+        <section className="featured-events-section">
+          <h2 className="section-header">Featured Events</h2>
           <div className="events-scroll-container">
             {isLoading ? (
               <p>Loading featured events...</p>
             ) : error ? (
               <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : allInvitations.length > 0 ? (
-              allInvitations.map((invitation) => (
+            ) : pastOrCurrentInvitations.length > 0 ? ( // Changed to pastOrCurrentInvitations
+              pastOrCurrentInvitations.map((invitation) => (
                 <div className="featured-event-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
                   {invitation.invitationImage && (
                     <img src={invitation.invitationImage.url} alt="Featured Event" className="featured-event-image" />
@@ -137,9 +173,12 @@ function Home() {
               <p>No featured events available yet.</p>
             )}
           </div>
-        </div>
+        </section>
       </main>
 
+      {showLoginPopup && (
+        <LoginModal onLoginSuccess={handleLoginSuccess} onClose={() => setShowLoginPopup(false)} />
+      )}
       {/* <nav className="navbar">
         <a className="nav-item" href="#">
           <span className="material-symbols-outlined nav-item-icon">home</span>
