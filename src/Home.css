@@ -188,6 +188,16 @@
   font-size: 14px;
 }
 
+.read-more-less {
+  color: #a413ec; /* Purple color for the link */
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.read-more-less:hover {
+  text-decoration: underline;
+}
+
 .navbar {
   position: fixed;
   bottom: 0;

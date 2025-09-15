@@ -12,6 +12,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({}); // New state for expanded descriptions
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -106,6 +107,15 @@ function Home() {
     // For now, we'll just close the popup.
   };
 
+  const toggleDescription = (id) => {
+    setExpandedDescriptions(prevState => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }));
+  };
+
+  const characterLimit = 150; // Define your character limit here
+
   return (
     <div className="home-container">
       <header className="header">
@@ -165,7 +175,18 @@ function Home() {
                   )}
                   <div>
                     {invitation.eventName && <p className="featured-event-title">{invitation.eventName}</p>}
-                    {invitation.description && <p className="featured-event-description">{invitation.description}</p>}
+                    {invitation.description && (
+                      <p className="featured-event-description">
+                        {expandedDescriptions[invitation._id] || invitation.description.length <= characterLimit
+                          ? invitation.description
+                          : `${invitation.description.substring(0, characterLimit)}...`}
+                        {invitation.description.length > characterLimit && (
+                          <span className="read-more-less" onClick={(e) => { e.stopPropagation(); toggleDescription(invitation._id); }}>
+                            {expandedDescriptions[invitation._id] ? ' less...' : ' more...'}
+                          </span>
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))
