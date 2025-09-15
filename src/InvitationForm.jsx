@@ -60,7 +60,18 @@ function InvitationForm() {
       setEventName(data.eventName);
       setLocation(data.location);
       setDescription(data.description || '');
-      setDateTime(data.dateTime ? new Date(data.dateTime).toISOString().slice(0, 16) : '');
+      // Correctly format dateTime for input fields to avoid timezone issues
+      if (data.dateTime) {
+        const dateObj = new Date(data.dateTime);
+        const year = dateObj.getFullYear();
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const hours = dateObj.getHours().toString().padStart(2, '0');
+        const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+        setDateTime(`${year}-${month}-${day}T${hours}:${minutes}`);
+      } else {
+        setDateTime('');
+      }
       setInvitedBy(data.invitedBy || ''); // Populate the new invitedBy field
       setEventPrivacy(data.eventPrivacy);
       setPreviewUrl(data.invitationImage?.url || ''); // Pre-fill image preview if available
@@ -152,7 +163,12 @@ function InvitationForm() {
     formData.append('eventName', eventName);
     formData.append('location', location);
     formData.append('description', description); // Append description
-    formData.append('dateTime', dateTime); // Append dateTime
+    // Ensure dateTime is a valid ISO string before appending
+    if (dateTime) {
+      formData.append('dateTime', new Date(dateTime).toISOString());
+    } else {
+      formData.append('dateTime', ''); // Send empty string if no date/time selected
+    }
     formData.append('eventPrivacy', eventPrivacy);
     formData.append('invitedBy', invitedBy); // Use the new invitedBy state
     // Only append new image if selected
@@ -288,7 +304,7 @@ function InvitationForm() {
                   type="time"
                   id="time"
                   value={dateTime ? dateTime.split('T')[1] : ''}
-                  onChange={(e) => setDateTime(`${dateTime.split('T')[0] || new Date().toISOString().slice(0,10)}T${e.target.value}`)}
+                  onChange={(e) => setDateTime(`${dateTime.split('T')[0] || new Date().toISOString().slice(0, 10)}T${e.target.value}`)}
                 />
                 <span className="material-symbols-outlined" onClick={() => document.getElementById('time').showPicker()}>schedule</span>
               </div>
