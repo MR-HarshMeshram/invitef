@@ -109,6 +109,49 @@
   display: none; /* Chrome, Safari, Opera */
 }
 
+.events-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.scroll-arrow:hover {
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-arrow.left {
+  left: 5px; /* Adjust as needed */
+}
+
+.scroll-arrow.right {
+  right: 5px; /* Adjust as needed */
+}
+
+.scroll-arrow span {
+  font-size: 20px;
+  color: #1f2937; /* Dark color for icons */
+}
+
 .event-card {
   flex-shrink: 0;
   width: 288px;

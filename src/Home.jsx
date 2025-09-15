@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './Home.css';
+import './Home.css'; // Custom CSS for the Home page
 import LoginModal from './LoginModal';
 
 function Home() {
@@ -13,6 +13,14 @@ function Home() {
   const [error, setError] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [expandedDescriptions, setExpandedDescriptions] = useState({}); // New state for expanded descriptions
+
+  const upcomingEventsRef = React.useRef(null); // Ref for upcoming events scroll container
+  const featuredEventsRef = React.useRef(null); // Ref for featured events scroll container
+
+  const [showLeftArrowUpcoming, setShowLeftArrowUpcoming] = useState(false);
+  const [showRightArrowUpcoming, setShowRightArrowUpcoming] = useState(false);
+  const [showLeftArrowFeatured, setShowLeftArrowFeatured] = useState(false);
+  const [showRightArrowFeatured, setShowRightArrowFeatured] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -116,6 +124,55 @@ function Home() {
 
   const characterLimit = 150; // Define your character limit here
 
+  // Handle scroll for upcoming events
+  const handleUpcomingScroll = () => {
+    if (upcomingEventsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = upcomingEventsRef.current;
+      setShowLeftArrowUpcoming(scrollLeft > 0);
+      setShowRightArrowUpcoming(scrollLeft < scrollWidth - clientWidth);
+    }
+  };
+
+  // Handle scroll for featured events
+  const handleFeaturedScroll = () => {
+    if (featuredEventsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = featuredEventsRef.current;
+      setShowLeftArrowFeatured(scrollLeft > 0);
+      setShowRightArrowFeatured(scrollLeft < scrollWidth - clientWidth);
+    }
+  };
+
+  // Set up observers for scroll containers
+  useEffect(() => {
+    const upcomingRefCurrent = upcomingEventsRef.current;
+    const featuredRefCurrent = featuredEventsRef.current;
+
+    if (upcomingRefCurrent) {
+      upcomingRefCurrent.addEventListener('scroll', handleUpcomingScroll);
+      handleUpcomingScroll(); // Initial check
+    }
+    if (featuredRefCurrent) {
+      featuredRefCurrent.addEventListener('scroll', handleFeaturedScroll);
+      handleFeaturedScroll(); // Initial check
+    }
+
+    return () => {
+      if (upcomingRefCurrent) {
+        upcomingRefCurrent.removeEventListener('scroll', handleUpcomingScroll);
+      }
+      if (featuredRefCurrent) {
+        featuredRefCurrent.removeEventListener('scroll', handleFeaturedScroll);
+      }
+    };
+  }, [upcomingInvitations, pastOrCurrentInvitations]); // Re-run when data changes
+
+  const scroll = (ref, direction) => {
+    if (ref.current) {
+      const scrollAmount = ref.current.clientWidth / 2; // Scroll half the visible width
+      ref.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="home-container">
       <header className="header">
@@ -136,62 +193,86 @@ function Home() {
 
         <section className="upcoming-events-section">
           <h2 className="section-header">Upcoming Events</h2>
-          <div className="events-scroll-container">
-            {isLoading ? (
-              <p>Loading invitations...</p>
-            ) : error ? (
-              <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : upcomingInvitations.length > 0 ? ( // Changed to upcomingInvitations
-              upcomingInvitations.map((invitation) => (
-                <div className="event-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
-                  {invitation.invitationImage && (
-                    <img src={invitation.invitationImage.url} alt="Event" className="event-card-image" />
-                  )}
-                  <div className="event-card-content">
-                    {invitation.eventName && <p className="event-card-title">{invitation.eventName}</p>}
-                    {invitation.dateTime && <p className="event-card-date">{new Date(invitation.dateTime).toLocaleDateString()}</p>}
-                    <button className="view-details-button" onClick={(e) => { e.stopPropagation(); handleInvitationCardClick(invitation); }}>View Details</button>
+          <div className="events-scroll-wrapper">
+            {showLeftArrowUpcoming && (
+              <button className="scroll-arrow left" onClick={() => scroll(upcomingEventsRef, 'left')}>
+                <span className="material-symbols-outlined">arrow_back_ios</span>
+              </button>
+            )}
+            <div className="events-scroll-container" ref={upcomingEventsRef}>
+              {isLoading ? (
+                <p>Loading invitations...</p>
+              ) : error ? (
+                <p style={{ color: 'red' }}>Error: {error}</p>
+              ) : upcomingInvitations.length > 0 ? (
+                upcomingInvitations.map((invitation) => (
+                  <div className="event-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
+                    {invitation.invitationImage && (
+                      <img src={invitation.invitationImage.url} alt="Event" className="event-card-image" />
+                    )}
+                    <div className="event-card-content">
+                      {invitation.eventName && <p className="event-card-title">{invitation.eventName}</p>}
+                      {invitation.dateTime && <p className="event-card-date">{new Date(invitation.dateTime).toLocaleDateString()}</p>}
+                      <button className="view-details-button" onClick={(e) => { e.stopPropagation(); handleInvitationCardClick(invitation); }}>View Details</button>
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>No upcoming events available yet.</p>
+                ))
+              ) : (
+                <p>No upcoming events available yet.</p>
+              )}
+            </div>
+            {showRightArrowUpcoming && (
+              <button className="scroll-arrow right" onClick={() => scroll(upcomingEventsRef, 'right')}>
+                <span className="material-symbols-outlined">arrow_forward_ios</span>
+              </button>
             )}
           </div>
         </section>
 
         <section className="featured-events-section">
           <h2 className="section-header">Events</h2>
-          <div className="events-scroll-container">
-            {isLoading ? (
-              <p>Loading featured events...</p>
-            ) : error ? (
-              <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : pastOrCurrentInvitations.length > 0 ? ( // Changed to pastOrCurrentInvitations
-              pastOrCurrentInvitations.map((invitation) => (
-                <div className="featured-event-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
-                  {invitation.invitationImage && (
-                    <img src={invitation.invitationImage.url} alt="Featured Event" className="featured-event-image" />
-                  )}
-                  <div>
-                    {invitation.eventName && <p className="featured-event-title">{invitation.eventName}</p>}
-                    {invitation.description && (
-                      <p className="featured-event-description">
-                        {expandedDescriptions[invitation._id] || invitation.description.length <= characterLimit
-                          ? invitation.description
-                          : `${invitation.description.substring(0, characterLimit)}...`}
-                        {invitation.description.length > characterLimit && (
-                          <span className="read-more-less" onClick={(e) => { e.stopPropagation(); toggleDescription(invitation._id); }}>
-                            {expandedDescriptions[invitation._id] ? ' less...' : ' more...'}
-                          </span>
-                        )}
-                      </p>
+          <div className="events-scroll-wrapper">
+            {showLeftArrowFeatured && (
+              <button className="scroll-arrow left" onClick={() => scroll(featuredEventsRef, 'left')}>
+                <span className="material-symbols-outlined">arrow_back_ios</span>
+              </button>
+            )}
+            <div className="events-scroll-container" ref={featuredEventsRef}>
+              {isLoading ? (
+                <p>Loading featured events...</p>
+              ) : error ? (
+                <p style={{ color: 'red' }}>Error: {error}</p>
+              ) : pastOrCurrentInvitations.length > 0 ? (
+                pastOrCurrentInvitations.map((invitation) => (
+                  <div className="featured-event-card" key={invitation._id} onClick={() => handleInvitationCardClick(invitation)}>
+                    {invitation.invitationImage && (
+                      <img src={invitation.invitationImage.url} alt="Featured Event" className="featured-event-image" />
                     )}
+                    <div>
+                      {invitation.eventName && <p className="featured-event-title">{invitation.eventName}</p>}
+                      {invitation.description && (
+                        <p className="featured-event-description">
+                          {expandedDescriptions[invitation._id] || invitation.description.length <= characterLimit
+                            ? invitation.description
+                            : `${invitation.description.substring(0, characterLimit)}...`}
+                          {invitation.description.length > characterLimit && (
+                            <span className="read-more-less" onClick={(e) => { e.stopPropagation(); toggleDescription(invitation._id); }}>
+                              {expandedDescriptions[invitation._id] ? ' less...' : ' more...'}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>No featured events available yet.</p>
+                ))
+              ) : (
+                <p>No featured events available yet.</p>
+              )}
+            </div>
+            {showRightArrowFeatured && (
+              <button className="scroll-arrow right" onClick={() => scroll(featuredEventsRef, 'right')}>
+                <span className="material-symbols-outlined">arrow_forward_ios</span>
+              </button>
             )}
           </div>
         </section>
