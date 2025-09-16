@@ -92,7 +92,7 @@ function InvitationGalleryPage() {
       try {
         await navigator.share({
           title: invitation.eventName,
-          text: `Check out this invitation for ${invitation.eventName} hosted by ${invitation.invitedBy}!`,
+          text: `Check out this Invite for ${invitation.eventName} hosted by ${invitation.invitedBy}!`,
           url: invitationUrl,
         });
         alert('Invitation shared successfully!');
