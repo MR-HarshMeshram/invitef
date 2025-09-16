@@ -411,7 +411,7 @@ function InvitationGalleryPage() {
             </div>
 
             <section className="invitation-details-section">
-              <h2 className="section-heading">All Details of Invitation</h2>
+              <h2 className="section-heading">All Details of Invite</h2>
               {loggedInUserEmail === invitation.createdByEmail && (
                 <div className="owner-actions">
                   <button className="action-button edit-button" onClick={handleEditClick}>
@@ -448,7 +448,7 @@ function InvitationGalleryPage() {
 
               <button className="share-invitation-button" onClick={handleShareClick}>
                 <span className="material-symbols-outlined">share</span>
-                Share Invitation
+                Share Invite
               </button>
 
               {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && invitation.eventPrivacy === 'private' && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
