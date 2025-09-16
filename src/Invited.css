@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
 .invited-container {
   display: flex;
   flex-direction: column;
@@ -16,6 +17,7 @@
   text-align: center;
   font-size: 2em;
   color: #1f2937;
+  font-family: 'Dancing Script', cursive;
   /* Removed border-bottom as per new design */
   padding-bottom: 0;
 }
