@@ -58,7 +58,7 @@ function MyInvitations() {
       <h1> My invitations</h1> 
 
       <main className="my-invitations-content">
-      {/* <h1> My invitations</h1>  */}
+      <h1> My invitations</h1> 
         {isLoading ? (
           <p>Loading your invitations...</p>
         ) : error ? (
