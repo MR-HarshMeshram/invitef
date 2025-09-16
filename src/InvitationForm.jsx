@@ -249,7 +249,7 @@ function InvitationForm() {
 
       <main className="form-content">
         <div className="create-invitation-banner">
-          <h2>Create Invitation</h2>
+          <h2>Create Invite</h2>
           <p>Design your perfect event invitation</p>
         </div>
 
@@ -394,7 +394,7 @@ function InvitationForm() {
           {error && <p className="error-message">{error}</p>}
 
           <button type="submit" className="create-invitation-button" disabled={isLoading}>
-            {isLoading ? (isEditing ? 'Saving...' : 'Creating...') : (isEditing ? 'Save Changes' : 'Create Invitation')}
+            {isLoading ? (isEditing ? 'Saving...' : 'Creating...') : (isEditing ? 'Save Changes' : 'Create Invite')}
           </button>
         </form>
       </main>
