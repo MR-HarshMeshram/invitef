@@ -51,7 +51,7 @@ function MyInvitations() {
 
   return (
     <div className="my-invitations-container">
-      <h1> My invitations</h1>  {/* <h1> My invitations</h1>   */}
+      {/* <h1> My invitations</h1>  <h1> My invitations</h1>   */}
       {/* <header className="my-invitations-header">
         <button className="back-button" onClick={() => navigate(-1)}>
           <span className="material-symbols-outlined">arrow_back</span>
@@ -60,6 +60,7 @@ function MyInvitations() {
       </header> */}
 
       <main className="my-invitations-content">
+      <h1> My invitations</h1> 
         {isLoading ? (
           <p>Loading your invitations...</p>
         ) : error ? (
