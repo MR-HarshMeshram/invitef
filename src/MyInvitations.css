@@ -7,7 +7,7 @@
   flex-direction: column;
 }
 /* new code  */
-.my-invitations-containerh1 {
+.my-invitations-container h1 {
   margin-top: 20px;
   margin-bottom: 30px;
   text-align: center;
