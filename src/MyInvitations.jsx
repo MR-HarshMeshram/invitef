@@ -55,7 +55,7 @@ function MyInvitations() {
       <header className="my-invitations-header">
         
       </header>
-      <h1> My invitations</h1> 
+      
 
       <main className="my-invitations-content">
       <h1> My invitations</h1> 
