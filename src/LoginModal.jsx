@@ -9,7 +9,7 @@ const LoginModal = ({ onLoginSuccess, onClose }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>Login to View Invitation</h2>
         <p>Please log in to accept or decline this invitation.</p>
