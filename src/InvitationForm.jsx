@@ -198,7 +198,9 @@ function InvitationForm() {
         response = await fetch(url, {
           method: method,
           body: formData,
-          headers: headers,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
         });
       } else {
         url = 'https://invite-backend-vk36.onrender.com/invitations/create';
@@ -208,7 +210,9 @@ function InvitationForm() {
         response = await fetch(url, {
           method: method,
           body: formData,
-          headers: headers,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
         });
       }
 
