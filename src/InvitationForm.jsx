@@ -164,7 +164,7 @@ function InvitationForm() {
     const formData = new FormData();
     formData.append('eventName', eventName);
     formData.append('location', location);
-    formData.append('description', description); // Append description
+    formData.append('description', description || ''); // Append description
     // Ensure dateTime is a valid ISO string before appending
     if (dateTime) {
       formData.append('dateTime', new Date(dateTime).toISOString());
@@ -301,7 +301,11 @@ function InvitationForm() {
                   type="date"
                   id="date"
                   value={dateTime ? dateTime.split('T')[0] : ''}
-                  onChange={(e) => setDateTime(`${e.target.value}T${dateTime.split('T')[1] || '00:00'}`)}
+                  onChange={(e) => {
+                    const newDate = e.target.value;
+                    const currentTime = dateTime ? dateTime.split('T')[1] : '00:00';
+                    setDateTime(newDate ? `${newDate}T${currentTime}` : '');
+                  }}
                 />
                 <span className="material-symbols-outlined" onClick={() => document.getElementById('date').showPicker()}>calendar_month</span>
               </div>
@@ -310,7 +314,11 @@ function InvitationForm() {
                   type="time"
                   id="time"
                   value={dateTime ? dateTime.split('T')[1] : ''}
-                  onChange={(e) => setDateTime(`${dateTime.split('T')[0] || new Date().toISOString().slice(0, 10)}T${e.target.value}`)}
+                  onChange={(e) => {
+                    const newTime = e.target.value;
+                    const currentDate = dateTime ? dateTime.split('T')[0] : new Date().toISOString().slice(0, 10);
+                    setDateTime(newTime ? `${currentDate}T${newTime}` : '');
+                  }}
                 />
                 <span className="material-symbols-outlined" onClick={() => document.getElementById('time').showPicker()}>schedule</span>
               </div>
