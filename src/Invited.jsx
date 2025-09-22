@@ -57,7 +57,7 @@ function Invited() {
     <div className="invited-container">
       <h1>Invited Events</h1>
       {isLoading && <p>Loading accepted invitations...</p>}
-      {error && <p className="error-message">Error: {error}</p>}
+      {error && <p className="error-message">{error}</p>}
       {!isLoading && !error && acceptedInvitations.length === 0 && (
         <p>The invite is not accepted on your account.</p>
       )}
