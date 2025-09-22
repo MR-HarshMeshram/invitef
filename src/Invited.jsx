@@ -59,7 +59,7 @@ function Invited() {
       {isLoading && <p>Loading accepted invitations...</p>}
       {error && <p className="error-message">Error: {error}</p>}
       {!isLoading && !error && acceptedInvitations.length === 0 && (
-        <p>No accepted invitations yet.</p>
+        <p>The invite is not accepted on your account.</p>
       )}
       <div className="card-container">
         {acceptedInvitations.length > 0 && (
