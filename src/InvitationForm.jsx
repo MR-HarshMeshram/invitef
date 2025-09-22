@@ -159,6 +159,8 @@ function InvitationForm() {
       return;
     }
 
+    console.log('User Email:', userEmail);
+
     const formData = new FormData();
     formData.append('eventName', eventName);
     formData.append('location', location);
@@ -177,12 +179,15 @@ function InvitationForm() {
     }
     formData.append('createdByEmail', userEmail); // Append user email
 
+    // Log FormData contents for debugging
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
     try {
       const accessToken = localStorage.getItem('accessToken'); // Get access token
-      const headers = {};
-      if (accessToken) {
-        headers['Authorization'] = `Bearer ${accessToken}`;
-      }
+
+      console.log('Access Token:', accessToken ? 'Present' : 'Not Present');
 
       let response;
       let url;
@@ -236,6 +241,7 @@ function InvitationForm() {
       setCurrentInvitationId(null); // Clear current invitation ID
       navigate('/my-invitations'); // Navigate to the new MyInvitations page
     } catch (err) {
+      console.error('API Error:', err); // Log the full error object
       setError(err.message);
     } finally {
       setIsLoading(false);
