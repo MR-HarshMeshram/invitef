@@ -20,6 +20,7 @@ function InvitationGalleryPage() {
   const [uploadPreviewUrl, setUploadPreviewUrl] = useState(''); // New state for upload image preview
   const uploadFileInputRef = useRef(null); // Ref for hidden file input
   const [privateInvitations, setPrivateInvitations] = useState([]); // For "My Private Invitations"
+  const [showFullDescription, setShowFullDescription] = useState(false); // New state for "show more/less"
 
   const fetchInvitation = useCallback(async () => {
     setLoading(true);
@@ -442,7 +443,22 @@ function InvitationGalleryPage() {
               {invitation.description && (
                 <div className="detail-item">
                   <span className="material-symbols-outlined">info</span>
-                  <p>Additional Details: {invitation.description}</p>
+                  <p>Additional Details: 
+                    {invitation.description.length > 150 ? (
+                      <>
+                        {showFullDescription ? invitation.description : `${invitation.description.substring(0, 150)}... `}
+                        <span
+                          className="read-more-less"
+                          onClick={() => setShowFullDescription(!showFullDescription)}
+                          style={{ cursor: 'pointer', color: '#6a0dad', fontWeight: 'bold' }}
+                        >
+                          {showFullDescription ? 'less' : 'more... '}
+                        </span>
+                      </>
+                    ) : (
+                      invitation.description
+                    )}
+                  </p>
                 </div>
               )}
 
