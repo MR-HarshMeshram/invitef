@@ -501,7 +501,7 @@ function InvitationGalleryPage() {
               </div>
             )}
 
-            {invitation.eventMedia && invitation.eventMedia.length > 0 && (
+            {(invitation.eventPrivacy === 'public' || loggedInUserEmail === invitation.createdByEmail || hasAccepted) && invitation.eventMedia && invitation.eventMedia.length > 0 && (
               <section className="event-media-gallery-section">
                 <h2 className="section-heading">Event Media Gallery</h2>
                 <div className="event-media-grid">
