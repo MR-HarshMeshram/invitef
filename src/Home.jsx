@@ -13,9 +13,45 @@ function Home() {
   const [error, setError] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [expandedDescriptions, setExpandedDescriptions] = useState({}); // New state for expanded descriptions
+  const [mediaGalleryImages, setMediaGalleryImages] = useState([]); // New state for media gallery images
+  const [imageReactions, setImageReactions] = useState({}); // New state for storing reaction counts per image
 
   const upcomingEventsRef = React.useRef(null); // Ref for upcoming events scroll container
   const featuredEventsRef = React.useRef(null); // Ref for featured events scroll container
+  const wsRef = React.useRef(null); // Ref for WebSocket instance
+
+  // WebSocket setup
+  useEffect(() => {
+    const ws = new WebSocket('wss://invite-backend-vk36.onrender.com'); // Assuming WebSocket endpoint
+    wsRef.current = ws; // Assign WebSocket instance to ref
+
+    ws.onopen = () => {
+      console.log('WebSocket Connected');
+      // Optionally, fetch initial reaction counts when connected
+      ws.send(JSON.stringify({ type: 'GET_ALL_REACTIONS' }));
+    };
+
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'REACTION_UPDATE') {
+        setImageReactions(prev => ({ ...prev, [message.imageId]: message.reactions }));
+      } else if (message.type === 'ALL_REACTIONS') {
+        setImageReactions(message.reactions);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket Disconnected');
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket Error:', error);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []); // Run once on mount
 
   const [showLeftArrowUpcoming, setShowLeftArrowUpcoming] = useState(false);
   const [showRightArrowUpcoming, setShowRightArrowUpcoming] = useState(false);
@@ -60,6 +96,44 @@ function Home() {
           return dateB - dateA; // Sort in descending order (latest first)
         });
         setAllInvitations(sortedInvitations);
+
+        // Fetch accepted private invitations if user is logged in
+        const accessToken = localStorage.getItem('accessToken');
+        const userEmail = localStorage.getItem('userEmail');
+        let acceptedPrivateInvitations = [];
+
+        if (accessToken && userEmail) {
+          try {
+            const privateResponse = await fetch(`https://invite-backend-vk36.onrender.com/invitations/accepted-by-user/${userEmail}`, {
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+              },
+            });
+            if (!privateResponse.ok) {
+              console.error('Failed to fetch accepted private invitations:', await privateResponse.json());
+            } else {
+              const privateResult = await privateResponse.json();
+              acceptedPrivateInvitations = privateResult.invitations || [];
+            }
+          } catch (privateErr) {
+            console.error('Error fetching accepted private invitations:', privateErr);
+          }
+        }
+
+        // Combine media gallery images from all invitations
+        const allMediaImages = [];
+        sortedInvitations.forEach(inv => {
+          if (inv.eventMedia && Array.isArray(inv.eventMedia)) {
+            allMediaImages.push(...inv.eventMedia);
+          }
+        });
+        acceptedPrivateInvitations.forEach(inv => {
+          if (inv.eventMedia && Array.isArray(inv.eventMedia)) {
+            allMediaImages.push(...inv.eventMedia);
+          }
+        });
+        setMediaGalleryImages(allMediaImages);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -173,6 +247,24 @@ function Home() {
     }
   };
 
+  const handleReaction = (imageId, reactionType) => {
+    // Optimistically update UI
+    setImageReactions(prev => ({
+      ...prev,
+      [imageId]: {
+        ...(prev[imageId] || {}),
+        [reactionType]: (prev[imageId]?.[reactionType] || 0) + 1
+      }
+    }));
+
+    // Send reaction to WebSocket server
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: 'REACT_TO_IMAGE', imageId, reactionType }));
+    } else {
+      console.warn('WebSocket not open. Reaction not sent.');
+    }
+  };
+
   return (
     <div className="home-container">
       {/* <header className="header">
@@ -274,6 +366,37 @@ function Home() {
               <button className="scroll-arrow right" onClick={() => scroll(featuredEventsRef, 'right')}>
                 <span className="material-symbols-outlined">arrow_forward_ios</span>
               </button>
+            )}
+          </div>
+        </section>
+
+        <section className="feed-section">
+          <h2 className="section-header">Event Gallery Feed</h2>
+          <div className="feed-grid">
+            {isLoading ? (
+              <p>Loading gallery images...</p>
+            ) : mediaGalleryImages.length > 0 ? (
+              mediaGalleryImages.map((media, index) => (
+                <div className="feed-item" key={media.public_id || index}>
+                  <img src={media.url} alt="Gallery" className="feed-image" />
+                  <div className="reactions-container">
+                    <button className="reaction-button" onClick={() => handleReaction(media.public_id || `temp-${index}`, 'cheer')}>
+                      🎉 Cheer {imageReactions[media.public_id || `temp-${index}`]?.cheer || 0}
+                    </button>
+                    <button className="reaction-button" onClick={() => handleReaction(media.public_id || `temp-${index}`, 'groove')}>
+                      🕺 Groove {imageReactions[media.public_id || `temp-${index}`]?.groove || 0}
+                    </button>
+                    <button className="reaction-button" onClick={() => handleReaction(media.public_id || `temp-${index}`, 'chill')}>
+                      🍹 Chill {imageReactions[media.public_id || `temp-${index}`]?.chill || 0}
+                    </button>
+                    <button className="reaction-button" onClick={() => handleReaction(media.public_id || `temp-${index}`, 'hype')}>
+                      🔥 Hype {imageReactions[media.public_id || `temp-${index}`]?.hype || 0}
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No gallery images available yet.</p>
             )}
           </div>
         </section>
