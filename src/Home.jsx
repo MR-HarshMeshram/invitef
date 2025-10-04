@@ -3,10 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './Home.css'; // Custom CSS for the Home page
 import LoginModal from './LoginModal';
 
-// WebSocket connection
-const WS_URL = "ws://localhost:5000"; // Replace with your backend WebSocket URL
-let ws = null; // Declare ws outside to maintain single connection
-
 function Home() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,9 +13,6 @@ function Home() {
   const [error, setError] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [expandedDescriptions, setExpandedDescriptions] = useState({}); // New state for expanded descriptions
-  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail')); // Get user email from localStorage
-  const [feedMedia, setFeedMedia] = useState([]); // New state for feed media
-  const [invitationReactions, setInvitationReactions] = useState({}); // New state to store reaction counts
 
   const upcomingEventsRef = React.useRef(null); // Ref for upcoming events scroll container
   const featuredEventsRef = React.useRef(null); // Ref for featured events scroll container
@@ -55,50 +48,18 @@ function Home() {
       setIsLoading(true);
       setError(null);
       try {
-        // Fetch public invitations
-        const publicResponse = await fetch(`https://invite-backend-vk36.onrender.com/invitations/all`);
-        if (!publicResponse.ok) {
-          const errorData = await publicResponse.json();
-          throw new Error(errorData.message || 'Failed to fetch public invitations.');
+        const response = await fetch(`https://invite-backend-vk36.onrender.com/invitations/all`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch all invitations.');
         }
-        const publicResult = await publicResponse.json();
-        let combinedInvitations = publicResult.invitations;
-
-        // If user is logged in, fetch accepted private invitations
-        if (userEmail) {
-          const privateResponse = await fetch(`https://invite-backend-vk36.onrender.com/invitations/accepted-by-user/${userEmail}`, {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-          });
-          if (!privateResponse.ok) {
-            const errorData = await privateResponse.json();
-            // Log error but don't block public invitations display
-            console.error('Failed to fetch accepted private invitations:', errorData.message || 'Unknown error');
-          } else {
-            const privateResult = await privateResponse.json();
-            combinedInvitations = [...combinedInvitations, ...privateResult.invitations];
-          }
-        }
-
-        const sortedInvitations = combinedInvitations.sort((a, b) => {
+        const result = await response.json();
+        const sortedInvitations = result.invitations.sort((a, b) => {
           const dateA = new Date(a.dateTime);
           const dateB = new Date(b.dateTime);
           return dateB - dateA; // Sort in descending order (latest first)
         });
         setAllInvitations(sortedInvitations);
-
-        // Fetch initial reaction counts for all invitations
-        const initialReactions = {};
-        for (const invitation of sortedInvitations) {
-          const reactionResponse = await fetch(`https://invite-backend-vk36.onrender.com/invitations/${invitation._id}/details-with-reactions`);
-          if (reactionResponse.ok) {
-            const reactionData = await reactionResponse.json();
-            initialReactions[invitation._id] = reactionData.reactions;
-          }
-        }
-        setInvitationReactions(initialReactions);
-
       } catch (err) {
         setError(err.message);
       } finally {
@@ -107,42 +68,7 @@ function Home() {
     };
 
     fetchAllInvitations();
-
-    // WebSocket setup
-    ws = new WebSocket(WS_URL);
-
-    ws.onopen = () => {
-      console.log('WebSocket connected');
-    };
-
-    ws.onmessage = event => {
-      const message = JSON.parse(event.data);
-      if (message.type === 'reactionUpdate') {
-        setInvitationReactions(prevReactions => ({
-          ...prevReactions,
-          [message.payload.invitationId]: {
-            ...prevReactions[message.payload.invitationId],
-            ...message.payload
-          }
-        }));
-      }
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket disconnected');
-    };
-
-    ws.onerror = error => {
-      console.error('WebSocket error:', error);
-    };
-
-    return () => {
-      if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.close();
-      }
-    };
-
-  }, [location, navigate, userEmail]); // Added userEmail to dependencies
+  }, [location, navigate]);
 
   // Filter invitations based on date
   useEffect(() => {
@@ -162,19 +88,6 @@ function Home() {
       return invitationDate <= today;
     });
     setPastOrCurrentInvitations(pastOrCurrent);
-  }, [allInvitations]);
-
-  // Extract all media for the feed
-  useEffect(() => {
-    const media = [];
-    allInvitations.forEach(invitation => {
-      if (invitation.eventMedia && invitation.eventMedia.length > 0) {
-        invitation.eventMedia.forEach(mediaItem => {
-          media.push({ ...mediaItem, invitationId: invitation._id, eventName: invitation.eventName });
-        });
-      }
-    });
-    setFeedMedia(media);
   }, [allInvitations]);
 
   const handleCreateInvitationClick = () => {
@@ -207,15 +120,6 @@ function Home() {
       ...prevState,
       [id]: !prevState[id]
     }));
-  };
-
-  const handleReactionClick = (e, invitationId, reactionType) => {
-    e.stopPropagation(); // Prevent card click event from firing
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'reactionClick', payload: { invitationId, reactionType } }));
-    } else {
-      console.warn('WebSocket not connected. Cannot send reaction.');
-    }
   };
 
   const characterLimit = 150; // Define your character limit here
@@ -370,42 +274,6 @@ function Home() {
               <button className="scroll-arrow right" onClick={() => scroll(featuredEventsRef, 'right')}>
                 <span className="material-symbols-outlined">arrow_forward_ios</span>
               </button>
-            )}
-          </div>
-        </section>
-
-        <section className="feed-section">
-          <h2 className="section-header">Feed</h2>
-          <div className="feed-media-container">
-            {isLoading ? (
-              <p>Loading feed...</p>
-            ) : error ? (
-              <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : feedMedia.length > 0 ? (
-              feedMedia.map((mediaItem, index) => (
-                <div className="feed-post-card" key={mediaItem.public_id || index}>
-                  <img src={mediaItem.url} alt="Event Media" className="feed-post-image" />
-                  <div className="feed-post-footer">
-                    <p className="feed-post-title">{mediaItem.eventName}</p>
-                    <div className="reaction-buttons">
-                      <button className="reaction-button cheer" onClick={(e) => handleReactionClick(e, mediaItem.invitationId, 'cheer')}>
-                        <span>🎉</span> Cheer <span>{invitationReactions[mediaItem.invitationId]?.cheer || 0}</span>
-                      </button>
-                      <button className="reaction-button groove" onClick={(e) => handleReactionClick(e, mediaItem.invitationId, 'groove')}>
-                        <span>🟣</span> Groove <span>{invitationReactions[mediaItem.invitationId]?.groove || 0}</span>
-                      </button>
-                      <button className="reaction-button chill" onClick={(e) => handleReactionClick(e, mediaItem.invitationId, 'chill')}>
-                        <span>🍹</span> Chill <span>{invitationReactions[mediaItem.invitationId]?.chill || 0}</span>
-                      </button>
-                      <button className="reaction-button hype" onClick={(e) => handleReactionClick(e, mediaItem.invitationId, 'hype')}>
-                        <span>🔥</span> Hype <span>{invitationReactions[mediaItem.invitationId]?.hype || 0}</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No media available in the feed yet.</p>
             )}
           </div>
         </section>
