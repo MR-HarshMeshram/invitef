@@ -13,8 +13,6 @@ function Home() {
   const [error, setError] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [expandedDescriptions, setExpandedDescriptions] = useState({}); // New state for expanded descriptions
-  const [mediaGallery, setMediaGallery] = useState([]); // New state for media gallery
-  const [socket, setSocket] = useState(null); // New state for WebSocket connection
 
   const upcomingEventsRef = React.useRef(null); // Ref for upcoming events scroll container
   const featuredEventsRef = React.useRef(null); // Ref for featured events scroll container
@@ -69,26 +67,8 @@ function Home() {
       }
     };
 
-    const fetchMediaGallery = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-        const response = await fetch(`https://invite-backend-vk36.onrender.com/media/gallery`, { headers });
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch media gallery.');
-        }
-        const result = await response.json();
-        setMediaGallery(result.media);
-      } catch (err) {
-        console.error('Error fetching media gallery:', err);
-        // Optionally set an error state for media gallery specifically
-      }
-    };
-
     fetchAllInvitations();
-    fetchMediaGallery();
-  }, [location, navigate, setMediaGallery]);
+  }, [location, navigate]);
 
   // Filter invitations based on date
   useEffect(() => {
@@ -110,41 +90,6 @@ function Home() {
     setPastOrCurrentInvitations(pastOrCurrent);
   }, [allInvitations]);
 
-  useEffect(() => {
-    const ws = new WebSocket('ws://invite-backend-vk36.onrender.com'); // Your WebSocket backend URL
-
-    ws.onopen = () => {
-      console.log('WebSocket connected');
-      setSocket(ws);
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type === 'reactionUpdate') {
-        setMediaGallery(prevGallery =>
-          prevGallery.map(media =>
-            media._id === message.mediaId
-              ? { ...media, reactions: message.reactions }
-              : media
-          )
-        );
-      }
-    };
-
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket disconnected');
-      setSocket(null);
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, [socket, setSocket, setMediaGallery]); // Empty dependency array means this effect runs once on mount and cleans up on unmount
-
   const handleCreateInvitationClick = () => {
     navigate('/invitation', { state: { showForm: true } });
   };
@@ -159,15 +104,6 @@ function Home() {
       setShowLoginPopup(true);
     } else {
       navigate('/invitation');
-    }
-  };
-
-  const handleReaction = (mediaId, reactionType) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({ type: 'react', mediaId, reactionType }));
-    } else {
-      console.warn('WebSocket not connected. Reaction not sent.');
-      // Optionally, handle the case where WebSocket is not open (e.g., show a message to the user)
     }
   };
 
@@ -338,31 +274,6 @@ function Home() {
               <button className="scroll-arrow right" onClick={() => scroll(featuredEventsRef, 'right')}>
                 <span className="material-symbols-outlined">arrow_forward_ios</span>
               </button>
-            )}
-          </div>
-        </section>
-
-        <section className="feed-section">
-          <h2 className="section-header">Feed</h2>
-          <div className="media-gallery-container">
-            {isLoading ? (
-              <p>Loading media gallery...</p>
-            ) : error ? (
-              <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : mediaGallery.length > 0 ? (
-              mediaGallery.map((media) => (
-                <div className="media-card" key={media._id}>
-                  <img src={media.url} alt="Gallery Media" className="media-card-image" />
-                  <div className="media-reactions">
-                    <button onClick={() => handleReaction(media._id, 'cheer')}>Cheer {media.reactions?.cheer || 0}</button>
-                    <button onClick={() => handleReaction(media._id, 'groove')}>Groove {media.reactions?.groove || 0}</button>
-                    <button onClick={() => handleReaction(media._id, 'chill')}>Chill {media.reactions?.chill || 0}</button>
-                    <button onClick={() => handleReaction(media._id, 'hype')}>Hype {media.reactions?.hype || 0}</button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No media available yet.</p>
             )}
           </div>
         </section>
