@@ -163,8 +163,8 @@ const FeedSection = ({ userEmail }) => {
     return invitation.reactions?.[reactionType]?.users?.includes(userEmail) || false;
   };
 
-  const handleCardClick = (post) => {
-    // Navigate to invitation details page
+  const handleTitleClick = (e, post) => {
+    e.stopPropagation();
     navigate(`/invitation/${post._id}`);
   };
 
@@ -252,7 +252,7 @@ const FeedSection = ({ userEmail }) => {
           <p className="no-posts">No posts available yet.</p>
         ) : (
           feedData.map((post) => (
-            <div key={post._id} className="feed-post" onClick={() => handleCardClick(post)}>
+            <div key={post._id} className="feed-post">
               {/* Post Header */}
               <div className="post-header">
                 <div className="user-info">
@@ -260,7 +260,7 @@ const FeedSection = ({ userEmail }) => {
                     {post.createdByEmail ? post.createdByEmail.charAt(0).toUpperCase() : 'U'}
                   </div>
                   <div className="user-details">
-                    <span className="username">{post.eventName || 'Event'}</span>
+                    <span className="username" onClick={(e) => handleTitleClick(e, post)}>{post.eventName || 'Event'}</span>
                     {/* <span className="user-email">{post.createdByEmail || 'Unknown User'}</span>
                     <span className="post-time">{formatTimeAgo(post.createdAt)}</span> */}
                   </div>
