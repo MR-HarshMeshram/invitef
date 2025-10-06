@@ -8,7 +8,6 @@ function MyInvitations() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAnalytics, setShowAnalytics] = useState({});
-  const [analyticsData, setAnalyticsData] = useState({});
 
   const fetchUserInvitations = useCallback(async () => {
     setIsLoading(true);
@@ -51,11 +50,8 @@ function MyInvitations() {
     navigate(`/invitation/${invitation._id}`); // Navigate to the combined invitation gallery page
   };
 
-  const toggleAnalytics = (invitationId) => {
-    setShowAnalytics(prev => ({
-      ...prev,
-      [invitationId]: !prev[invitationId]
-    }));
+  const goToAnalytics = (invitationId) => {
+    navigate(`/invitation/${invitationId}#analytics`);
   };
 
   const getReactionStats = (invitation) => {
@@ -82,15 +78,7 @@ function MyInvitations() {
     };
   };
 
-  const getReactionUsers = (invitation, reactionType) => {
-    return invitation.reactions?.[reactionType]?.users || [];
-  };
-
-  const formatUserEmail = (email) => {
-    if (!email) return 'Unknown User';
-    const [username, domain] = email.split('@');
-    return `${username}@${domain}`;
-  };
+  // We intentionally do not expose individual user emails in analytics for privacy.
 
   const getReactionEmoji = (reactionType) => {
     const emojis = {
@@ -132,7 +120,7 @@ function MyInvitations() {
                     </div>
                   </div>
                   
-                  {/* Analytics Section */}
+                  {/* Compact Analytics Section */}
                   <div className="analytics-section">
                     <div className="analytics-summary">
                       <div className="stat-item">
@@ -151,78 +139,13 @@ function MyInvitations() {
                     
                     <button 
                       className="analytics-toggle-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleAnalytics(invitation._id);
-                      }}
+                      onClick={(e) => { e.stopPropagation(); goToAnalytics(invitation._id); }}
                     >
-                      <span className="material-symbols-outlined">
-                        {showAnalytics[invitation._id] ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
-                      </span>
-                      {showAnalytics[invitation._id] ? 'Hide Details' : 'View Details'}
+                      <span className="material-symbols-outlined">insights</span>
+                      View Analytics
                     </button>
                   </div>
 
-                  {/* Detailed Analytics */}
-                  {showAnalytics[invitation._id] && (
-                    <div className="analytics-details">
-                      <div className="reaction-breakdown">
-                        <h4>Reaction Breakdown</h4>
-                        {['cheer', 'groove', 'chill', 'hype'].map(reactionType => {
-                          const users = getReactionUsers(invitation, reactionType);
-                          const count = invitation.reactions?.[reactionType]?.count || 0;
-                          return (
-                            <div key={reactionType} className="reaction-item">
-                              <div className="reaction-header">
-                                <span className="reaction-emoji">{getReactionEmoji(reactionType)}</span>
-                                <span className="reaction-name">{reactionType.charAt(0).toUpperCase() + reactionType.slice(1)}</span>
-                                <span className="reaction-count">({count})</span>
-                              </div>
-                              {users.length > 0 && (
-                                <div className="reaction-users">
-                                  {users.map((email, index) => (
-                                    <div key={index} className="reaction-user">
-                                      <div className="user-avatar-small">
-                                        {email.charAt(0).toUpperCase()}
-                                      </div>
-                                      <span className="user-email-small">{formatUserEmail(email)}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                      
-                      <div className="response-analysis">
-                        <h4>Response Analysis</h4>
-                        <div className="response-stats">
-                          <div className="response-item">
-                            <span className="response-label">Total Invited:</span>
-                            <span className="response-value">{stats.totalInvited}</span>
-                          </div>
-                          <div className="response-item">
-                            <span className="response-label">People Reacted:</span>
-                            <span className="response-value">{stats.uniqueUsers}</span>
-                          </div>
-                          <div className="response-item">
-                            <span className="response-label">Response Rate:</span>
-                            <span className="response-value">{stats.responseRate}%</span>
-                          </div>
-                        </div>
-                        
-                        {stats.totalInvited > 0 && (
-                          <div className="response-bar">
-                            <div 
-                              className="response-fill" 
-                              style={{ width: `${stats.responseRate}%` }}
-                            ></div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
               );
             })}

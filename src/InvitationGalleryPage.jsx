@@ -21,6 +21,7 @@ function InvitationGalleryPage() {
   const uploadFileInputRef = useRef(null); // Ref for hidden file input
   const [privateInvitations, setPrivateInvitations] = useState([]); // For "My Private Invitations"
   const [showFullDescription, setShowFullDescription] = useState(false); // New state for "show more/less"
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const fetchInvitation = useCallback(async () => {
     setLoading(true);
@@ -467,6 +468,17 @@ function InvitationGalleryPage() {
                 Share Invite
               </button>
 
+              {loggedInUserEmail === invitation.createdByEmail && (
+                <button
+                  className="share-invitation-button"
+                  onClick={() => setShowAnalytics(!showAnalytics)}
+                  id="analytics"
+                >
+                  <span className="material-symbols-outlined">insights</span>
+                  {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
+                </button>
+              )}
+
               {loggedInUserEmail && invitation.createdByEmail !== loggedInUserEmail && invitation.eventPrivacy === 'private' && !hasAccepted && !invitation.declinedUsers.includes(loggedInUserEmail) && (
                 <div className="response-buttons">
                   <button className="accept-invite-button" onClick={handleAcceptInvite}>
@@ -499,6 +511,22 @@ function InvitationGalleryPage() {
                   </div>
                 )}
               </div>
+            )}
+
+            {showAnalytics && loggedInUserEmail === invitation.createdByEmail && (
+              <section className="invitation-analytics-section">
+                <h2 className="section-heading">Analytics</h2>
+                <div className="analytics-summary">
+                  <div className="stat-item"><span className="stat-number">{(invitation.reactions?.cheer?.count||0)+(invitation.reactions?.groove?.count||0)+(invitation.reactions?.chill?.count||0)+(invitation.reactions?.hype?.count||0)}</span><span className="stat-label">Total Reactions</span></div>
+                  <div className="stat-item"><span className="stat-number">{new Set([...(invitation.reactions?.cheer?.users||[]),...(invitation.reactions?.groove?.users||[]),...(invitation.reactions?.chill?.users||[]),...(invitation.reactions?.hype?.users||[])]).size}</span><span className="stat-label">People Reacted</span></div>
+                </div>
+                <div className="reaction-breakdown">
+                  <div className="reaction-item"><span className="reaction-emoji">🎉</span><span className="reaction-name">Cheer</span><span className="reaction-count">{invitation.reactions?.cheer?.count||0}</span></div>
+                  <div className="reaction-item"><span className="reaction-emoji">🪩</span><span className="reaction-name">Groove</span><span className="reaction-count">{invitation.reactions?.groove?.count||0}</span></div>
+                  <div className="reaction-item"><span className="reaction-emoji">🍹</span><span className="reaction-name">Chill</span><span className="reaction-count">{invitation.reactions?.chill?.count||0}</span></div>
+                  <div className="reaction-item"><span className="reaction-emoji">🔥</span><span className="reaction-name">Hype</span><span className="reaction-count">{invitation.reactions?.hype?.count||0}</span></div>
+                </div>
+              </section>
             )}
 
             {(invitation.eventPrivacy === 'public' || loggedInUserEmail === invitation.createdByEmail || hasAccepted) && invitation.eventMedia && invitation.eventMedia.length > 0 && (
