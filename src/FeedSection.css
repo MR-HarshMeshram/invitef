@@ -24,6 +24,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .feed-post:hover {
@@ -86,10 +87,56 @@
   padding: 0.5rem;
   border-radius: 50%;
   transition: background-color 0.2s ease;
+  position: relative;
 }
 
 .post-options:hover {
   background-color: #f0f0f0;
+}
+
+/* Share Menu */
+.share-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-menu-content {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  min-width: 200px;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.share-button:hover {
+  background: #e9ecef;
+}
+
+.share-button .material-symbols-outlined {
+  font-size: 1.2rem;
 }
 
 /* Post Content */
@@ -258,6 +305,12 @@
   
   .reaction-count {
     font-size: 0.7rem;
+  }
+  
+  .share-menu-content {
+    margin: 1rem;
+    min-width: auto;
+    width: calc(100% - 2rem);
   }
 }
 

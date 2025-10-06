@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './FeedSection.css';
 
 const FeedSection = ({ userEmail }) => {
+  const navigate = useNavigate();
   const [feedData, setFeedData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ws, setWs] = useState(null);
   const [reactionUpdates, setReactionUpdates] = useState({});
+  const [showShareMenu, setShowShareMenu] = useState({});
 
   useEffect(() => {
     fetchFeedData();
@@ -18,6 +21,20 @@ const FeedSection = ({ userEmail }) => {
       }
     };
   }, [userEmail]);
+
+  // Close share menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (Object.keys(showShareMenu).length > 0) {
+        setShowShareMenu({});
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showShareMenu]);
 
   const fetchFeedData = async () => {
     setIsLoading(true);
@@ -146,6 +163,58 @@ const FeedSection = ({ userEmail }) => {
     return invitation.reactions?.[reactionType]?.users?.includes(userEmail) || false;
   };
 
+  const handleCardClick = (post) => {
+    // Navigate to invitation details page
+    navigate(`/invitation/${post._id}`);
+  };
+
+  const handleThreeDotsClick = (e, postId) => {
+    e.stopPropagation(); // Prevent card click
+    setShowShareMenu(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
+  const handleShareClick = (e, post) => {
+    e.stopPropagation(); // Prevent card click
+    const shareUrl = `${window.location.origin}/invitation/${post._id}`;
+    
+    if (navigator.share) {
+      // Use native share API if available
+      navigator.share({
+        title: post.eventName || 'Event Invitation',
+        text: post.description || 'Check out this event!',
+        url: shareUrl
+      }).catch(err => console.log('Error sharing:', err));
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        alert('Invitation link copied to clipboard!');
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = shareUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Invitation link copied to clipboard!');
+      });
+    }
+    
+    // Close the share menu
+    setShowShareMenu(prev => ({
+      ...prev,
+      [post._id]: false
+    }));
+  };
+
+  const closeShareMenu = (e) => {
+    e.stopPropagation();
+    setShowShareMenu({});
+  };
+
   const formatTimeAgo = (dateString) => {
     const now = new Date();
     const postDate = new Date(dateString);
@@ -183,7 +252,7 @@ const FeedSection = ({ userEmail }) => {
           <p className="no-posts">No posts available yet.</p>
         ) : (
           feedData.map((post) => (
-            <div key={post._id} className="feed-post">
+            <div key={post._id} className="feed-post" onClick={() => handleCardClick(post)}>
               {/* Post Header */}
               <div className="post-header">
                 <div className="user-info">
@@ -192,12 +261,25 @@ const FeedSection = ({ userEmail }) => {
                   </div>
                   <div className="user-details">
                     <span className="username">{post.eventName || 'Event'}</span>
-                    <span className="user-email">{post.createdByEmail || 'Unknown User'}</span>
-                    <span className="post-time">{formatTimeAgo(post.createdAt)}</span>
+                    {/* <span className="user-email">{post.createdByEmail || 'Unknown User'}</span>
+                    <span className="post-time">{formatTimeAgo(post.createdAt)}</span> */}
                   </div>
                 </div>
-                <div className="post-options">
+                <div className="post-options" onClick={(e) => handleThreeDotsClick(e, post._id)}>
                   <span className="material-symbols-outlined">more_horiz</span>
+                  {showShareMenu[post._id] && (
+                    <div className="share-menu" onClick={closeShareMenu}>
+                      <div className="share-menu-content" onClick={(e) => e.stopPropagation()}>
+                        <button 
+                          className="share-button" 
+                          onClick={(e) => handleShareClick(e, post)}
+                        >
+                          <span className="material-symbols-outlined">share</span>
+                          Share Invitation
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
