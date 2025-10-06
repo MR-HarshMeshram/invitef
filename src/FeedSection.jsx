@@ -10,6 +10,7 @@ const FeedSection = ({ userEmail }) => {
   const [ws, setWs] = useState(null);
   const [reactionUpdates, setReactionUpdates] = useState({});
   const [showShareMenu, setShowShareMenu] = useState({});
+  const [showReactionDetails, setShowReactionDetails] = useState({});
 
   useEffect(() => {
     fetchFeedData();
@@ -215,6 +216,35 @@ const FeedSection = ({ userEmail }) => {
     setShowShareMenu({});
   };
 
+  const isCreator = (post) => {
+    return userEmail && post.createdByEmail === userEmail;
+  };
+
+  const handleReactionCountClick = (e, post, reactionType) => {
+    e.stopPropagation(); // Prevent card click
+    if (!isCreator(post)) return;
+    
+    setShowReactionDetails(prev => ({
+      ...prev,
+      [`${post._id}-${reactionType}`]: !prev[`${post._id}-${reactionType}`]
+    }));
+  };
+
+  const closeReactionDetails = (e) => {
+    e.stopPropagation();
+    setShowReactionDetails({});
+  };
+
+  const getReactionUsers = (post, reactionType) => {
+    return post.reactions?.[reactionType]?.users || [];
+  };
+
+  const formatUserEmail = (email) => {
+    if (!email) return 'Unknown User';
+    const [username, domain] = email.split('@');
+    return `${username}@${domain}`;
+  };
+
   const formatTimeAgo = (dateString) => {
     const now = new Date();
     const postDate = new Date(dateString);
@@ -317,7 +347,12 @@ const FeedSection = ({ userEmail }) => {
                 >
                   <span className="reaction-emoji">🎉</span>
                   <span className="reaction-label">Cheer</span>
-                  <span className="reaction-count">{getReactionCount(post, 'cheer')}</span>
+                  <span 
+                    className={`reaction-count ${isCreator(post) ? 'clickable' : ''}`}
+                    onClick={(e) => handleReactionCountClick(e, post, 'cheer')}
+                  >
+                    {getReactionCount(post, 'cheer')}
+                  </span>
                 </button>
 
                 <button 
@@ -326,7 +361,12 @@ const FeedSection = ({ userEmail }) => {
                 >
                   <span className="reaction-emoji">🪩</span>
                   <span className="reaction-label">Groove</span>
-                  <span className="reaction-count">{getReactionCount(post, 'groove')}</span>
+                  <span 
+                    className={`reaction-count ${isCreator(post) ? 'clickable' : ''}`}
+                    onClick={(e) => handleReactionCountClick(e, post, 'groove')}
+                  >
+                    {getReactionCount(post, 'groove')}
+                  </span>
                 </button>
 
                 <button 
@@ -335,7 +375,12 @@ const FeedSection = ({ userEmail }) => {
                 >
                   <span className="reaction-emoji">🍹</span>
                   <span className="reaction-label">Chill</span>
-                  <span className="reaction-count">{getReactionCount(post, 'chill')}</span>
+                  <span 
+                    className={`reaction-count ${isCreator(post) ? 'clickable' : ''}`}
+                    onClick={(e) => handleReactionCountClick(e, post, 'chill')}
+                  >
+                    {getReactionCount(post, 'chill')}
+                  </span>
                 </button>
 
                 <button 
@@ -344,9 +389,58 @@ const FeedSection = ({ userEmail }) => {
                 >
                   <span className="reaction-emoji">🔥</span>
                   <span className="reaction-label">Hype</span>
-                  <span className="reaction-count">{getReactionCount(post, 'hype')}</span>
+                  <span 
+                    className={`reaction-count ${isCreator(post) ? 'clickable' : ''}`}
+                    onClick={(e) => handleReactionCountClick(e, post, 'hype')}
+                  >
+                    {getReactionCount(post, 'hype')}
+                  </span>
                 </button>
               </div>
+
+              {/* Reaction Details Modal */}
+              {Object.keys(showReactionDetails).map(key => {
+                const [postId, reactionType] = key.split('-');
+                if (postId !== post._id) return null;
+                
+                const users = getReactionUsers(post, reactionType);
+                const reactionEmojis = {
+                  cheer: '🎉',
+                  groove: '🪩',
+                  chill: '🍹',
+                  hype: '🔥'
+                };
+                
+                return (
+                  <div key={key} className="reaction-details-modal" onClick={closeReactionDetails}>
+                    <div className="reaction-details-content" onClick={(e) => e.stopPropagation()}>
+                      <div className="reaction-details-header">
+                        <span className="reaction-emoji-large">{reactionEmojis[reactionType]}</span>
+                        <h3>{reactionType.charAt(0).toUpperCase() + reactionType.slice(1)}</h3>
+                        <button className="close-button" onClick={closeReactionDetails}>
+                          <span className="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                      <div className="reaction-details-body">
+                        {users.length === 0 ? (
+                          <p className="no-reactions">No one has reacted yet</p>
+                        ) : (
+                          <div className="reaction-users-list">
+                            {users.map((email, index) => (
+                              <div key={index} className="reaction-user">
+                                <div className="user-avatar-small">
+                                  {email.charAt(0).toUpperCase()}
+                                </div>
+                                <span className="user-email-small">{formatUserEmail(email)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ))
         )}
