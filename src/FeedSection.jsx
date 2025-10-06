@@ -203,8 +203,20 @@ const FeedSection = ({ userEmail }) => {
 
               {/* Post Content */}
               <div className="post-content">
-                {/* Event Image */}
-                {post.invitationImage && (
+                {/* Event Media Gallery - Show eventMedia images first */}
+                {post.eventMedia && post.eventMedia.length > 0 ? (
+                  <div className="post-gallery">
+                    {post.eventMedia.map((media, index) => (
+                      <img 
+                        key={media._id || index}
+                        src={media.url} 
+                        alt={`Event media ${index + 1}`} 
+                        className="gallery-image"
+                      />
+                    ))}
+                  </div>
+                ) : post.invitationImage ? (
+                  /* Fallback to invitation image if no eventMedia */
                   <div className="post-image-container">
                     <img 
                       src={post.invitationImage.url} 
@@ -212,21 +224,7 @@ const FeedSection = ({ userEmail }) => {
                       className="post-image"
                     />
                   </div>
-                )}
-
-                {/* Event Media Gallery */}
-                {post.eventMedia && post.eventMedia.length > 0 && (
-                  <div className="post-gallery">
-                    {post.eventMedia.map((media, index) => (
-                      <img 
-                        key={index}
-                        src={media.url} 
-                        alt={`Event media ${index + 1}`} 
-                        className="gallery-image"
-                      />
-                    ))}
-                  </div>
-                )}
+                ) : null}
               </div>
 
               {/* Reaction Buttons */}
