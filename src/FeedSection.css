@@ -1,0 +1,300 @@
+.feed-section {
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+.section-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.feed-post {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.feed-post:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Post Header */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.username {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.post-time {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.post-options {
+  color: #666;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.post-options:hover {
+  background-color: #f0f0f0;
+}
+
+/* Post Content */
+.post-content {
+  padding: 0 1.5rem;
+}
+
+.post-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0.5rem 0;
+}
+
+.post-description {
+  color: #555;
+  line-height: 1.5;
+  margin: 0.75rem 0;
+}
+
+.post-image-container {
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.post-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.post-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.gallery-image:hover {
+  transform: scale(1.02);
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.event-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.event-detail .material-symbols-outlined {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Reaction Buttons */
+.reaction-buttons {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+
+.reaction-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.reaction-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+.reaction-btn.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.reaction-btn.active .reaction-emoji {
+  transform: scale(1.1);
+}
+
+.reaction-emoji {
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.reaction-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.reaction-btn.active .reaction-label {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.reaction-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #999;
+}
+
+.reaction-btn.active .reaction-count {
+  color: #1976d2;
+}
+
+/* Loading and Error States */
+.loading, .error, .no-posts {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.no-posts {
+  color: #999;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .feed-section {
+    padding: 0 0.5rem;
+  }
+  
+  .feed-container {
+    gap: 1rem;
+  }
+  
+  .post-header {
+    padding: 0.75rem 1rem 0.5rem;
+  }
+  
+  .post-content {
+    padding: 0 1rem;
+  }
+  
+  .reaction-buttons {
+    padding: 0.75rem 1rem;
+  }
+  
+  .reaction-btn {
+    padding: 0.5rem 0.75rem;
+    min-width: 70px;
+  }
+  
+  .reaction-emoji {
+    font-size: 1.25rem;
+  }
+  
+  .reaction-label {
+    font-size: 0.75rem;
+  }
+  
+  .reaction-count {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reaction-buttons {
+    gap: 0.25rem;
+  }
+  
+  .reaction-btn {
+    padding: 0.5rem 0.5rem;
+    min-width: 60px;
+  }
+  
+  .reaction-emoji {
+    font-size: 1.1rem;
+  }
+  
+  .reaction-label {
+    font-size: 0.7rem;
+  }
+}

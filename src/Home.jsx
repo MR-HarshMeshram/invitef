@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Home.css'; // Custom CSS for the Home page
 import LoginModal from './LoginModal';
+import FeedSection from './FeedSection';
 
 function Home() {
   const navigate = useNavigate();
@@ -277,6 +278,9 @@ function Home() {
             )}
           </div>
         </section>
+
+        {/* Feed Section */}
+        <FeedSection userEmail={localStorage.getItem('userEmail')} />
       </main>
 
       {showLoginPopup && (
