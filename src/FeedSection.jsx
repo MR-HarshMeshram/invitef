@@ -191,7 +191,8 @@ const FeedSection = ({ userEmail }) => {
                     {post.createdByEmail ? post.createdByEmail.charAt(0).toUpperCase() : 'U'}
                   </div>
                   <div className="user-details">
-                    <span className="username">{post.createdByEmail || 'Unknown User'}</span>
+                    <span className="username">{post.eventName || 'Event'}</span>
+                    <span className="user-email">{post.createdByEmail || 'Unknown User'}</span>
                     <span className="post-time">{formatTimeAgo(post.createdAt)}</span>
                   </div>
                 </div>
@@ -202,9 +203,6 @@ const FeedSection = ({ userEmail }) => {
 
               {/* Post Content */}
               <div className="post-content">
-                {post.eventName && <h3 className="post-title">{post.eventName}</h3>}
-                {post.description && <p className="post-description">{post.description}</p>}
-                
                 {/* Event Image */}
                 {post.invitationImage && (
                   <div className="post-image-container">
@@ -229,22 +227,6 @@ const FeedSection = ({ userEmail }) => {
                     ))}
                   </div>
                 )}
-
-                {/* Event Details */}
-                <div className="event-details">
-                  {post.location && (
-                    <div className="event-detail">
-                      <span className="material-symbols-outlined">location_on</span>
-                      <span>{post.location}</span>
-                    </div>
-                  )}
-                  {post.dateTime && (
-                    <div className="event-detail">
-                      <span className="material-symbols-outlined">schedule</span>
-                      <span>{new Date(post.dateTime).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                </div>
               </div>
 
               {/* Reaction Buttons */}
